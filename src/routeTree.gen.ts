@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SimulateurRoute = SimulateurRouteImport.update({
+  id: '/simulateur',
+  path: '/simulateur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
   path: '/niveaux',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/financement': typeof FinancementRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/financement': typeof FinancementRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/financement': typeof FinancementRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/financement' | '/niveaux'
+  fullPaths: '/' | '/financement' | '/niveaux' | '/simulateur'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/financement' | '/niveaux'
-  id: '__root__' | '/' | '/financement' | '/niveaux'
+  to: '/' | '/financement' | '/niveaux' | '/simulateur'
+  id: '__root__' | '/' | '/financement' | '/niveaux' | '/simulateur'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FinancementRoute: typeof FinancementRoute
   NiveauxRoute: typeof NiveauxRoute
+  SimulateurRoute: typeof SimulateurRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/simulateur': {
+      id: '/simulateur'
+      path: '/simulateur'
+      fullPath: '/simulateur'
+      preLoaderRoute: typeof SimulateurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/niveaux': {
       id: '/niveaux'
       path: '/niveaux'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FinancementRoute: FinancementRoute,
   NiveauxRoute: NiveauxRoute,
+  SimulateurRoute: SimulateurRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
