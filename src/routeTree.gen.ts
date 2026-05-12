@@ -9,8 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NiveauxRouteImport } from './routes/niveaux'
+import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as IndexRouteImport } from './routes/index'
 
+const NiveauxRoute = NiveauxRouteImport.update({
+  id: '/niveaux',
+  path: '/niveaux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinancementRoute = FinancementRouteImport.update({
+  id: '/financement',
+  path: '/financement',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +31,50 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/financement': typeof FinancementRoute
+  '/niveaux': typeof NiveauxRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/financement': typeof FinancementRoute
+  '/niveaux': typeof NiveauxRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/financement': typeof FinancementRoute
+  '/niveaux': typeof NiveauxRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/financement' | '/niveaux'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/financement' | '/niveaux'
+  id: '__root__' | '/' | '/financement' | '/niveaux'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FinancementRoute: typeof FinancementRoute
+  NiveauxRoute: typeof NiveauxRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/niveaux': {
+      id: '/niveaux'
+      path: '/niveaux'
+      fullPath: '/niveaux'
+      preLoaderRoute: typeof NiveauxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financement': {
+      id: '/financement'
+      path: '/financement'
+      fullPath: '/financement'
+      preLoaderRoute: typeof FinancementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +87,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FinancementRoute: FinancementRoute,
+  NiveauxRoute: NiveauxRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
