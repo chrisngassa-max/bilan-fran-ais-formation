@@ -9,22 +9,31 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { siteName, siteUrl } from "@/config/site";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-[60vh] items-center justify-center bg-surface px-4 py-16">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="text-7xl font-bold text-primary">404</h1>
+        <h2 className="mt-4 headline-md">Page introuvable</h2>
+        <p className="mt-2 body-md text-on-surface-variant">
+          Cette page n'existe pas ou a été déplacée.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-on-primary font-semibold hover:bg-primary-container"
           >
-            Go home
+            Retour à l'accueil
+          </Link>
+          <Link
+            to="/simulateur"
+            className="inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-bright px-5 py-3 font-semibold text-on-surface hover:bg-surface-container"
+          >
+            Faire le simulateur
           </Link>
         </div>
       </div>
@@ -35,15 +44,12 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-[60vh] items-center justify-center bg-surface px-4 py-16">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <h1 className="headline-md">Cette page n'a pas pu se charger</h1>
+        <p className="mt-2 body-md text-on-surface-variant">
+          Vous pouvez réessayer ou revenir à l'accueil.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -51,15 +57,15 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-on-primary font-semibold hover:bg-primary-container"
           >
-            Try again
+            Réessayer
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-bright px-5 py-3 font-semibold text-on-surface hover:bg-surface-container"
           >
-            Go home
+            Accueil
           </a>
         </div>
       </div>
@@ -72,20 +78,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: `${siteName} — Évaluez votre niveau et trouvez la formation adaptée` },
+      {
+        name: "description",
+        content:
+          "Préparation TCF, carte de séjour, naturalisation et français professionnel. Faites le bilan de votre niveau de français et découvrez le parcours adapté.",
+      },
+      { property: "og:site_name", content: siteName },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: siteUrl },
+      { property: "og:title", content: `${siteName} — Bilan de français en ligne` },
+      {
+        property: "og:description",
+        content:
+          "Évaluez votre niveau de français et trouvez la formation adaptée à votre projet (TCF, carte de séjour, naturalisation, travail).",
+      },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Work+Sans:wght@400;600&display=swap",
       },
+      { rel: "canonical", href: siteUrl },
     ],
   }),
   shellComponent: RootShell,
@@ -96,7 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <HeadContent />
       </head>
@@ -110,10 +128,15 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <div className="flex min-h-screen flex-col bg-surface">
+        <Header />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </QueryClientProvider>
   );
 }
