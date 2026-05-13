@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -12,6 +13,7 @@ import appCss from "../styles.css?url";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { siteName, siteUrl } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
 
 function NotFoundComponent() {
   return (
@@ -103,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Work+Sans:wght@400;600&display=swap",
       },
-      { rel: "canonical", href: siteUrl },
+      { rel: "canonical", href: siteUrl + (typeof window !== "undefined" ? window.location.pathname : "") },
     ],
   }),
   shellComponent: RootShell,
@@ -128,6 +130,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    trackEvent("page_view", { path: router.state.location.pathname });
+    const unsubscribe = router.subscribe("onResolved", ({ toLocation }) => {
+      trackEvent("page_view", { path: toLocation.pathname });
+    });
+    return unsubscribe;
+  }, [router]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col bg-surface">

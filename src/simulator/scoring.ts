@@ -18,15 +18,15 @@ import { fundingMode } from "@/config/site";
 
 export type LinguisticAnswers = {
   // 0..3 chacun
-  comprehension_orale: number;
-  comprehension_ecrite: number;
-  expression_ecrite: number;
-  expression_orale: number;
-  vocabulaire_admin: number;
-  vocabulaire_travail: number;
-  grammaire: number;
-  prononciation: number;
-  aisance: number;
+  comprehension_orale: number | null;
+  comprehension_ecrite: number | null;
+  expression_ecrite: number | null;
+  expression_orale: number | null;
+  vocabulaire_admin: number | null;
+  vocabulaire_travail: number | null;
+  grammaire: number | null;
+  prononciation: number | null;
+  aisance: number | null;
 };
 
 export function scoreToLevel(percent: number): EstimatedLevel {
@@ -42,15 +42,15 @@ export function computeEstimatedLevel(answers: LinguisticAnswers): {
   level: EstimatedLevel;
 } {
   const total =
-    answers.comprehension_orale +
-    answers.comprehension_ecrite +
-    answers.expression_ecrite +
-    answers.expression_orale +
-    answers.vocabulaire_admin +
-    answers.vocabulaire_travail +
-    answers.grammaire +
-    answers.prononciation +
-    answers.aisance;
+    (answers.comprehension_orale ?? 0) +
+    (answers.comprehension_ecrite ?? 0) +
+    (answers.expression_ecrite ?? 0) +
+    (answers.expression_orale ?? 0) +
+    (answers.vocabulaire_admin ?? 0) +
+    (answers.vocabulaire_travail ?? 0) +
+    (answers.grammaire ?? 0) +
+    (answers.prononciation ?? 0) +
+    (answers.aisance ?? 0);
   const max = 9 * 3;
   const percent = Math.round((total / max) * 100);
   return { percent, level: scoreToLevel(percent) };
