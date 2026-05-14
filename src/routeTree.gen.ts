@@ -9,13 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as FinancementRouteImport } from './routes/financement'
+import { Route as EvaluationRouteImport } from './routes/evaluation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as BilanRouteImport } from './routes/bilan'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SimulateurRoute = SimulateurRouteImport.update({
+  id: '/simulateur',
+  path: '/simulateur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
   path: '/niveaux',
@@ -31,6 +39,11 @@ const FinancementRoute = FinancementRouteImport.update({
   path: '/financement',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EvaluationRoute = EvaluationRouteImport.update({
+  id: '/evaluation',
+  path: '/evaluation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -41,6 +54,11 @@ const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
   path: '/confidentialite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BilanRoute = BilanRouteImport.update({
+  id: '/bilan',
+  path: '/bilan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,67 +67,95 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bilan': typeof BilanRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/evaluation': typeof EvaluationRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bilan': typeof BilanRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/evaluation': typeof EvaluationRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bilan': typeof BilanRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/evaluation': typeof EvaluationRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/bilan'
     | '/confidentialite'
     | '/contact'
+    | '/evaluation'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bilan'
     | '/confidentialite'
     | '/contact'
+    | '/evaluation'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
   id:
     | '__root__'
     | '/'
+    | '/bilan'
     | '/confidentialite'
     | '/contact'
+    | '/evaluation'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BilanRoute: typeof BilanRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
+  EvaluationRoute: typeof EvaluationRoute
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   NiveauxRoute: typeof NiveauxRoute
+  SimulateurRoute: typeof SimulateurRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/simulateur': {
+      id: '/simulateur'
+      path: '/simulateur'
+      fullPath: '/simulateur'
+      preLoaderRoute: typeof SimulateurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/niveaux': {
       id: '/niveaux'
       path: '/niveaux'
@@ -131,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinancementRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/evaluation': {
+      id: '/evaluation'
+      path: '/evaluation'
+      fullPath: '/evaluation'
+      preLoaderRoute: typeof EvaluationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -145,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bilan': {
+      id: '/bilan'
+      path: '/bilan'
+      fullPath: '/bilan'
+      preLoaderRoute: typeof BilanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -157,12 +217,25 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BilanRoute: BilanRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
+  EvaluationRoute: EvaluationRoute,
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   NiveauxRoute: NiveauxRoute,
+  SimulateurRoute: SimulateurRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

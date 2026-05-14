@@ -32,10 +32,10 @@ function NotFoundComponent() {
             Retour à l'accueil
           </Link>
           <Link
-            to="/simulateur"
+            to="/evaluation"
             className="inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-bright px-5 py-3 font-semibold text-on-surface hover:bg-surface-container"
           >
-            Faire le simulateur
+            Faire l'évaluation
           </Link>
         </div>
       </div>

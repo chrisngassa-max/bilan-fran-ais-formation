@@ -7,7 +7,7 @@ import { siteName } from "@/config/site";
 const NAV = [
   { to: "/niveaux", label: "Niveaux" },
   { to: "/financement", label: "Financement" },
-  { to: "/simulateur", label: "Simulateur" },
+  { to: "/evaluation", label: "Évaluation" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -32,9 +32,9 @@ export function Header() {
               {n.label}
             </Link>
           ))}
-          <Link to="/simulateur">
+          <Link to="/evaluation">
             <Button size="md" variant="primary">
-              Faire le test de niveau
+              Faire le test complet
             </Button>
           </Link>
         </nav>
@@ -64,9 +64,9 @@ export function Header() {
                 {n.label}
               </Link>
             ))}
-            <Link to="/simulateur" onClick={() => setOpen(false)} className="mt-2">
+            <Link to="/evaluation" onClick={() => setOpen(false)} className="mt-2">
               <Button size="md" variant="primary" className="w-full">
-                Faire le test de niveau
+                Faire le test complet
               </Button>
             </Link>
           </nav>
