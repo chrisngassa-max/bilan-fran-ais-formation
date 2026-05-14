@@ -1,6 +1,22 @@
 // Scoring local (mock). À remplacer par l'Edge Function `score-placement-test`.
-// TODO(brevo/supabase): remplacer cette fonction par un appel HTTP à l'Edge
-// Function existante (score-placement-test) qui renvoie scores + flags + narrative.
+//
+// TODO: Connect to Edge Function
+// Remplacer le bloc `computeResult` ci-dessous par un appel HTTP du type :
+//
+//   const res = await fetch(
+//     "https://jjhnaxuyunpocuuswvyb.supabase.co/functions/v1/score-placement-test",
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: "Bearer YOUR_ANON_KEY",
+//       },
+//       body: JSON.stringify({ candidateName, answers }),
+//     },
+//   );
+//   const data = await res.json(); // { scores, perSkillLevel, globalLevel, flags, narrative, ... }
+//
+// L'Edge Function renvoie déjà l'analyse pédagogique (avis de l'expert).
 import { ITEMS, ITEMS_BY_SKILL } from "./items";
 import type {
   Answer,
