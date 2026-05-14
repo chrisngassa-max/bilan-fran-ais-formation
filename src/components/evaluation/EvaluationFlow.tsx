@@ -329,11 +329,18 @@ export function EvaluationFlow() {
           </div>
         ) : (
           <div className="mt-5">
+            {currentItem.skill === "EO" && (
+              <SimulatedRecorder itemKey={currentItem.id} />
+            )}
             <textarea
               value={openText}
               onChange={(e) => setOpenText(e.target.value)}
               rows={8}
-              placeholder="Écrivez votre réponse ici…"
+              placeholder={
+                currentItem.skill === "EO"
+                  ? "Transcrivez ici ce que vous diriez à l'oral…"
+                  : "Écrivez votre réponse ici…"
+              }
               className="w-full rounded-lg border-2 border-outline-variant bg-surface-bright px-4 py-3 body-md focus:border-[var(--color-eval-navy)] focus:outline-none"
             />
             <p className="mt-2 text-xs text-on-surface-variant">
