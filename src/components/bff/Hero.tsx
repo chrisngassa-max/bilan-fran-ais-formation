@@ -15,7 +15,7 @@ export function Hero() {
           et intégration en France.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link to="/simulateur" onClick={() => trackEvent("landing_cta_click")}>
+          <Link to="/passer-test/$token" params={{ token: 'latest' }} onClick={() => trackEvent("landing_cta_click")}>
             <Button variant="primary">Faire le test de niveau</Button>
           </Link>
           <Link to="/contact">

@@ -8,7 +8,7 @@ interface Props {
   description?: string;
 }
 
-export function CTASection({ title, ctaLabel, to = "/simulateur", description }: Props) {
+export function CTASection({ title, ctaLabel, description }: Props) {
   return (
     <section className="px-4 py-16">
       <div className="mx-auto max-w-3xl rounded-2xl border border-outline-variant bg-surface-container-high p-8 text-center sm:p-12">
@@ -17,7 +17,7 @@ export function CTASection({ title, ctaLabel, to = "/simulateur", description }:
           <p className="body-lg mt-4 text-on-surface-variant">{description}</p>
         )}
         <div className="mt-8">
-          <Link to={to}>
+          <Link to="/passer-test/$token" params={{ token: 'latest' }}>
             <Button variant="primary">{ctaLabel}</Button>
           </Link>
         </div>
