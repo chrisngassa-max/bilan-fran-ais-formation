@@ -43,8 +43,7 @@ function BilanTestPage() {
             student_name,
             estimated_level,
             placement_tests (title)
-          ),
-          training_offers (*)
+          )
         `)
         .eq('attempt_id', attemptId)
         .single();
@@ -164,44 +163,40 @@ function BilanTestPage() {
           </CardContent>
         </Card>
         
-        {/* RECOMMENDED OFFER (SALES FUNNEL) */}
-        {result.training_offers && (
-          <Card className="border-none shadow-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white overflow-hidden relative">
-            <div className="absolute -right-20 -bottom-20 opacity-10">
-              <Rocket className="h-80 w-80 rotate-12" />
-            </div>
-            <CardContent className="p-10 md:p-14 flex flex-col md:flex-row gap-12 items-center relative z-10">
-              <div className="flex-1 space-y-6">
-                <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-1.5 rounded-full text-sm font-bold backdrop-blur-sm">
-                  <Rocket className="h-4 w-4" /> Prochaine étape conseillée
+        {/* RECOMMENDED OFFER (ADVANCED FUNNEL) */}
+        {result.recommended_offer_json && (
+          <Card className="border-2 border-amber-400 shadow-2xl bg-amber-50 overflow-hidden">
+            <CardHeader className="border-b border-amber-100 bg-amber-100/50">
+              <CardTitle className="text-amber-900 flex items-center gap-2">
+                <Rocket className="h-6 w-6" /> Votre prochaine étape recommandée
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 md:p-12 space-y-8">
+              <p className="text-slate-700 text-xl leading-relaxed font-medium">
+                {result.profile_message}
+              </p>
+              
+              <div className="bg-white rounded-3xl p-8 border border-amber-200 shadow-sm flex flex-col md:flex-row justify-between items-center gap-8">
+                <div className="space-y-3 flex-1 text-center md:text-left">
+                  <h3 className="font-black text-blue-900 text-2xl">{result.recommended_offer_json.titre}</h3>
+                  <p className="text-slate-500 text-lg leading-snug">{result.recommended_offer_json.description}</p>
+                  {result.recommended_offer_json.duree_heures && (
+                    <Badge className="bg-amber-100 text-amber-800 border-none font-bold px-4 py-1">
+                      {result.recommended_offer_json.duree_heures}h de formation intensive
+                    </Badge>
+                  )}
                 </div>
-                <h2 className="text-4xl font-black leading-tight">
-                  {result.estimated_level === 'B1' ? "Objectif Nationalité Française ?" : "Sécurisez votre parcours de formation"}
-                </h2>
-                <p className="text-xl text-orange-50 text-balance">
-                  {result.detailed_analysis?.reliability_flag || 
-                    `Bravo ${result.placement_test_attempts?.student_name} ! Votre niveau ${result.estimated_level} est une excellente base. Pour atteindre votre prochain objectif, nous vous conseillons ce module spécifique.`}
-                </p>
-                <div className="flex flex-wrap gap-4 pt-4">
-                  <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/20">
-                    <p className="text-xs opacity-70 uppercase font-bold tracking-widest mb-1">Formation recommandée</p>
-                    <p className="text-xl font-bold">{result.training_offers.title}</p>
-                  </div>
-                  <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/20">
-                    <p className="text-xs opacity-70 uppercase font-bold tracking-widest mb-1">Durée</p>
-                    <p className="text-xl font-bold">{result.training_offers.duration}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full md:w-auto">
-                <Button className="w-full md:w-auto h-20 px-12 bg-white text-orange-600 hover:bg-orange-50 font-black text-xl rounded-2xl shadow-xl transition-all hover:scale-105">
-                  Découvrir mon offre
-                  <ArrowRight className="ml-3 h-8 w-8" />
+                <Button asChild className="w-full md:w-auto h-16 px-10 bg-amber-500 hover:bg-amber-600 text-white font-black text-xl rounded-2xl shadow-lg transition-transform hover:scale-105">
+                  <a href={result.recommended_offer_json.url_cta} className="flex items-center">
+                    Découvrir cette formation
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                  </a>
                 </Button>
-                <p className="text-center mt-4 text-xs opacity-70">
-                  Conseil basé sur votre analyse IA
-                </p>
               </div>
+              
+              <p className="text-xs text-slate-400 text-center italic">
+                Conseil basé sur votre analyse IA. Pour un plan sur-mesure, prenez rendez-vous avec un expert humain.
+              </p>
             </CardContent>
           </Card>
         )}
