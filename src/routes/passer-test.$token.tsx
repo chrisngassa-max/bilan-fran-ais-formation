@@ -41,6 +41,7 @@ function PasserTestPage() {
   const [transcribing, setTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const startTimeRef = useRef<number>(Date.now());
 
   const { data: testPayload, isLoading, error } = useQuery({
     queryKey: ['public-placement-test', token],
@@ -148,12 +149,24 @@ function PasserTestPage() {
   };
 
   const nextItem = () => {
+    const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
+    
+    // Mettre à jour la réponse avec le temps passé
+    setAnswers(prev => {
+      const currentAnswer = prev.find(a => a.item_id === currentItem.id);
+      if (currentAnswer) {
+        currentAnswer.time_spent = timeSpent;
+      }
+      return [...prev];
+    });
+
     if (currentItemIndex < currentItems.length - 1) {
       setCurrentItemIndex(prev => prev + 1);
     } else {
       setCurrentStep(prev => prev + 1);
       setCurrentItemIndex(0);
     }
+    startTimeRef.current = Date.now();
   };
 
   if (isLoading) return <div className="p-20 text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" /> Chargement du test expert...</div>;
