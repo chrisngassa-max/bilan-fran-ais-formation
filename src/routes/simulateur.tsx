@@ -39,15 +39,15 @@ const STEP_STORAGE_KEY = "bff_simulator_step";
 
 const initialState: SimulatorState = {
   linguistic: {
-    comprehension_orale: 0,
-    comprehension_ecrite: 0,
-    expression_ecrite: 0,
-    expression_orale: 0,
-    vocabulaire_admin: 0,
-    vocabulaire_travail: 0,
-    grammaire: 0,
-    prononciation: 0,
-    aisance: 0,
+    comprehension_orale: null,
+    comprehension_ecrite: null,
+    expression_ecrite: null,
+    expression_orale: null,
+    vocabulaire_admin: null,
+    vocabulaire_travail: null,
+    grammaire: null,
+    prononciation: null,
+    aisance: null,
   },
   adminGoal: "unknown",
   deadlineMonths: null,
@@ -170,9 +170,7 @@ function SimulatorPage() {
 function questionAnswered(q: Question, s: SimulatorState): boolean {
   switch (q.type) {
     case "linguistic":
-      // 0 est une réponse valide (=) "quasiment rien" → considérer comme répondu.
-      // On distingue l'état "non touché" via une valeur sentinelle ? Ici on accepte 0 comme valide.
-      return true;
+      return s.linguistic[q.field] !== null;
     case "goal":
       return s.adminGoal !== "unknown";
     case "deadline":

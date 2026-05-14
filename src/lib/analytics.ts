@@ -15,7 +15,9 @@ export type AnalyticsEvent =
   | "result_viewed"
   | "contact_form_submitted"
   | "whatsapp_clicked"
-  | "phone_clicked";
+  | "phone_clicked"
+  | "page_view"
+  | "landing_cta_click";
 
 export function trackEvent(name: AnalyticsEvent, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

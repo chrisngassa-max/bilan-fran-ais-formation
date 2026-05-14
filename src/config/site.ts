@@ -2,8 +2,8 @@ export const fundingMode: "qualiopi_direct" | "partner_qualiopi" | "no_qualiopi_
   "no_qualiopi_yet";
 
 export const contactInfo = {
-  whatsapp: "33000000000", // TODO: remplacer
-  phone: "33000000000", // TODO: remplacer
+  whatsapp: "33000000000", // TODO (P0): BLOQUANT AVANT PROD - Remplacer par un vrai numéro
+  phone: "33000000000", // TODO (P0): BLOQUANT AVANT PROD - Remplacer par un vrai numéro
   email: "contact@bilanfrancaisformation.fr",
   city: "France",
 };

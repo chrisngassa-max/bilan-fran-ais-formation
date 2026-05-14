@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "./Button";
+import { trackEvent } from "@/lib/analytics";
 
 export function Hero() {
   return (
@@ -14,7 +15,7 @@ export function Hero() {
           et intégration en France.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link to="/simulateur">
+          <Link to="/simulateur" onClick={() => trackEvent("landing_cta_click")}>
             <Button variant="primary">Faire le test de niveau</Button>
           </Link>
           <Link to="/contact">

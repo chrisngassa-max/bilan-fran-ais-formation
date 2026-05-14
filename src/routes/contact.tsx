@@ -72,7 +72,8 @@ function ContactPage() {
     // eslint-disable-next-line no-console
     console.log("[BFF contact payload]", payload);
     /* TODO: envoyer ce payload vers Brevo via une serverless function
-       (clé API côté serveur uniquement). */
+       (Cloudflare Workers function /functions/brevo-contact.ts).
+       La clé API Brevo reste côté serveur, JAMAIS dans le frontend. */
     trackEvent("contact_form_submitted", { from: "contact_page" });
     setSubmitted(true);
   };

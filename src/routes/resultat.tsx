@@ -329,7 +329,7 @@ function ContactForm({ result }: { result: PublicSimulationResult }) {
     // eslint-disable-next-line no-console
     console.log("[BFF contact payload]", payload);
     /* TODO: envoyer ce payload vers Brevo via une serverless function
-       (Vercel API route /api/brevo-contact ou Netlify Function).
+       (Cloudflare Workers function /functions/brevo-contact.ts).
        La clé API Brevo reste côté serveur, JAMAIS dans le frontend.
        Endpoint Brevo cible : POST /v3/contacts (upsert) + POST /v3/events.
        Mapping attributs : OBJECTIF, NIVEAU_CIBLE, NIVEAU_ESTIME,
