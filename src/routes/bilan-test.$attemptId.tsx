@@ -14,6 +14,7 @@ import {
   Share2,
   Rocket,
   Loader2,
+  AlertCircle,
   FileText
 } from 'lucide-react';
 import { 
@@ -52,66 +53,69 @@ function BilanTestPage() {
     },
   });
 
-  if (isLoading) return <div className="p-20 text-center"><Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-orange-500" /> Analyse pédagogique en cours...</div>;
+  if (isLoading) return <div className="p-20 text-center"><Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-orange-500" /> Analyse de votre profil expert...</div>;
   if (!result) return <div className="p-20 text-center">Résultat introuvable.</div>;
 
   const chartData = [
-    { subject: 'Écrit', A: result.ce_score_pct || 0, fullMark: 100 },
-    { subject: 'Oral', A: result.co_score_pct || 0, fullMark: 100 },
-    { subject: 'Production', A: ((result.ee_score_pct || 0) + (result.eo_score_pct || 0)) / 2 || 0, fullMark: 100 },
-    { subject: 'Grammaire', A: 75, fullMark: 100 }, // Mocked or calculated
+    { subject: 'Compréhension Écrite', A: result.ce_score_pct || 0 },
+    { subject: 'Compréhension Orale', A: result.co_score_pct || 0 },
+    { subject: 'Expression Écrite', A: result.detailed_analysis?.ee_level === 'B1' ? 75 : result.detailed_analysis?.ee_level === 'A2' ? 50 : 25 },
+    { subject: 'Expression Orale', A: result.detailed_analysis?.eo_level === 'B1' ? 75 : result.detailed_analysis?.eo_level === 'A2' ? 50 : 25 },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-5xl mx-auto space-y-10">
         
-        {/* Success Banner */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-extrabold text-blue-900">Votre Bilan de Niveau Français</h1>
-          <p className="text-slate-500 text-lg">Bravo {result.placement_test_attempts?.student_name}, voici votre profil linguistique actuel.</p>
+        {/* Header Section */}
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <h1 className="text-4xl font-extrabold text-blue-900 tracking-tight">Bilan de Niveau Expert</h1>
+            <p className="text-slate-500 text-lg">Candidat : <span className="font-bold text-slate-800">{result.placement_test_attempts?.student_name}</span></p>
+          </div>
+          <Badge className="bg-green-100 text-green-700 hover:bg-green-100 px-4 py-2 border-green-200">
+            Évaluation IA : Indice {result.confidence_level || 'Normal'}
+          </Badge>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Level Card */}
-          <Card className="lg:col-span-1 border-none shadow-2xl bg-gradient-to-br from-blue-900 to-blue-800 text-white overflow-hidden relative">
-            <div className="absolute -right-4 -bottom-4 opacity-10">
-              <Award className="h-48 w-48" />
+          {/* Main Level Card */}
+          <Card className="lg:col-span-1 border-none shadow-2xl bg-blue-900 text-white overflow-hidden relative group">
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+              <Award className="h-40 w-40" />
             </div>
             <CardHeader className="text-center">
-              <CardTitle className="text-sm font-medium opacity-70 uppercase tracking-[0.2em]">Estimation CECRL</CardTitle>
+              <CardTitle className="text-sm font-medium opacity-70 uppercase tracking-widest">Niveau Estimé</CardTitle>
             </CardHeader>
             <CardContent className="text-center p-12 space-y-6 relative z-10">
-              <div className="text-9xl font-black tracking-tighter drop-shadow-lg">{result.global_level || 'A2'}</div>
-              <Badge className="bg-orange-500 hover:bg-orange-500 text-white px-6 py-2 text-md border-none shadow-lg">
-                {result.global_level?.includes('A') ? 'Niveau Élémentaire' : 'Niveau Indépendant'}
-              </Badge>
-              <div className="pt-6 text-sm opacity-80 leading-relaxed max-w-[200px] mx-auto">
-                Vous pouvez communiquer dans des situations simples de la vie quotidienne.
+              <div className="text-[10rem] font-black tracking-tighter leading-none">{result.global_level || 'A2'}</div>
+              <p className="text-xl font-bold opacity-90">Cadre CECRL</p>
+              <div className="pt-8 text-xs opacity-60 leading-relaxed italic border-t border-white/20">
+                Basé sur le barème TCF IRN (Intégration, Résidence, Nationalité).
               </div>
             </CardContent>
           </Card>
 
-          {/* Analysis Card */}
-          <Card className="lg:col-span-2 border-none shadow-xl bg-white overflow-hidden">
-            <CardHeader className="bg-slate-50 border-b">
+          {/* Detailed Skill Analysis */}
+          <Card className="lg:col-span-2 border-none shadow-xl bg-white">
+            <CardHeader className="border-b bg-slate-50/50">
               <CardTitle className="flex items-center gap-2 text-blue-900">
                 <BarChart className="h-5 w-5 text-orange-500" />
-                Détails par compétences
+                Détail de vos compétences
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8 h-[400px]">
+            <CardContent className="p-10 h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                   <PolarGrid stroke="#e2e8f0" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 14, fontWeight: 600 }} />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 13, fontWeight: 600 }} />
                   <Radar
-                    name="Score"
+                    name="Niveau"
                     dataKey="A"
                     stroke="#f97316"
                     fill="#f97316"
-                    fillOpacity={0.5}
+                    fillOpacity={0.6}
                   />
                 </RadarChart>
               </ResponsiveContainer>
@@ -119,60 +123,52 @@ function BilanTestPage() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Analysis Text */}
-          <Card className="border-none shadow-lg bg-white">
-            <CardHeader className="bg-green-50/50 border-b">
-              <CardTitle className="text-lg flex items-center gap-2 text-green-800">
-                <CheckCircle2 className="h-5 w-5" /> Vos points forts
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 space-y-4">
-              {result.strengths?.map((s: string, i: number) => (
-                <div key={i} className="flex gap-4 items-start">
-                  <div className="h-6 w-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">{s}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+        {/* Narrative Analysis Section */}
+        <Card className="border-none shadow-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-blue-900 to-blue-800 text-white">
+            <CardTitle className="flex items-center gap-3">
+              <FileText className="h-6 w-6" />
+              Bilan Pédagogique Personnalisé
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-10 space-y-10">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-green-700 flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5" /> Vos points forts
+                </h3>
+                <ul className="space-y-3">
+                  {result.strengths?.map((s: string, i: number) => (
+                    <li key={i} className="bg-green-50 p-4 rounded-xl text-slate-700 border-l-4 border-green-500">{s}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-orange-700 flex items-center gap-2">
+                  <Target className="h-5 w-5" /> Axes d'amélioration
+                </h3>
+                <ul className="space-y-3">
+                  {result.weaknesses?.map((w: string, i: number) => (
+                    <li key={i} className="bg-orange-50 p-4 rounded-xl text-slate-700 border-l-4 border-orange-500">{w}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-          <Card className="border-none shadow-lg bg-white">
-            <CardHeader className="bg-orange-50/50 border-b">
-              <CardTitle className="text-lg flex items-center gap-2 text-orange-800">
-                <Target className="h-5 w-5" /> À travailler
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 space-y-4">
-              {result.weaknesses?.map((w: string, i: number) => (
-                <div key={i} className="flex gap-4 items-start">
-                  <div className="h-6 w-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                  <p className="text-slate-700 leading-relaxed">{w}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+            <div className="p-8 bg-blue-50 rounded-2xl border border-blue-100 text-slate-700 leading-relaxed italic">
+              <h4 className="not-italic font-bold text-blue-900 mb-2">L'avis de l'expert :</h4>
+              "{result.detailed_analysis?.analysis || "Analyse en attente."}"
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Action / Next Steps */}
-        <div className="bg-blue-900 rounded-3xl p-10 text-white flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl">
-          <div className="space-y-4 max-w-xl">
-            <h2 className="text-3xl font-bold">Prêt à progresser ?</h2>
-            <p className="opacity-80 text-lg">
-              Téléchargez votre bilan complet au format PDF ou contactez un formateur pour mettre en place votre parcours personnalisé.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 shrink-0">
-            <Button size="lg" variant="secondary" className="h-16 px-10 gap-2 font-bold text-lg rounded-2xl">
-              <Download className="h-5 w-5" /> Télécharger mon PDF
-            </Button>
-            <Button size="lg" className="h-16 px-10 gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg rounded-2xl">
-              Prendre rendez-vous <ArrowRight className="h-5 w-5" />
-            </Button>
+        {/* Legal / Disclaimer */}
+        <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl flex gap-4 text-amber-900 items-start">
+          <AlertCircle className="h-6 w-6 shrink-0 mt-1" />
+          <div className="text-sm">
+            <p className="font-bold mb-1">Mention légale importante :</p>
+            Ce test donne une **estimation pédagogique automatique** de votre niveau de français. Il est basé sur une technologie d'intelligence artificielle et ne remplace en aucun cas une certification officielle (TCF, DELF) passée dans un centre d'examen agréé par France Éducation International.
           </div>
         </div>
 
