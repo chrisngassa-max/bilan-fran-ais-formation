@@ -39,6 +39,7 @@ function BilanTestPage() {
         .from('placement_test_results')
         .select(`
           *,
+          flags,
           placement_test_attempts (
             student_name,
             estimated_level,
@@ -73,9 +74,21 @@ function BilanTestPage() {
             <h1 className="text-4xl font-extrabold text-blue-900 tracking-tight">Bilan de Niveau Expert</h1>
             <p className="text-slate-500 text-lg">Candidat : <span className="font-bold text-slate-800">{result.placement_test_attempts?.student_name}</span></p>
           </div>
-          <Badge className="bg-green-100 text-green-700 hover:bg-green-100 px-4 py-2 border-green-200">
-            Évaluation IA : Indice {result.confidence_level || 'Normal'}
-          </Badge>
+          <div className="flex flex-wrap gap-2 justify-center">
+            {result.flags?.includes('FATIGUE_DETECTEE') && (
+              <Badge variant="outline" className="border-amber-500 text-amber-700 bg-amber-50 px-3 py-1 animate-pulse">
+                <AlertCircle className="h-3 w-3 mr-1" /> Fatigue détectée
+              </Badge>
+            )}
+            {result.flags?.includes('PROFIL_ASYMETRIQUE') && (
+              <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50 px-3 py-1">
+                Profil asymétrique
+              </Badge>
+            )}
+            <Badge className="bg-green-100 text-green-700 hover:bg-green-100 px-4 py-2 border-green-200">
+              Fiabilité Algorithmique : {result.flags?.length > 0 ? 'Diagnostic complexe' : 'Optimale'}
+            </Badge>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -92,7 +105,7 @@ function BilanTestPage() {
               <div className="text-[10rem] font-black tracking-tighter leading-none">{result.global_level || 'A2'}</div>
               <p className="text-xl font-bold opacity-90">Cadre CECRL</p>
               <div className="pt-8 text-xs opacity-60 leading-relaxed italic border-t border-white/20">
-                Basé sur le barème TCF IRN (Intégration, Résidence, Nationalité).
+                Basé sur le référentiel Européen (CECRL).
               </div>
             </CardContent>
           </Card>
@@ -158,13 +171,37 @@ function BilanTestPage() {
 
             <div className="p-8 bg-blue-50 rounded-2xl border border-blue-100 text-slate-700 leading-relaxed italic">
               <h4 className="not-italic font-bold text-blue-900 mb-2">L'avis de l'expert :</h4>
-              "{result.detailed_analysis?.analysis || "Analyse en attente."}"
+              "{result.teacher_notes || "Analyse pédagogique en cours..."}"
             </div>
           </CardContent>
         </Card>
         
+        {/* ANOMALY DETECTION / EXPERT CTA */}
+        {(result.flags?.includes('ALERTE_VITESSE_INCOHERENTE') || result.flags?.includes('PROFIL_INCOHERENT')) && (
+          <Card className="border-2 border-red-500 shadow-2xl bg-red-50 overflow-hidden">
+            <CardHeader className="bg-red-600 text-white">
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="h-6 w-6" /> Vérification Humaine Recommandée
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-10 space-y-6">
+              <p className="text-red-900 font-medium text-xl">
+                Votre profil présente des irrégularités (vitesse d'exécution ou incohérence de score) qui ne permettent pas à notre algorithme de garantir votre niveau CECRL à 100%.
+              </p>
+              <div className="flex flex-col md:flex-row gap-6 items-center bg-white p-6 rounded-2xl border border-red-200 shadow-sm">
+                <div className="flex-1">
+                  <p className="text-slate-600">Pour valider officiellement votre niveau et obtenir un diagnostic précis, nous vous recommandons un entretien de 15 minutes avec un de nos formateurs experts.</p>
+                </div>
+                <Button className="h-14 px-8 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl whitespace-nowrap">
+                  Réserver mon entretien gratuit
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* RECOMMENDED OFFER (ADVANCED FUNNEL) */}
-        {result.recommended_offer_json && (
+        {result.recommended_offer_json ? (
           <Card className="border-2 border-amber-400 shadow-2xl bg-amber-50 overflow-hidden">
             <CardHeader className="border-b border-amber-100 bg-amber-100/50">
               <CardTitle className="text-amber-900 flex items-center gap-2">
@@ -199,6 +236,21 @@ function BilanTestPage() {
               </p>
             </CardContent>
           </Card>
+        ) : result.recommended_pathway && (
+          <Card className="border-none shadow-xl bg-orange-50 overflow-hidden">
+             <CardHeader className="bg-orange-500 text-white">
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-6 w-6" /> Parcours Recommandé
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-10 space-y-6">
+              <p className="text-orange-900 font-bold text-2xl">{result.recommended_group}</p>
+              <p className="text-slate-700 text-lg">{result.recommended_pathway}</p>
+              <Button asChild className="bg-blue-900 hover:bg-blue-800 text-white">
+                <Link to="/financement">Consulter les aides disponibles</Link>
+              </Button>
+            </CardContent>
+          </Card>
         )}
 
         {/* Legal / Disclaimer */}
@@ -206,7 +258,7 @@ function BilanTestPage() {
           <AlertCircle className="h-6 w-6 shrink-0 mt-1" />
           <div className="text-sm">
             <p className="font-bold mb-1">Mention légale importante :</p>
-            Ce test donne une **estimation pédagogique automatique** de votre niveau de français. Il est basé sur une technologie d'intelligence artificielle et ne remplace en aucun cas une certification officielle (TCF, DELF) passée dans un centre d'examen agréé par France Éducation International.
+            Ce bilan donne une **estimation pédagogique automatique** de votre niveau de français. Il est basé sur une technologie d'intelligence artificielle et ne remplace en aucun cas une certification officielle passée dans un centre d'examen agréé.
           </div>
         </div>
 

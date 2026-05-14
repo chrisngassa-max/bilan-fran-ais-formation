@@ -41,7 +41,56 @@ function PasserTestPage() {
   const [transcribing, setTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  const startTimeRef = useRef<number>(Date.now());
+  
+  // Timer and Persistence state
+  const [activeStartTime, setActiveStartTime] = useState<number>(Date.now());
+  const accumulatedTimeRef = useRef<number>(0);
+  const SESSION_KEY = `test_session_${token}`;
+
+  // Load persistence on mount
+  useEffect(() => {
+    const saved = sessionStorage.getItem(SESSION_KEY);
+    if (saved) {
+      try {
+        const { step, index, savedAnswers, name } = JSON.parse(saved);
+        setCurrentStep(step);
+        setCurrentItemIndex(index);
+        setAnswers(savedAnswers);
+        setStudentName(name);
+        toast.info("Session restaurée. Vous pouvez reprendre votre test.");
+      } catch (e) {
+        console.error("Failed to restore session", e);
+      }
+    }
+  }, [SESSION_KEY]);
+
+  // Save persistence on change
+  useEffect(() => {
+    if (currentStep > 0) {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        step: currentStep,
+        index: currentItemIndex,
+        savedAnswers: answers,
+        name: studentName
+      }));
+    }
+  }, [currentStep, currentItemIndex, answers, studentName, SESSION_KEY]);
+
+  // Active Timer Logic (only count time when tab is visible)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab hidden: save accumulated time so far
+        accumulatedTimeRef.current += (Date.now() - activeStartTime);
+      } else {
+        // Tab focused: restart the reference clock
+        setActiveStartTime(Date.now());
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [activeStartTime]);
 
   const { data: testPayload, isLoading, error } = useQuery({
     queryKey: ['public-placement-test', token],
@@ -77,10 +126,13 @@ function PasserTestPage() {
       return data;
     },
     onSuccess: (data) => {
+      sessionStorage.removeItem(SESSION_KEY); // Clear session on success
       toast.success('Test terminé !');
       navigate({ to: '/bilan-test/$attemptId', params: { attemptId: data.attempt_id } });
     },
-    onError: (err: any) => toast.error(`Erreur: ${err.message}`),
+    onError: (err: any) => {
+      toast.error(`Erreur de transmission : ${err.message}. Vos réponses sont sauvegardées localement.`);
+    },
   });
 
   const handleAnswerChange = (answer: string) => {
@@ -149,15 +201,18 @@ function PasserTestPage() {
   };
 
   const nextItem = () => {
-    const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
+    // Total active time = accumulated from previous focus sessions + current focus session
+    const currentActiveSession = Date.now() - activeStartTime;
+    const totalTimeSpent = Math.round((accumulatedTimeRef.current + currentActiveSession) / 1000);
     
-    // Mettre à jour la réponse avec le temps passé
+    // Mettre à jour la réponse avec le temps passé (temps actif uniquement)
     setAnswers(prev => {
-      const currentAnswer = prev.find(a => a.item_id === currentItem.id);
-      if (currentAnswer) {
-        currentAnswer.time_spent = timeSpent;
+      const existing = prev.find(a => a.item_id === currentItem.id);
+      if (existing) {
+        existing.time_spent = totalTimeSpent;
+        return [...prev];
       }
-      return [...prev];
+      return [...prev, { item_id: currentItem.id, answer: "", time_spent: totalTimeSpent }];
     });
 
     if (currentItemIndex < currentItems.length - 1) {
@@ -166,7 +221,10 @@ function PasserTestPage() {
       setCurrentStep(prev => prev + 1);
       setCurrentItemIndex(0);
     }
-    startTimeRef.current = Date.now();
+    
+    // Reset timer for next question
+    accumulatedTimeRef.current = 0;
+    setActiveStartTime(Date.now());
   };
 
   if (isLoading) return <div className="p-20 text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" /> Chargement du test expert...</div>;
@@ -180,7 +238,7 @@ function PasserTestPage() {
           <Card className="border-none shadow-xl">
             <CardHeader className="text-center p-10 bg-blue-900 text-white rounded-t-xl">
               <CardTitle className="text-3xl font-bold">{testPayload.test.title}</CardTitle>
-              <p className="mt-2 text-white/70 text-lg">Positionnement Expert V2 — Multi-niveaux A1-B2</p>
+              <p className="mt-2 text-white/70 text-lg">Évaluation Linguistique Initiale — Inspiré du référentiel CECRL</p>
             </CardHeader>
             <CardContent className="p-10 space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -337,19 +395,33 @@ function PasserTestPage() {
         {currentStep === 5 && (
           <Card className="border-none shadow-2xl text-center p-20 space-y-8">
             <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto" />
-            <h2 className="text-4xl font-bold text-blue-900">Test terminé !</h2>
-            <Button 
-              onClick={() => submitMutation.mutate({ 
-                token: token === 'latest' ? null : token, 
-                student_name: studentName, 
-                answers,
-                source: 'public_site_v2'
-              })}
-              disabled={submitMutation.isPending}
-              className="h-16 px-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-2xl"
-            >
-              {submitMutation.isPending ? <Loader2 className="animate-spin h-6 w-6" /> : "Voir mon bilan expert"}
-            </Button>
+            <h2 className="text-4xl font-bold text-blue-900">Évaluation terminée !</h2>
+            <p className="text-slate-500 max-w-md mx-auto">Vos réponses sont prêtes à être analysées par notre moteur de scoring expert.</p>
+            
+            <div className="flex flex-col gap-4 items-center">
+              <Button 
+                onClick={() => submitMutation.mutate({ 
+                  token: token === 'latest' ? null : token, 
+                  student_name: studentName, 
+                  answers,
+                  source: 'public_site_v2'
+                })}
+                disabled={submitMutation.isPending}
+                className="h-16 px-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-2xl w-full md:w-auto"
+              >
+                {submitMutation.isPending ? <Loader2 className="animate-spin h-6 w-6" /> : "Générer mon bilan détaillé"}
+              </Button>
+
+              {submitMutation.isError && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => submitMutation.reset()}
+                  className="text-slate-500"
+                >
+                  Réessayer la soumission
+                </Button>
+              )}
+            </div>
           </Card>
         )}
 
