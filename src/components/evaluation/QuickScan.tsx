@@ -124,7 +124,7 @@ export function QuickScan() {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link to="/evaluation">
             <Button variant="primary" className="bg-[var(--color-eval-orange)] hover:opacity-90">
-              Passer le test complet
+              Passer l'évaluation experte (Certification CECRL)
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

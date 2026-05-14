@@ -9,6 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 
+import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -149,6 +150,7 @@ function RootComponent() {
         </main>
         <Footer />
       </div>
+      <Toaster position="top-right" richColors />
     </QueryClientProvider>
   );
 }

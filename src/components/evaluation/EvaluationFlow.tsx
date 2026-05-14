@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import {
   ArrowRight,
   ArrowLeft,
@@ -37,6 +38,74 @@ function fmtMs(ms: number) {
   return `${m}:${String(s % 60).padStart(2, "0")}`;
 }
 
+/** Enregistreur vocal simulé (mock). Aucune capture micro réelle — l'élève
+ * appuie sur "Démarrer", visualise un compteur, puis "Arrêter". */
+function SimulatedRecorder({ itemKey }: { itemKey: string }) {
+  const [recording, setRecording] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+  const [stoppedAt, setStoppedAt] = useState<number | null>(null);
+
+  useEffect(() => {
+    setRecording(false);
+    setSeconds(0);
+    setStoppedAt(null);
+  }, [itemKey]);
+
+  useEffect(() => {
+    if (!recording) return;
+    const id = window.setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [recording]);
+
+  return (
+    <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border-2 border-dashed border-[var(--color-eval-navy)] bg-[var(--color-eval-navy-soft)] p-4">
+      <Mic
+        className={`h-6 w-6 ${recording ? "animate-pulse text-[var(--color-eval-orange)]" : "text-[var(--color-eval-navy)]"}`}
+      />
+      <div className="flex-1 min-w-[140px]">
+        <p className="body-md font-semibold text-[var(--color-eval-navy)]">
+          {recording
+            ? "Enregistrement en cours…"
+            : stoppedAt !== null
+              ? `Enregistrement terminé (${stoppedAt}s)`
+              : "Enregistreur vocal"}
+        </p>
+        <p className="text-xs text-on-surface-variant">
+          Démo — l'audio n'est pas envoyé. Saisissez aussi votre réponse écrite ci-dessous.
+        </p>
+      </div>
+      <span className="rounded bg-white px-2 py-1 font-mono text-sm text-[var(--color-eval-navy)]">
+        {String(Math.floor(seconds / 60)).padStart(2, "0")}:
+        {String(seconds % 60).padStart(2, "0")}
+      </span>
+      {!recording ? (
+        <button
+          type="button"
+          onClick={() => {
+            setSeconds(0);
+            setStoppedAt(null);
+            setRecording(true);
+          }}
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-eval-orange)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+        >
+          <Mic className="h-4 w-4" /> Démarrer
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => {
+            setRecording(false);
+            setStoppedAt(seconds);
+          }}
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-eval-navy)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+        >
+          Arrêter
+        </button>
+      )}
+    </div>
+  );
+}
+
 type Phase = "intro" | "running";
 
 export function EvaluationFlow() {
@@ -57,6 +126,9 @@ export function EvaluationFlow() {
       setCurrentIndex(Math.min(p.currentIndex, ITEMS.length - 1));
       setAnswers(p.answers);
       setPhase("running");
+      toast.success("Session restaurée", {
+        description: `Reprise à la question ${Math.min(p.currentIndex, ITEMS.length - 1) + 1} / ${ITEMS.length}.`,
+      });
     }
   }, []);
 
@@ -325,11 +397,18 @@ export function EvaluationFlow() {
           </div>
         ) : (
           <div className="mt-5">
+            {currentItem.skill === "EO" && (
+              <SimulatedRecorder itemKey={currentItem.id} />
+            )}
             <textarea
               value={openText}
               onChange={(e) => setOpenText(e.target.value)}
               rows={8}
-              placeholder="Écrivez votre réponse ici…"
+              placeholder={
+                currentItem.skill === "EO"
+                  ? "Transcrivez ici ce que vous diriez à l'oral…"
+                  : "Écrivez votre réponse ici…"
+              }
               className="w-full rounded-lg border-2 border-outline-variant bg-surface-bright px-4 py-3 body-md focus:border-[var(--color-eval-navy)] focus:outline-none"
             />
             <p className="mt-2 text-xs text-on-surface-variant">
