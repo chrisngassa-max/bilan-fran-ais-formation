@@ -9,25 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SimulateurRouteImport } from './routes/simulateur'
-import { Route as ResultatRouteImport } from './routes/resultat'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
+import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
-const SimulateurRoute = SimulateurRouteImport.update({
-  id: '/simulateur',
-  path: '/simulateur',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResultatRoute = ResultatRouteImport.update({
-  id: '/resultat',
-  path: '/resultat',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
   path: '/niveaux',
@@ -58,6 +48,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
+  id: '/passer-test/$token',
+  path: '/passer-test/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BilanTestAttemptIdRoute = BilanTestAttemptIdRouteImport.update({
+  id: '/bilan-test/$attemptId',
+  path: '/bilan-test/$attemptId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,8 +66,8 @@ export interface FileRoutesByFullPath {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/resultat': typeof ResultatRoute
-  '/simulateur': typeof SimulateurRoute
+  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +76,8 @@ export interface FileRoutesByTo {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/resultat': typeof ResultatRoute
-  '/simulateur': typeof SimulateurRoute
+  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +87,8 @@ export interface FileRoutesById {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/resultat': typeof ResultatRoute
-  '/simulateur': typeof SimulateurRoute
+  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +99,8 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/resultat'
-    | '/simulateur'
+    | '/bilan-test/$attemptId'
+    | '/passer-test/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +109,8 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/resultat'
-    | '/simulateur'
+    | '/bilan-test/$attemptId'
+    | '/passer-test/$token'
   id:
     | '__root__'
     | '/'
@@ -119,8 +119,8 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/resultat'
-    | '/simulateur'
+    | '/bilan-test/$attemptId'
+    | '/passer-test/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,26 +130,12 @@ export interface RootRouteChildren {
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   NiveauxRoute: typeof NiveauxRoute
-  ResultatRoute: typeof ResultatRoute
-  SimulateurRoute: typeof SimulateurRoute
+  BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
+  PasserTestTokenRoute: typeof PasserTestTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/simulateur': {
-      id: '/simulateur'
-      path: '/simulateur'
-      fullPath: '/simulateur'
-      preLoaderRoute: typeof SimulateurRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/resultat': {
-      id: '/resultat'
-      path: '/resultat'
-      fullPath: '/resultat'
-      preLoaderRoute: typeof ResultatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/niveaux': {
       id: '/niveaux'
       path: '/niveaux'
@@ -192,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/passer-test/$token': {
+      id: '/passer-test/$token'
+      path: '/passer-test/$token'
+      fullPath: '/passer-test/$token'
+      preLoaderRoute: typeof PasserTestTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bilan-test/$attemptId': {
+      id: '/bilan-test/$attemptId'
+      path: '/bilan-test/$attemptId'
+      fullPath: '/bilan-test/$attemptId'
+      preLoaderRoute: typeof BilanTestAttemptIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -202,9 +202,19 @@ const rootRouteChildren: RootRouteChildren = {
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   NiveauxRoute: NiveauxRoute,
-  ResultatRoute: ResultatRoute,
-  SimulateurRoute: SimulateurRoute,
+  BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
+  PasserTestTokenRoute: PasserTestTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
