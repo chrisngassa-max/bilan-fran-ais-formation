@@ -13,7 +13,10 @@ export function Hero() {
           Préparation au TCF, carte de séjour, naturalisation, français professionnel
           et intégration en France.
         </p>
-        <div className="mt-6 flex justify-center">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link to="/evaluation">
+            <Button variant="primary">Passer l'évaluation experte</Button>
+          </Link>
           <Link to="/contact">
             <Button variant="outline">Être rappelé·e</Button>
           </Link>
