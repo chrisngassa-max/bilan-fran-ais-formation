@@ -15,8 +15,6 @@ import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
-import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
@@ -48,16 +46,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
-  id: '/passer-test/$token',
-  path: '/passer-test/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BilanTestAttemptIdRoute = BilanTestAttemptIdRouteImport.update({
-  id: '/bilan-test/$attemptId',
-  path: '/bilan-test/$attemptId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,8 +54,6 @@ export interface FileRoutesByFullPath {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
-  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +62,6 @@ export interface FileRoutesByTo {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
-  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +71,6 @@ export interface FileRoutesById {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
-  '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
-  '/passer-test/$token': typeof PasserTestTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +81,6 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/bilan-test/$attemptId'
-    | '/passer-test/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +89,6 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/bilan-test/$attemptId'
-    | '/passer-test/$token'
   id:
     | '__root__'
     | '/'
@@ -119,8 +97,6 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
-    | '/bilan-test/$attemptId'
-    | '/passer-test/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,8 +106,6 @@ export interface RootRouteChildren {
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   NiveauxRoute: typeof NiveauxRoute
-  BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
-  PasserTestTokenRoute: typeof PasserTestTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,20 +152,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/passer-test/$token': {
-      id: '/passer-test/$token'
-      path: '/passer-test/$token'
-      fullPath: '/passer-test/$token'
-      preLoaderRoute: typeof PasserTestTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bilan-test/$attemptId': {
-      id: '/bilan-test/$attemptId'
-      path: '/bilan-test/$attemptId'
-      fullPath: '/bilan-test/$attemptId'
-      preLoaderRoute: typeof BilanTestAttemptIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -202,8 +162,6 @@ const rootRouteChildren: RootRouteChildren = {
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   NiveauxRoute: NiveauxRoute,
-  BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
-  PasserTestTokenRoute: PasserTestTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

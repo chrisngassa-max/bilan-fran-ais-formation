@@ -28,6 +28,15 @@
   --color-outline: var(--outline);
   --color-outline-variant: var(--outline-variant);
 
+  /* Évaluation experte (palette navy/orange) */
+  --color-eval-navy: var(--eval-navy);
+  --color-eval-navy-soft: var(--eval-navy-soft);
+  --color-eval-orange: var(--eval-orange);
+  --color-eval-orange-soft: var(--eval-orange-soft);
+  --color-eval-danger: var(--eval-danger);
+  --color-eval-danger-soft: var(--eval-danger-soft);
+  --color-eval-success: var(--eval-success);
+
   /* Aliases Shadcn pour ne pas casser les composants ui/* */
   --color-background: var(--surface);
   --color-foreground: var(--on-surface);
@@ -68,6 +77,14 @@
   --on-surface-variant: #56423c;
   --outline: #89726b;
   --outline-variant: #dcc1b8;
+
+  --eval-navy: #1e3a8a;
+  --eval-navy-soft: #e0e7ff;
+  --eval-orange: #f97316;
+  --eval-orange-soft: #ffedd5;
+  --eval-danger: #dc2626;
+  --eval-danger-soft: #fee2e2;
+  --eval-success: #15803d;
 }
 
 @layer base {
