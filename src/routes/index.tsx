@@ -4,6 +4,7 @@ import { Card } from "@/components/bff/Card";
 import { CTASection } from "@/components/bff/CTASection";
 import { fundingMode, siteName, siteUrl } from "@/config/site";
 import { Button } from "@/components/bff/Button";
+import { QuickScan } from "@/components/evaluation/QuickScan";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,6 +59,12 @@ function IndexPage() {
   return (
     <>
       <Hero />
+
+      <section className="px-4 pb-12">
+        <div className="mx-auto max-w-3xl">
+          <QuickScan />
+        </div>
+      </section>
 
       <section className="px-4 py-12">
         <div className="mx-auto max-w-5xl">

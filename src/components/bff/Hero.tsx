@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "./Button";
-import { trackEvent } from "@/lib/analytics";
 
 export function Hero() {
   return (
-    <section className="px-4 pt-12 pb-16 sm:pt-20 sm:pb-24">
+    <section className="px-4 pt-12 pb-8 sm:pt-16 sm:pb-10">
       <div className="mx-auto max-w-3xl text-center">
         <p className="label-caps mb-4 text-secondary">Bilan Français Formation</p>
         <h1 className="headline-lg sm:text-4xl">
@@ -14,12 +13,9 @@ export function Hero() {
           Préparation au TCF, carte de séjour, naturalisation, français professionnel
           et intégration en France.
         </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link to="/passer-test/$token" params={{ token: 'latest' }} onClick={() => trackEvent("landing_cta_click")}>
-            <Button variant="primary">Faire le test de niveau</Button>
-          </Link>
+        <div className="mt-6 flex justify-center">
           <Link to="/contact">
-            <Button variant="outline">Être rappelé</Button>
+            <Button variant="outline">Être rappelé·e</Button>
           </Link>
         </div>
       </div>
