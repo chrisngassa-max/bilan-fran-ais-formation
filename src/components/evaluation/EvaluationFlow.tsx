@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import {
   ArrowRight,
   ArrowLeft,
@@ -57,6 +58,9 @@ export function EvaluationFlow() {
       setCurrentIndex(Math.min(p.currentIndex, ITEMS.length - 1));
       setAnswers(p.answers);
       setPhase("running");
+      toast.success("Session restaurée", {
+        description: `Reprise à la question ${Math.min(p.currentIndex, ITEMS.length - 1) + 1} / ${ITEMS.length}.`,
+      });
     }
   }, []);
 
