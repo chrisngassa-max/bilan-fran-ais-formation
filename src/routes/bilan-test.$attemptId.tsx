@@ -184,7 +184,7 @@ function BilanTestPage() {
                   FINANCEMENTS DISPONIBLES
                 </h3>
                 <div className="bg-surface-container p-4 rounded-lg">
-                  <p className="text-on-surface-variant mb-2">Votre formation peut être prise en charge à 100% par :</p>
+                  <p className="text-on-surface-variant mb-2">Selon votre situation, plusieurs dispositifs peuvent prendre en charge tout ou partie de votre formation :</p>
                   <p className="font-bold text-secondary">Compte Personnel de Formation (CPF)</p>
                 </div>
               </div>

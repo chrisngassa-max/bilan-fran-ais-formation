@@ -91,7 +91,7 @@ function IndexPage() {
       <section className="py-12 px-4">
         <div className="max-w-[800px] mx-auto text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold">Financements Disponibles</h2>
-          <p className="text-on-surface-variant mt-4">Votre formation peut être prise en charge à 100%.</p>
+          <p className="text-on-surface-variant mt-4">Selon votre situation (CPF, employeur, OPCO, France Travail), la prise en charge peut couvrir une partie ou la totalité de votre formation. Nous étudions votre éligibilité avec vous.</p>
         </div>
         <div className="max-w-[800px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
