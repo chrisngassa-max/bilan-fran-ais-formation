@@ -88,8 +88,8 @@ function BilanTestPage() {
         
         {/* Result Header */}
         <div className="text-center mb-12">
-          <span className="text-xs font-bold font-label text-secondary uppercase tracking-widest block mb-2">Simulation Terminée</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-on-surface">Votre estimation de niveau</h1>
+          <span className="text-xs font-bold font-label text-secondary uppercase tracking-widest block mb-2">Résultat de votre test (30 min)</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-on-surface">Votre bilan de niveau estimé</h1>
           {result.placement_test_attempts?.student_name && (
             <p className="text-on-surface-variant mt-2 text-lg">Candidat : {result.placement_test_attempts.student_name}</p>
           )}
@@ -184,8 +184,7 @@ function BilanTestPage() {
                   FINANCEMENTS DISPONIBLES
                 </h3>
                 <div className="bg-surface-container p-4 rounded-lg">
-                  <p className="text-on-surface-variant mb-2">Selon votre situation, plusieurs dispositifs peuvent prendre en charge tout ou partie de votre formation :</p>
-                  <p className="font-bold text-secondary">Compte Personnel de Formation (CPF)</p>
+                  <p className="text-on-surface-variant mb-2">Vos droits (CPF, OPCO, employeur) peuvent couvrir tout ou partie de votre préparation. Testons votre éligibilité.</p>
                 </div>
               </div>
             </div>
@@ -194,7 +193,7 @@ function BilanTestPage() {
             <div className="mt-8 flex gap-3 p-4 bg-error-container/10 border border-error/20 rounded-lg">
               <AlertCircle className="text-error h-6 w-6 shrink-0" />
               <p className="text-on-surface-variant italic">
-                <span className="font-bold text-on-surface">Note :</span> Cette estimation est basée sur vos réponses. Seul un examen officiel en centre d'examen peut valider légalement votre niveau pour vos démarches administratives.
+                <span className="font-bold text-on-surface">Note :</span> Cette estimation indique votre niveau actuel. Pour obtenir votre carte de séjour ou votre naturalisation, vous devrez passer un examen officiel (TCF, DELF) en centre agréé.
               </p>
             </div>
             {isFragile && (
@@ -215,7 +214,7 @@ function BilanTestPage() {
           </a>
           <Link to="/passer-test/$token" params={{ token: "latest" }} className="flex items-center justify-center gap-2 bg-transparent text-secondary border-2 border-secondary h-[56px] rounded-lg font-bold hover:bg-secondary/5 transition-all active:scale-95">
             <RefreshCw className="h-5 w-5" />
-            Refaire l'estimation
+            Refaire le test
           </Link>
         </div>
 

@@ -20,10 +20,10 @@ function NiveauxPage() {
               RÉFÉRENTIEL CECRL
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-4">
-              Comprendre les niveaux de Français
+              Comprendre les niveaux de français
             </h1>
             <p className="text-lg text-on-surface-variant max-w-[600px] mx-auto">
-              De A1 à C2, découvrez les exigences linguistiques officielles de l'État français pour vos démarches.
+              De A1 à C2, voici les niveaux requis pour chaque démarche administrative en France. À chaque palier, son objectif.
             </p>
           </div>
         </section>
@@ -137,13 +137,13 @@ function NiveauxPage() {
 
           {/* CTA Section */}
           <section className="mt-12 p-10 bg-secondary-container rounded-2xl text-center shadow-inner">
-            <h2 className="text-2xl font-bold text-on-secondary-container mb-3">Vous n'êtes pas sûr de votre niveau ?</h2>
+            <h2 className="text-2xl font-bold text-on-secondary-container mb-3">Vous n'êtes pas sûr(e) de votre niveau ?</h2>
             <p className="text-on-secondary-container/80 mb-8 max-w-[500px] mx-auto">
-              Répondez à quelques questions simples pour évaluer votre situation gratuitement en 2 minutes.
+              Répondez à quelques questions pour estimer rapidement votre niveau (2 min). Pour un bilan complet, un test approfondi est disponible.
             </p>
             <Link to="/passer-test/$token" params={{ token: "latest" }}>
               <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
-                Faire mon estimation gratuite
+                Démarrer (2 min, gratuit)
               </button>
             </Link>
             <p className="mt-4 text-sm text-on-secondary-container/60">

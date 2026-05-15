@@ -16,10 +16,10 @@ function FinancementPage() {
         {/* Hero Section */}
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-4">
-            Financer votre formation
+            Financer votre formation de français
           </h1>
           <p className="text-lg text-on-surface-variant">
-            De nombreuses solutions existent pour accompagner votre projet d'apprentissage du français. Découvrez les dispositifs adaptés à votre situation professionnelle et personnelle.
+            CPF, OPCO, employeur, France Travail : plusieurs dispositifs peuvent couvrir tout ou partie de votre formation. Vérifions ensemble votre éligibilité.
           </p>
         </header>
 
@@ -29,7 +29,7 @@ function FinancementPage() {
           <div>
             <p className="font-bold text-xl mb-2 text-error">Point de vigilance important</p>
             <p className="text-error/90 leading-relaxed">
-              Nous ne garantissons pas l'obtention d'un financement. Chaque situation est unique et doit être vérifiée auprès des organismes compétents avant toute inscription définitive.
+              Nous ne garantissons pas l'obtention d'un financement : la décision finale appartient toujours au financeur (CPF, OPCO, employeur, France Travail). Notre rôle est de monter un dossier solide pour maximiser vos chances.
             </p>
           </div>
         </div>
@@ -51,7 +51,7 @@ function FinancementPage() {
                 <h3 className="text-2xl font-bold text-on-surface">Compte Personnel de Formation (CPF)</h3>
               </div>
               <p className="text-on-surface-variant mb-6 leading-relaxed">
-                Utilisez vos droits acquis tout au long de votre carrière. Attention : nous n'utilisons pas de connexion directe simplifiée pour garantir la sécurité de votre compte.
+                Vos droits CPF accumulés au fil de votre carrière peuvent financer tout ou partie de votre formation de français. Vérifions le solde et l'éligibilité. Attention : nous n'utilisons pas de connexion directe simplifiée pour garantir la sécurité de votre compte.
               </p>
               <span className="inline-block bg-surface-container-high text-on-surface text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
                 SÉCURISÉ & INDÉPENDANT
@@ -119,7 +119,7 @@ function FinancementPage() {
         <div className="text-center py-8">
           <Link to="/contact">
             <button className="bg-primary text-on-primary px-10 h-16 rounded-xl font-bold text-xl hover:opacity-90 active:scale-95 transition-all shadow-md">
-              Vérifier les solutions possibles
+              Vérifier mes financements possibles
             </button>
           </Link>
           <p className="text-sm text-on-surface-variant mt-4">

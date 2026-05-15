@@ -13,10 +13,10 @@ export function Header() {
             <GraduationCap className="text-primary h-8 w-8" />
             <div className="flex flex-col">
               <span className="font-headline-md text-[20px] font-bold text-primary leading-tight">
-                Bilan Français
+                Bilan Français Formation
               </span>
-              <span className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">
-                Accompagnement
+              <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">
+                Votre niveau, votre parcours, vos démarches
               </span>
             </div>
           </div>
@@ -37,12 +37,12 @@ export function Header() {
               to="/simulateur"
               className="hover:text-primary transition-colors flex items-center gap-1"
             >
-              <Calculator className="h-4 w-4" /> Simulateur
+              <Calculator className="h-4 w-4" /> Test de niveau
             </Link>
           </div>
           <Link to="/simulateur">
             <button className="hidden md:block bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
-              Faire mon estimation gratuite
+              Évaluer mon niveau (gratuit, 30 min)
             </button>
           </Link>
           <button
@@ -63,10 +63,10 @@ export function Header() {
         <div className="p-6 border-b border-outline-variant flex justify-between items-center">
           <div>
             <div className="font-headline-md text-[20px] font-bold text-primary">
-              Bilan Français
+              Bilan Français Formation
             </div>
-            <div className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">
-              Accompagnement
+            <div className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">
+              Votre niveau, votre parcours, vos démarches
             </div>
           </div>
           <button onClick={() => setOpen(false)} className="text-on-surface">
@@ -102,13 +102,13 @@ export function Header() {
               className: "bg-secondary-container text-on-secondary-container font-bold",
             }}
           >
-            <Calculator className="h-5 w-5" /> Simulateur
+            <Calculator className="h-5 w-5" /> Test de niveau
           </Link>
         </nav>
         <div className="p-4 border-t border-outline-variant">
           <Link to="/simulateur" onClick={() => setOpen(false)}>
             <button className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm">
-              Estimation Gratuite
+              Faire le test (gratuit)
             </button>
           </Link>
         </div>

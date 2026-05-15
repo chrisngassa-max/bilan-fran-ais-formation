@@ -232,16 +232,16 @@ function PasserTestPage() {
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="text-center p-10 bg-blue-900 text-white">
               <h2 className="text-3xl font-bold">{testPayload.test.title}</h2>
-              <p className="mt-2 text-white/70 text-lg">Évaluation Linguistique Initiale — Inspiré du référentiel CECRL</p>
+              <p className="mt-2 text-white/70 text-lg">Votre bilan de niveau en 30 minutes — Inspiré du référentiel CECRL</p>
             </div>
             <div className="p-10 space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-6">
                   <h3 className="font-bold text-blue-900 text-xl">Règles du test</h3>
                   <ul className="space-y-4 text-slate-600">
-                    <li className="flex gap-3"><Volume2 className="h-5 w-5 text-blue-500 shrink-0" /> Écoute unique pour la partie orale</li>
-                    <li className="flex gap-3"><Mic className="h-5 w-5 text-red-500 shrink-0" /> Enregistrement vocal requis (EO)</li>
-                    <li className="flex gap-3"><CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" /> Scoring expert pondéré</li>
+                    <li className="flex gap-3"><Volume2 className="h-5 w-5 text-blue-500 shrink-0" /> Vous écouterez chaque audio une seule fois</li>
+                    <li className="flex gap-3"><Mic className="h-5 w-5 text-red-500 shrink-0" /> Vous enregistrerez votre voix pour l'oral</li>
+                    <li className="flex gap-3"><CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" /> Votre niveau est calculé selon une méthode rigoureuse</li>
                   </ul>
                 </div>
                 <div className="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
@@ -261,7 +261,7 @@ function PasserTestPage() {
                 onClick={() => setCurrentStep(1)}
                 className="w-full h-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-xl shadow-lg flex items-center justify-center"
               >
-                Lancer l'évaluation experte
+                Démarrer mon évaluation
                 <ChevronRight className="ml-2 h-6 w-6" />
               </Button>
             </div>
@@ -399,7 +399,7 @@ function PasserTestPage() {
         {currentStep === 5 && (
           <div className="bg-white rounded-2xl shadow-2xl text-center p-20 space-y-8">
             <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto" />
-            <h2 className="text-4xl font-bold text-blue-900">Évaluation terminée !</h2>
+            <h2 className="text-4xl font-bold text-blue-900">C'est terminé, bravo !</h2>
             <p className="text-slate-500 max-w-md mx-auto">Vos réponses sont prêtes à être analysées par notre moteur de scoring expert.</p>
             
             <div className="flex flex-col gap-4 items-center">
@@ -413,7 +413,7 @@ function PasserTestPage() {
                 disabled={submitMutation.isPending}
                 className="h-16 px-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-2xl w-full md:w-auto flex items-center justify-center"
               >
-                {submitMutation.isPending ? <Loader2 className="animate-spin h-6 w-6" /> : "Générer mon bilan détaillé"}
+                {submitMutation.isPending ? <Loader2 className="animate-spin h-6 w-6" /> : "Voir mon bilan détaillé"}
               </Button>
 
               {submitMutation.isError && (

@@ -21,12 +21,12 @@ export const Route = createFileRoute("/simulateur")({
 
 function SimulateurPage() {
   const options = [
-    { label: "Première carte", icon: CreditCard, color: "bg-secondary-container text-on-secondary-container" },
-    { label: "Carte 10 ans", icon: Calendar, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "1ère carte pluriannuelle", icon: CreditCard, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "Carte de résident 10 ans", icon: Calendar, color: "bg-secondary-container text-on-secondary-container" },
     { label: "Naturalisation", icon: Flag, color: "bg-secondary-container text-on-secondary-container" },
     { label: "Travail", icon: Briefcase, color: "bg-secondary-container text-on-secondary-container" },
-    { label: "Renouvellement", icon: RefreshCw, color: "bg-secondary-container text-on-secondary-container" },
-    { label: "Je ne sais pas", icon: HelpCircle, color: "bg-surface-variant text-on-surface-variant" },
+    { label: "Renouvellement de titre", icon: RefreshCw, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "Je ne sais pas encore", icon: HelpCircle, color: "bg-surface-variant text-on-surface-variant" },
   ];
 
   return (
@@ -50,7 +50,7 @@ function SimulateurPage() {
               Quel est votre objectif ?
             </h1>
             <p className="text-lg text-on-surface-variant max-w-[600px]">
-              Identifiez votre besoin pour que nous puissions vous proposer le parcours de formation le plus adapté à vos démarches administratives.
+              Dites-nous ce que vous préparez : nous orientons votre parcours en conséquence.
             </p>
           </section>
 
