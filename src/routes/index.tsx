@@ -3,12 +3,6 @@ import { ArrowRight, FileText, Badge, Flag, Wallet, Building2, Handshake, Briefc
 import { siteName } from "@/config/site";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: `${siteName} — Votre bilan de niveau en 30 minutes` },
-      { name: "description", content: "Estimez le niveau de français adapté à votre situation (carte pluriannuelle, carte de résident, naturalisation) et découvrez vos droits à la formation." }
-    ],
-  }),
   component: IndexPage,
 });
 
@@ -25,7 +19,7 @@ function IndexPage() {
             Carte pluriannuelle (A2), carte de résident 10 ans (B1) ou naturalisation (B2) : on évalue votre niveau et on vous oriente vers la formation adaptée.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link to="/evaluation">
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
               <button className="h-[56px] w-full md:w-auto bg-primary text-on-primary px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md">
                 Démarrer mon test (30 min, gratuit)
                 <ArrowRight className="w-5 h-5" />
@@ -156,7 +150,7 @@ function IndexPage() {
         <div className="max-w-[1000px] mx-auto bg-surface-container-highest rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-outline-variant shadow-sm">
           <div className="p-8 bg-primary text-on-primary">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Une question sur votre démarche ?</h2>
-            <p className="mb-8 opacity-90">Laissez-nous vos coordonnées pour comprendre votre situation et vous proposer la marche à suivre.</p>
+            <p className="mb-8 opacity-90">Un conseiller vous rappelle gratuitement pour comprendre votre situation et vous proposer la marche à suivre.</p>
             <div className="flex flex-col gap-4">
               <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="https://wa.me/33000000000">
                 <MessageCircle className="w-8 h-8" />
@@ -165,11 +159,11 @@ function IndexPage() {
                   <div className="font-bold">Ouvrir la discussion</div>
                 </div>
               </a>
-              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="mailto:contact@bilan-francais.fr">
-                <MessageCircle className="w-8 h-8" />
+              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="tel:+33000000000">
+                <Phone className="w-8 h-8" />
                 <div>
-                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">Email</div>
-                  <div className="font-bold">Nous écrire</div>
+                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">Téléphone</div>
+                  <div className="font-bold">01 23 45 67 89</div>
                 </div>
               </a>
             </div>
@@ -184,10 +178,10 @@ function IndexPage() {
               <div>
                 <label className="block font-bold mb-1 text-on-surface">Téléphone</label>
                 <input className="w-full h-[56px] px-4 rounded-lg border border-outline bg-surface-bright focus:ring-2 focus:ring-primary focus:border-primary" placeholder="06 00 00 00 00" type="tel" />
-                <p className="text-xs text-on-surface-variant mt-1">Nous vous contacterons sous 24h.</p>
+                <p className="text-xs text-on-surface-variant mt-1">Nous vous rappellerons sous 24h.</p>
               </div>
               <button className="w-full h-[56px] bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all mt-4" type="submit">
-                Envoyer ma demande
+                Être rappelé(e) gratuitement
               </button>
             </form>
           </div>

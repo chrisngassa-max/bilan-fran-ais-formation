@@ -4,10 +4,7 @@ import { Home, Sparkles, GraduationCap } from "lucide-react";
 
 export const Route = createFileRoute("/niveaux")({
   head: () => ({
-    meta: [
-      { title: `${siteName} — Les Niveaux CECRL expliqués` },
-      { name: "description", content: "Découvrez les niveaux de français (A2, B1, B2) requis pour votre carte de séjour, de résident ou de naturalisation." }
-    ],
+    meta: [{ title: `${siteName} — Les Niveaux CECRL expliqués` }],
   }),
   component: NiveauxPage,
 });
@@ -144,7 +141,7 @@ function NiveauxPage() {
             <p className="text-on-secondary-container/80 mb-8 max-w-[500px] mx-auto">
               Répondez à quelques questions pour estimer rapidement votre niveau (2 min). Pour un bilan complet, un test approfondi est disponible.
             </p>
-            <Link to="/evaluation">
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
               <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
                 Démarrer (2 min, gratuit)
               </button>

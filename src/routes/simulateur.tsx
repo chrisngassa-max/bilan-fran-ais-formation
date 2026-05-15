@@ -14,10 +14,7 @@ import {
 
 export const Route = createFileRoute("/simulateur")({
   head: () => ({
-    meta: [
-      { title: `${siteName} — Évaluer votre niveau de français` },
-      { name: "description", content: "Testez votre niveau de français en 30 minutes et découvrez le parcours adapté à vos démarches." }
-    ],
+    meta: [{ title: `${siteName} — Quel est votre objectif ?` }],
   }),
   component: SimulateurPage,
 });
@@ -62,7 +59,8 @@ function SimulateurPage() {
             {options.map((opt, i) => (
               <Link
                 key={i}
-                to="/evaluation"
+                to="/passer-test/$token"
+                params={{ token: "latest" }}
                 className="flex items-center p-6 bg-surface-container-lowest border border-outline-variant rounded-xl text-left transition-all group hover:border-primary hover:shadow-sm"
               >
                 <div className={`${opt.color} p-3 rounded-lg mr-4 group-hover:bg-primary group-hover:text-white transition-colors`}>
@@ -79,7 +77,7 @@ function SimulateurPage() {
               <ArrowLeft className="mr-2 h-5 w-5" />
               Retour
             </Link>
-            <Link to="/evaluation" className="w-full md:w-auto px-12 h-14 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-all flex items-center justify-center shadow-lg active:scale-95">
+            <Link to="/passer-test/$token" params={{ token: "latest" }} className="w-full md:w-auto px-12 h-14 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-all flex items-center justify-center shadow-lg active:scale-95">
               Continuer
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
