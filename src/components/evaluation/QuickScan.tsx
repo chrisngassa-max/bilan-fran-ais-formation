@@ -122,7 +122,7 @@ export function QuickScan() {
           complète (15–20 min).
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link to="/evaluation">
+          <Link to="/passer-test/latest">
             <Button variant="primary" className="bg-[var(--color-eval-orange)] hover:opacity-90">
               Passer l'évaluation experte (Certification CECRL)
               <ArrowRight className="h-4 w-4" />

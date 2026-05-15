@@ -14,7 +14,7 @@ export function Hero() {
           et intégration en France.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link to="/evaluation">
+          <Link to="/passer-test/latest">
             <Button variant="primary">Passer l'évaluation experte</Button>
           </Link>
           <Link to="/contact">

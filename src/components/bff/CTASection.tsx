@@ -17,7 +17,7 @@ export function CTASection({ title, ctaLabel, description }: Props) {
           <p className="body-lg mt-4 text-on-surface-variant">{description}</p>
         )}
         <div className="mt-8">
-          <Link to="/evaluation">
+          <Link to="/passer-test/latest">
             <Button variant="primary">{ctaLabel}</Button>
           </Link>
         </div>
