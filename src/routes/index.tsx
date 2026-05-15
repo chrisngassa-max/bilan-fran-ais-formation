@@ -3,6 +3,12 @@ import { ArrowRight, FileText, Badge, Flag, Wallet, Building2, Handshake, Briefc
 import { siteName } from "@/config/site";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: `${siteName} — Votre bilan de niveau en 30 minutes` },
+      { name: "description", content: "Estimez le niveau de français adapté à votre situation (carte pluriannuelle, carte de résident, naturalisation) et découvrez vos droits à la formation." }
+    ],
+  }),
   component: IndexPage,
 });
 

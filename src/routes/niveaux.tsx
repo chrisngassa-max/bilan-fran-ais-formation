@@ -4,7 +4,10 @@ import { Home, Sparkles, GraduationCap } from "lucide-react";
 
 export const Route = createFileRoute("/niveaux")({
   head: () => ({
-    meta: [{ title: `${siteName} — Les Niveaux CECRL expliqués` }],
+    meta: [
+      { title: `${siteName} — Les Niveaux CECRL expliqués` },
+      { name: "description", content: "Découvrez les niveaux de français (A2, B1, B2) requis pour votre carte de séjour, de résident ou de naturalisation." }
+    ],
   }),
   component: NiveauxPage,
 });

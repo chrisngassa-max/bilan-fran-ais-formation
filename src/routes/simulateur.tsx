@@ -14,7 +14,10 @@ import {
 
 export const Route = createFileRoute("/simulateur")({
   head: () => ({
-    meta: [{ title: `${siteName} — Quel est votre objectif ?` }],
+    meta: [
+      { title: `${siteName} — Évaluer votre niveau de français` },
+      { name: "description", content: "Testez votre niveau de français en 30 minutes et découvrez le parcours adapté à vos démarches." }
+    ],
   }),
   component: SimulateurPage,
 });
