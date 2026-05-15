@@ -20,6 +20,8 @@ export const Route = createFileRoute('/passer-test/$token')({
   component: PasserTestPage,
 });
 
+const PLACEMENT_TEST_TIMEOUT_MS = 6000;
+
 function PasserTestPage() {
   const { token } = Route.useParams();
   const navigate = useNavigate();
@@ -89,12 +91,22 @@ function PasserTestPage() {
     queryKey: ['public-placement-test', token],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('get-placement-test', {
-          method: 'GET',
-          headers: token === 'latest'
-            ? { 'Content-Type': 'application/json' }
-            : { 'Content-Type': 'application/json', 'x-placement-token': token },
-        });
+        const response = await Promise.race([
+          supabase.functions.invoke('get-placement-test', {
+            method: 'GET',
+            headers: token === 'latest'
+              ? { 'Content-Type': 'application/json' }
+              : { 'Content-Type': 'application/json', 'x-placement-token': token },
+          }),
+          new Promise<{ data: null; error: Error }>((resolve) => {
+            window.setTimeout(
+              () => resolve({ data: null, error: new Error('Timeout get-placement-test') }),
+              PLACEMENT_TEST_TIMEOUT_MS,
+            );
+          }),
+        ]);
+
+        const { data, error } = response;
         
         if (error || !data || !Array.isArray(data.items)) {
           console.warn("Supabase function error, using mock fallback:", error);
