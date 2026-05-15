@@ -19,7 +19,7 @@ function IndexPage() {
             Carte pluriannuelle (A2), carte de résident 10 ans (B1) ou naturalisation (B2) : on évalue votre niveau et on vous oriente vers la formation adaptée.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+            <Link to="/passer-test/latest">
               <button className="h-[56px] w-full md:w-auto bg-primary text-on-primary px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md">
                 Démarrer mon test (30 min, gratuit)
                 <ArrowRight className="w-5 h-5" />
