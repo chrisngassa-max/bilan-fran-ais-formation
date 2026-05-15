@@ -91,11 +91,12 @@ function PasserTestPage() {
       try {
         const { data, error } = await supabase.functions.invoke('get-placement-test', {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          queries: token === 'latest' ? {} : { token }
+          headers: token === 'latest'
+            ? { 'Content-Type': 'application/json' }
+            : { 'Content-Type': 'application/json', 'x-placement-token': token },
         });
         
-        if (error) {
+        if (error || !data || !Array.isArray(data.items)) {
           console.warn("Supabase function error, using mock fallback:", error);
           return getMockTestData();
         }
