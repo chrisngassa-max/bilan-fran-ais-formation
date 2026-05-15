@@ -108,7 +108,7 @@ function PasserTestPage() {
     },
   });
 
-  // Mock data for when Supabase functions are not yet deployed
+  // Mock data for when Supabase functions are not yet deployed or return 404
   function getMockTestData() {
     return {
       schema_version: "placement_test_v1",
@@ -122,48 +122,68 @@ function PasserTestPage() {
       },
       configuration: {
         levels_covered: ["A2", "B1", "B2"],
-        skills: ["Compréhension", "Grammaire"],
+        skills: ["CE", "CO", "EE", "EO"],
         contexts: ["Vie quotidienne", "Travail"]
       },
       items: [
         {
-          id: "m1",
-          skill: "Compréhension écrite",
+          id: "mock-ce-1",
+          skill: "CE",
           level_cecrl: "A2",
           difficulty: 1,
           context: "Email",
           support_type: "text",
           support: "Bonjour, j'aimerais réserver une table pour deux personnes ce soir à 20h. Cordialement, Jean.",
           question: "Que veut faire Jean ?",
-          options: ["Réserver un restaurant", "Acheter un billet de train", "Appeler un ami"],
+          options: [
+            { id: "A", text: "Réserver un restaurant" },
+            { id: "B", text: "Acheter un billet de train" },
+            { id: "C", text: "Appeler un ami" }
+          ],
           score: 1,
           order_index: 0
         },
         {
-          id: "m2",
-          skill: "Grammaire",
+          id: "mock-co-1",
+          skill: "CO",
           level_cecrl: "B1",
           difficulty: 2,
-          context: "Conjugaison",
+          context: "Annonce publique",
           support_type: "text",
-          support: "Complétez la phrase : 'Si j'avais de l'argent, je _______ un voyage autour du monde.'",
-          question: "Quelle est la bonne forme ?",
-          options: ["ferais", "fais", "ferai"],
+          support: "Annonce simulée : le train pour Lyon partira voie 4 avec dix minutes de retard.",
+          audio_url: "",
+          question: "Quelle information est annoncée ?",
+          options: [
+            { id: "A", text: "Le train est annulé" },
+            { id: "B", text: "Le train a du retard" },
+            { id: "C", text: "Le train change de destination" }
+          ],
           score: 2,
           order_index: 1
         },
         {
-          id: "m3",
-          skill: "Compréhension orale",
+          id: "mock-ee-1",
+          skill: "EE",
           level_cecrl: "B2",
           difficulty: 3,
-          context: "Radio",
+          context: "Écrit professionnel",
           support_type: "text",
-          support: "Le gouvernement a annoncé de nouvelles mesures pour favoriser la transition écologique dans les transports urbains.",
-          question: "De quoi parle ce reportage ?",
-          options: ["De l'écologie", "Du sport", "De la cuisine"],
+          support: "Votre responsable vous demande de justifier une absence à une réunion importante.",
+          question: "Rédigez un court message professionnel pour expliquer la situation et proposer une solution.",
           score: 3,
           order_index: 2
+        },
+        {
+          id: "mock-eo-1",
+          skill: "EO",
+          level_cecrl: "B1",
+          difficulty: 2,
+          context: "Présentation orale",
+          support_type: "text",
+          support: "Vous participez à un entretien de formation.",
+          question: "Présentez votre parcours et expliquez pourquoi vous souhaitez améliorer votre français.",
+          score: 2,
+          order_index: 3
         }
       ],
       scoring_rules: {
