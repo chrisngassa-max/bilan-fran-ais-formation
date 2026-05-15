@@ -18,7 +18,7 @@ export function Hero() {
             <Button variant="primary">Passer l'évaluation experte</Button>
           </Link>
           <Link to="/contact">
-            <Button variant="outline">Être rappelé·e</Button>
+            <Button variant="outline">Nous contacter</Button>
           </Link>
         </div>
       </div>

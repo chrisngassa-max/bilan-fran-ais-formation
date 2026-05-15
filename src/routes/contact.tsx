@@ -82,9 +82,9 @@ function ContactPage() {
     <div className="px-4 py-10">
       <div className="mx-auto max-w-2xl space-y-6">
         <header className="text-center">
-          <h1 className="headline-lg">Échangez avec un formateur expert</h1>
+          <h1 className="headline-lg">Échangez avec notre équipe</h1>
           <p className="mt-3 body-lg text-on-surface-variant">
-            Vous avez un doute sur votre niveau ou sur les financements possibles ? Laissez-nous vos coordonnées, un formateur vous rappelle sous 24h pour faire le point.
+            Vous avez un doute sur votre niveau ou sur les financements possibles ? Laissez-nous vos coordonnées, notre équipe vous répond sous 24h pour faire le point.
           </p>
         </header>
 
@@ -128,9 +128,9 @@ function ContactPage() {
           </Card>
         ) : (
           <Card>
-            <h2 className="headline-md">Être rappelé(e) gratuitement</h2>
+            <h2 className="headline-md">Nous contacter</h2>
             <p className="mt-1 body-md text-on-surface-variant">
-              L'appel dure environ 10 minutes. C'est sans engagement.
+              Laissez-nous un message, c'est sans engagement.
             </p>
             <form className="mt-6 grid gap-4" onSubmit={onSubmit} noValidate>
               <F name="firstName" label="Prénom" required error={errors.firstName} />
@@ -157,7 +157,7 @@ function ContactPage() {
               )}
 
               <Button variant="primary" type="submit">
-                Demander mon rappel (gratuit)
+                Envoyer mon message
               </Button>
             </form>
           </Card>

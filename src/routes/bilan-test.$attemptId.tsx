@@ -111,11 +111,11 @@ function BilanTestPage() {
                 <div className="flex-1">
                   <p className="text-on-surface-variant">Pour débloquer vos résultats officiels, un entretien de vérification avec un de nos formateurs est nécessaire.</p>
                 </div>
-                <a href={phoneHref} onClick={() => trackEvent("phone_clicked")}>
+                <Link to="/contact">
                   <button className="h-14 px-8 bg-primary hover:opacity-90 text-on-primary font-bold rounded-xl whitespace-nowrap transition-all">
-                    Réserver mon entretien
+                    Contacter un conseiller
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -204,10 +204,10 @@ function BilanTestPage() {
 
         {/* Action Grid */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href={phoneHref} className="flex items-center justify-center gap-2 bg-primary text-on-primary h-[56px] rounded-lg font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
-            <Phone className="h-5 w-5" />
-            Être rappelé
-          </a>
+          <Link to="/contact" className="flex items-center justify-center gap-2 bg-primary text-on-primary h-[56px] rounded-lg font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
+            <Send className="h-5 w-5" />
+            Nous contacter
+          </Link>
           <a href={waHref()} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-surface-container-highest text-on-surface h-[56px] rounded-lg font-bold border border-outline-variant hover:bg-surface-variant transition-all active:scale-95">
             <Send className="h-5 w-5" />
             Envoyer par WhatsApp

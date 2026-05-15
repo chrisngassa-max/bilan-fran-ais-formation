@@ -156,7 +156,7 @@ function IndexPage() {
         <div className="max-w-[1000px] mx-auto bg-surface-container-highest rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-outline-variant shadow-sm">
           <div className="p-8 bg-primary text-on-primary">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Une question sur votre démarche ?</h2>
-            <p className="mb-8 opacity-90">Un conseiller vous rappelle gratuitement pour comprendre votre situation et vous proposer la marche à suivre.</p>
+            <p className="mb-8 opacity-90">Laissez-nous vos coordonnées pour comprendre votre situation et vous proposer la marche à suivre.</p>
             <div className="flex flex-col gap-4">
               <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="https://wa.me/33000000000">
                 <MessageCircle className="w-8 h-8" />
@@ -165,11 +165,11 @@ function IndexPage() {
                   <div className="font-bold">Ouvrir la discussion</div>
                 </div>
               </a>
-              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="tel:+33000000000">
-                <Phone className="w-8 h-8" />
+              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="mailto:contact@bilan-francais.fr">
+                <MessageCircle className="w-8 h-8" />
                 <div>
-                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">Téléphone</div>
-                  <div className="font-bold">01 23 45 67 89</div>
+                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">Email</div>
+                  <div className="font-bold">Nous écrire</div>
                 </div>
               </a>
             </div>
@@ -184,10 +184,10 @@ function IndexPage() {
               <div>
                 <label className="block font-bold mb-1 text-on-surface">Téléphone</label>
                 <input className="w-full h-[56px] px-4 rounded-lg border border-outline bg-surface-bright focus:ring-2 focus:ring-primary focus:border-primary" placeholder="06 00 00 00 00" type="tel" />
-                <p className="text-xs text-on-surface-variant mt-1">Nous vous rappellerons sous 24h.</p>
+                <p className="text-xs text-on-surface-variant mt-1">Nous vous contacterons sous 24h.</p>
               </div>
               <button className="w-full h-[56px] bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all mt-4" type="submit">
-                Être rappelé(e) gratuitement
+                Envoyer ma demande
               </button>
             </form>
           </div>
