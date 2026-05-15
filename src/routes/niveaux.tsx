@@ -1,101 +1,157 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { LevelCard } from "@/components/bff/LevelCard";
-import { Disclaimer } from "@/components/bff/Disclaimer";
-import { CTASection } from "@/components/bff/CTASection";
-import { siteName, siteUrl } from "@/config/site";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { siteName } from "@/config/site";
+import { Home, Sparkles, GraduationCap } from "lucide-react";
 
 export const Route = createFileRoute("/niveaux")({
   head: () => ({
-    meta: [
-      { title: `Niveaux A0 à B2 — ${siteName}` },
-      {
-        name: "description",
-        content:
-          "Comprendre les niveaux de français A0, A1, A2, B1, B2 selon le CECRL et leur correspondance avec les démarches administratives.",
-      },
-      { property: "og:title", content: `Niveaux de français A0 à B2 — ${siteName}` },
-      {
-        property: "og:description",
-        content:
-          "Description des niveaux CECRL et de leur lien avec la carte de séjour, la carte de résident et la naturalisation.",
-      },
-      { property: "og:url", content: siteUrl + "/niveaux" },
-    ],
+    meta: [{ title: `${siteName} — Les Niveaux CECRL expliqués` }],
   }),
   component: NiveauxPage,
 });
 
 function NiveauxPage() {
   return (
-    <div className="px-4 py-12">
-      <div className="mx-auto max-w-5xl">
-        <header className="text-center max-w-2xl mx-auto">
-          <h1 className="headline-lg">Les niveaux de français</h1>
-          <p className="mt-4 body-lg text-on-surface-variant">
-            Du débutant complet (A0) au niveau autonome avancé (B2). Trouvez où vous
-            vous situez.
-          </p>
-        </header>
+    <div className="flex flex-col min-h-screen bg-surface">
+      <main className="flex-1">
+        {/* Header Section */}
+        <section className="pt-12 md:pt-16 pb-12 px-4 bg-surface-container-low text-center border-b border-outline-variant">
+          <div className="max-w-[800px] mx-auto">
+            <span className="text-xs font-bold font-label text-primary uppercase tracking-widest block mb-2">
+              RÉFÉRENTIEL CECRL
+            </span>
+            <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-4">
+              Comprendre les niveaux de Français
+            </h1>
+            <p className="text-lg text-on-surface-variant max-w-[600px] mx-auto">
+              De A1 à C2, découvrez les exigences linguistiques officielles de l'État français pour vos démarches.
+            </p>
+          </div>
+        </section>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          <LevelCard
-            level="A0"
-            understands="Quelques mots isolés"
-            speaks="Se présenter avec des mots simples"
-            writes="Son nom, des chiffres"
-            difficulties="Compréhension globale, prononciation"
-            training="Alphabétisation ou français débutant complet"
-          />
-          <LevelCard
-            level="A1"
-            understands="Phrases courtes du quotidien"
-            speaks="Se présenter, demander un renseignement basique"
-            writes="Phrases simples, formulaires basiques"
-            difficulties="Conjugaisons, vocabulaire limité"
-            training="Français débutant"
-          />
-          <LevelCard
-            level="A2"
-            understands="Conversations simples sur des sujets familiers"
-            speaks="Échanger sur la vie quotidienne, le travail"
-            writes="Messages courts, mails simples"
-            difficulties="Temps du passé, structures complexes"
-            training="Consolidation A2 / préparation TCF A2"
-            admin="Peut être demandé pour une première carte de séjour pluriannuelle."
-          />
-          <LevelCard
-            level="B1"
-            understands="L'essentiel d'une discussion claire"
-            speaks="Raconter, expliquer, donner un avis simple"
-            writes="Lettres, courriers personnels, textes structurés"
-            difficulties="Subjonctif, vocabulaire administratif"
-            training="Préparation TCF B1 / français intermédiaire"
-            admin="Peut être demandé pour la carte de résident 10 ans."
-          />
-          <LevelCard
-            level="B2"
-            understands="Discussions complexes, débats, médias"
-            speaks="Argumenter, nuancer, défendre un point de vue"
-            writes="Rédactions structurées, courriers formels"
-            difficulties="Registres soutenus, expressions idiomatiques"
-            training="Préparation TCF B2 / français avancé"
-            admin="Peut être demandé pour la naturalisation."
-          />
+        <div className="max-w-[1000px] mx-auto px-4 py-12 space-y-12">
+          {/* Summary Table */}
+          <section>
+            <h2 className="text-2xl font-bold text-on-surface mb-6">Synthèse des obligations</h2>
+            <div className="overflow-x-auto bg-surface-bright border border-outline-variant rounded-xl shadow-sm">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-surface-container-lowest border-b border-outline-variant">
+                  <tr>
+                    <th className="p-4 text-xs font-bold font-label text-outline uppercase tracking-wider">Niveau</th>
+                    <th className="p-4 text-xs font-bold font-label text-outline uppercase tracking-wider">Objectif</th>
+                    <th className="p-4 text-xs font-bold font-label text-outline uppercase tracking-wider">Exigence</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-variant">
+                  <tr>
+                    <td className="p-4 font-bold text-primary">A2</td>
+                    <td className="p-4">Carte de Résident (10 ans)</td>
+                    <td className="p-4">
+                      <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-sm font-medium">Obligatoire</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 font-bold text-primary">B1</td>
+                    <td className="p-4">Demande de Nationalité Française</td>
+                    <td className="p-4">
+                      <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-sm font-medium">Obligatoire</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 font-bold text-primary">B2 / C1</td>
+                    <td className="p-4">Études supérieures & Emplois qualifiés</td>
+                    <td className="p-4">
+                      <span className="bg-surface-container-high text-on-surface px-2 py-1 rounded text-sm font-medium">Recommandé</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Detailed Cards (Bento-inspired) */}
+          <section className="grid grid-cols-1 gap-6">
+            {/* A2 Card */}
+            <div className="bg-surface-bright p-8 rounded-xl border border-outline-variant flex flex-col md:flex-row gap-6 items-start relative overflow-hidden shadow-sm">
+              <div className="absolute top-4 right-4 text-primary opacity-10">
+                <Home className="w-24 h-24" />
+              </div>
+              <div className="flex-1 relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-4xl font-bold text-primary">A2</span>
+                  <span className="text-xs font-bold font-label text-secondary bg-secondary-container px-3 py-1 rounded-full uppercase tracking-wider">Élémentaire</span>
+                </div>
+                <h3 className="text-2xl font-bold mb-3">La Carte de Résident</h3>
+                <p className="text-on-surface-variant mb-6 leading-relaxed">
+                  Pour obtenir votre carte de 10 ans, vous devez prouver que vous pouvez communiquer simplement dans la vie courante : faire des courses, parler de votre environnement.
+                </p>
+                <div className="bg-surface-container p-4 rounded-lg border border-surface-variant italic text-sm text-on-surface-variant">
+                  "L'étape clé pour une stabilité durable en France."
+                </div>
+              </div>
+            </div>
+
+            {/* B1 Card */}
+            <div className="bg-surface-bright p-8 rounded-xl border-2 border-primary flex flex-col md:flex-row gap-6 items-start relative overflow-hidden shadow-md">
+              <div className="absolute top-4 right-4 text-primary-container opacity-10">
+                <Sparkles className="w-24 h-24" />
+              </div>
+              <div className="flex-1 relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-4xl font-bold text-primary">B1</span>
+                  <span className="text-xs font-bold font-label text-on-primary-container bg-primary-container px-3 py-1 rounded-full uppercase tracking-wider">Intermédiaire</span>
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Devenir Français</h3>
+                <p className="text-on-surface-variant mb-6 leading-relaxed">
+                  La naturalisation demande une autonomie réelle. Vous devez savoir exprimer votre opinion, raconter un événement et comprendre les points essentiels d'une discussion standard.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-center gap-3 text-sm text-on-surface">
+                    <span className="text-secondary shrink-0">✓</span>
+                    Indispensable pour le dossier de citoyenneté
+                  </li>
+                  <li className="flex items-center gap-3 text-sm text-on-surface">
+                    <span className="text-secondary shrink-0">✓</span>
+                    Valable pour la plupart des formations professionnelles
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* B2/C1 Card */}
+            <div className="bg-surface-bright p-8 rounded-xl border border-outline-variant flex flex-col md:flex-row gap-6 items-start relative overflow-hidden shadow-sm">
+              <div className="absolute top-4 right-4 text-on-surface-variant opacity-10">
+                <GraduationCap className="w-24 h-24" />
+              </div>
+              <div className="flex-1 relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-4xl font-bold text-on-surface">B2 / C1</span>
+                  <span className="text-xs font-bold font-label text-on-surface bg-surface-container-high px-3 py-1 rounded-full uppercase tracking-wider">Avancé</span>
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Études & Carrière</h3>
+                <p className="text-on-surface-variant leading-relaxed">
+                  Pour intégrer une Université ou accéder à des postes de cadres, une maîtrise fluide de la langue est nécessaire pour argumenter et comprendre des textes complexes.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="mt-12 p-10 bg-secondary-container rounded-2xl text-center shadow-inner">
+            <h2 className="text-2xl font-bold text-on-secondary-container mb-3">Vous n'êtes pas sûr de votre niveau ?</h2>
+            <p className="text-on-secondary-container/80 mb-8 max-w-[500px] mx-auto">
+              Répondez à quelques questions simples pour évaluer votre situation gratuitement en 2 minutes.
+            </p>
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+              <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
+                Faire mon estimation gratuite
+              </button>
+            </Link>
+            <p className="mt-4 text-sm text-on-secondary-container/60">
+              Service gratuit, sans engagement et conforme RGPD.
+            </p>
+          </section>
         </div>
-
-        <div className="mt-10">
-          <Disclaimer>
-            Ce test donne une estimation. Il ne remplace pas une certification officielle
-            (TCF, TEF, DELF/DALF). Le niveau exact exigé pour votre démarche doit être
-            vérifié au cas par cas.
-          </Disclaimer>
-        </div>
-      </div>
-
-      <CTASection
-        title="Pas sûr(e) de votre niveau&nbsp;?"
-        ctaLabel="Faire mon estimation gratuite"
-      />
+      </main>
     </div>
   );
 }

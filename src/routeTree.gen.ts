@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as FinancementRouteImport } from './routes/financement'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
+const SimulateurRoute = SimulateurRouteImport.update({
+  id: '/simulateur',
+  path: '/simulateur',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
   path: '/niveaux',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
+  '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
+    | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
   fileRoutesById: FileRoutesById
@@ -130,12 +142,20 @@ export interface RootRouteChildren {
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   NiveauxRoute: typeof NiveauxRoute
+  SimulateurRoute: typeof SimulateurRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/simulateur': {
+      id: '/simulateur'
+      path: '/simulateur'
+      fullPath: '/simulateur'
+      preLoaderRoute: typeof SimulateurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/niveaux': {
       id: '/niveaux'
       path: '/niveaux'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   NiveauxRoute: NiveauxRoute,
+  SimulateurRoute: SimulateurRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,
 }

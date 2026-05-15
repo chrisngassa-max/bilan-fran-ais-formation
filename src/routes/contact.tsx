@@ -13,7 +13,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Contactez l'équipe Bilan Français Formation pour étudier votre projet : TCF, démarches administratives, français professionnel.",
+          "Contactez l'équipe Bilan Français Formation pour étudier votre projet : certifications officielles, démarches administratives, français professionnel.",
       },
       { property: "og:title", content: `Contact — ${siteName}` },
       {
@@ -131,7 +131,7 @@ function ContactPage() {
           <Card>
             <h2 className="headline-md">Formulaire de contact</h2>
             <p className="mt-1 body-md text-on-surface-variant">
-              Objectifs possibles : préparation TCF, carte de séjour, naturalisation,
+              Objectifs possibles : préparation examen, carte de séjour, naturalisation,
               français professionnel, remise à niveau.
             </p>
             <form className="mt-6 grid gap-4" onSubmit={onSubmit} noValidate>

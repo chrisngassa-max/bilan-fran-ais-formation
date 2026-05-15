@@ -1,126 +1,207 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Hero } from "@/components/bff/Hero";
-import { Card } from "@/components/bff/Card";
-import { CTASection } from "@/components/bff/CTASection";
-import { fundingMode, siteName, siteUrl } from "@/config/site";
-import { Button } from "@/components/bff/Button";
-import { QuickScan } from "@/components/evaluation/QuickScan";
+import { ArrowRight, FileText, Badge, Flag, Wallet, Building2, Handshake, Briefcase, MessageCircle, Phone, Gavel } from "lucide-react";
+import { siteName } from "@/config/site";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: `${siteName} — Bilan de français et formation adaptée` },
-      {
-        name: "description",
-        content:
-          "Test de niveau gratuit, orientation vers la bonne formation : TCF, carte de séjour, naturalisation, français professionnel.",
-      },
-      { property: "og:title", content: `${siteName} — Bilan de français` },
-      {
-        property: "og:description",
-        content:
-          "Évaluez votre niveau et trouvez la formation adaptée à votre projet en France.",
-      },
-      { property: "og:url", content: siteUrl + "/" },
-    ],
-  }),
   component: IndexPage,
 });
 
-const POUR_QUI = [
-  { title: "Débutants en français", desc: "Vous arrivez en France ou vous reprenez à zéro." },
-  { title: "Préparation au TCF", desc: "Vous préparez une certification officielle." },
-  { title: "Salariés", desc: "Vous avez besoin du français professionnel au travail." },
-  { title: "Démarches administratives", desc: "Carte de séjour, résident, naturalisation." },
-];
-
-const fundingWording =
-  fundingMode === "qualiopi_direct"
-    ? "Accompagnement vers les solutions de financement, dont le CPF selon votre éligibilité."
-    : fundingMode === "partner_qualiopi"
-      ? "Accompagnement vers les solutions de financement, avec orientation possible via un organisme partenaire certifié."
-      : "Accompagnement vers les solutions de financement adaptées à votre situation (personnel, employeur, OPCO, partenaire).";
-
-const PROPOSE = [
-  { title: "Test de niveau", desc: "Une estimation rapide et claire de votre niveau actuel." },
-  { title: "Orientation", desc: "Vers le parcours adapté à votre objectif." },
-  { title: "Formation en petit groupe", desc: "Pour progresser à votre rythme avec un suivi humain." },
-  { title: "Solutions de financement", desc: fundingWording },
-];
-
-const POURQUOI = [
-  "Éviter de commencer dans un mauvais groupe",
-  "Identifier vos compétences faibles",
-  "Préparer un parcours réaliste",
-  "Gagner du temps sur vos démarches",
-];
-
 function IndexPage() {
   return (
-    <>
-      <Hero />
-
-      <section className="px-4 pb-12">
-        <div className="mx-auto max-w-3xl">
-          <QuickScan />
-        </div>
-      </section>
-
-      <section className="px-4 py-12">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="headline-lg text-center">Pour qui&nbsp;?</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {POUR_QUI.map((c) => (
-              <Card key={c.title}>
-                <h3 className="headline-md">{c.title}</h3>
-                <p className="mt-2 body-md text-on-surface-variant">{c.desc}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-12 bg-surface-container">
-        <div className="mx-auto max-w-5xl">
-          <h2 className="headline-lg text-center">Ce que nous proposons</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {PROPOSE.map((c) => (
-              <Card key={c.title}>
-                <h3 className="headline-md">{c.title}</h3>
-                <p className="mt-2 body-md text-on-surface-variant">{c.desc}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-12">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="headline-lg text-center">Pourquoi faire un bilan&nbsp;?</h2>
-          <ul className="mt-8 grid gap-3">
-            {POURQUOI.map((p) => (
-              <li
-                key={p}
-                className="rounded-lg border border-outline-variant bg-surface-bright px-4 py-3 body-lg"
-              >
-                <span className="mr-2 text-primary font-semibold">→</span>
-                {p}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex justify-center">
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-12 md:pt-16 pb-12 px-4">
+        <div className="max-w-[800px] mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-on-background mb-4 leading-tight">
+            Estimez le niveau de français adapté à votre situation
+          </h1>
+          <p className="text-lg text-on-surface-variant mb-8">
+            Que vous souhaitiez obtenir une première carte pluriannuelle, devenir résident de longue durée (10 ans) ou demander la naturalisation française, nous vous guidons.
+          </p>
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+              <button className="h-[56px] w-full md:w-auto bg-primary text-on-primary px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md">
+                Faire mon estimation gratuite
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
             <Link to="/niveaux">
-              <Button variant="outline">Voir les niveaux A0 à B2</Button>
+              <button className="h-[56px] w-full md:w-auto border-2 border-secondary text-secondary px-8 rounded-lg font-bold flex items-center justify-center hover:bg-secondary-container/20 active:scale-95 transition-all">
+                Comprendre les niveaux A2, B1, B2
+              </button>
             </Link>
           </div>
         </div>
+
+        {/* Decorative Visual */}
+        <div className="mt-12 max-w-[1000px] mx-auto rounded-xl overflow-hidden shadow-sm border border-outline-variant">
+          <img
+            alt="Groupe étudiant"
+            className="w-full h-[300px] md:h-[450px] object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzYQMSLme1QuqbxfGCtlkQdEwrsTAawK3v1CJ4VpHQNRvuwta1hEDoFjoM-BZPTfFIZNzcmX_aMyA3Own7y38Ms33q4fs7KaMl28oax7RGNn2V11qZu6VdNiyVzHNUHXlO8RFh13pxqAn8aTop1XWq5XcpETWVmHoqRbtzbHSlrt4gNrgi8nb3YiWwMffyu3byArf13QUcVl5WU-UrHnvZpYtVyYiKj9Bl0_EDkHGXkejkyIBfhtFN4e3owE2jSVwHbL9rKsBM39c"
+          />
+        </div>
       </section>
 
-      <CTASection
-        title="Commencez par un bilan simple et gratuit"
-        ctaLabel="Commencer mon bilan gratuit"
-        description="10 minutes pour situer votre niveau et recevoir une orientation personnalisée."
-      />
-    </>
+      {/* Tableau des niveaux (Bento-style Grid) */}
+      <section className="py-12 px-4 bg-[#f8efec]">
+        <div className="max-w-[800px] mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Les exigences linguistiques</h2>
+          <div className="grid grid-cols-1 gap-4">
+            {/* A2 Card */}
+            <div className="bg-surface-bright p-6 rounded-xl border border-outline-variant flex items-center gap-6">
+              <div className="bg-primary-container/20 text-primary w-16 h-16 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-2xl font-bold">A2</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-1">1ère Carte Pluriannuelle</h3>
+                <p className="text-on-surface-variant">Un niveau élémentaire pour vos démarches administratives initiales.</p>
+              </div>
+              <FileText className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
+            </div>
+
+            {/* B1 Card */}
+            <div className="bg-surface-bright p-6 rounded-xl border border-outline-variant flex items-center gap-6">
+              <div className="bg-secondary-container text-secondary w-16 h-16 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-2xl font-bold">B1</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-1">Carte de Résident (10 ans)</h3>
+                <p className="text-on-surface-variant">Un niveau intermédiaire pour une intégration durable en France.</p>
+              </div>
+              <Badge className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
+            </div>
+
+            {/* B2 Card */}
+            <div className="bg-surface-bright p-6 rounded-xl border border-outline-variant flex items-center gap-6">
+              <div className="bg-primary text-on-primary w-16 h-16 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-2xl font-bold">B2</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-1">Naturalisation</h3>
+                <p className="text-on-surface-variant">Le niveau avancé requis pour obtenir la nationalité française.</p>
+              </div>
+              <Flag className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Financements */}
+      <section className="py-12 px-4">
+        <div className="max-w-[800px] mx-auto text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold">Financements Disponibles</h2>
+          <p className="text-on-surface-variant mt-4">Votre formation peut être prise en charge à 100%.</p>
+        </div>
+        <div className="max-w-[800px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+            <Wallet className="text-primary w-10 h-10 mb-2" />
+            <span className="font-bold">CPF</span>
+          </div>
+          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+            <Building2 className="text-primary w-10 h-10 mb-2" />
+            <span className="font-bold">Employeur</span>
+          </div>
+          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+            <Handshake className="text-primary w-10 h-10 mb-2" />
+            <span className="font-bold">OPCO</span>
+          </div>
+          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+            <Briefcase className="text-primary w-10 h-10 mb-2" />
+            <span className="font-bold">France Travail</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 3 Étapes */}
+      <section className="py-12 px-4 bg-secondary-container/10">
+        <div className="max-w-[800px] mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Votre parcours en 3 étapes</h2>
+          <div className="flex flex-col gap-6">
+            <div className="flex gap-6 items-start">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">1</div>
+              <div>
+                <h4 className="text-xl font-bold">Répondez au questionnaire</h4>
+                <p className="text-on-surface-variant">Précisez votre situation administrative actuelle et vos objectifs.</p>
+              </div>
+            </div>
+            <div className="h-8 w-px bg-outline-variant ml-5"></div>
+            <div className="flex gap-6 items-start">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">2</div>
+              <div>
+                <h4 className="text-xl font-bold">Recevez votre bilan</h4>
+                <p className="text-on-surface-variant">Nous analysons vos réponses pour définir le niveau requis par la préfecture.</p>
+              </div>
+            </div>
+            <div className="h-8 w-px bg-outline-variant ml-5"></div>
+            <div className="flex gap-6 items-start">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">3</div>
+              <div>
+                <h4 className="text-xl font-bold">Demandez votre financement</h4>
+                <p className="text-on-surface-variant">Un conseiller vous accompagne pour monter votre dossier de prise en charge.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloc Contact */}
+      <section className="py-12 px-4">
+        <div className="max-w-[1000px] mx-auto bg-surface-container-highest rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-outline-variant shadow-sm">
+          <div className="p-8 bg-primary text-on-primary">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Besoin d'aide ?</h2>
+            <p className="mb-8 opacity-90">Nos conseillers sont disponibles pour répondre à toutes vos questions sur les formations et les financements.</p>
+            <div className="flex flex-col gap-4">
+              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="https://wa.me/33000000000">
+                <MessageCircle className="w-8 h-8" />
+                <div>
+                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">WhatsApp</div>
+                  <div className="font-bold">Ouvrir la discussion</div>
+                </div>
+              </a>
+              <a className="flex items-center gap-4 bg-white/10 p-4 rounded-lg hover:bg-white/20 transition-all" href="tel:+33000000000">
+                <Phone className="w-8 h-8" />
+                <div>
+                  <div className="text-sm uppercase tracking-wider font-bold opacity-75">Téléphone</div>
+                  <div className="font-bold">01 23 45 67 89</div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div className="p-8">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div>
+                <label className="block font-bold mb-1 text-on-surface">Nom complet</label>
+                <input className="w-full h-[56px] px-4 rounded-lg border border-outline bg-surface-bright focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Jean Dupont" type="text" />
+                <p className="text-xs text-on-surface-variant mt-1">Pour mieux vous identifier lors de notre appel.</p>
+              </div>
+              <div>
+                <label className="block font-bold mb-1 text-on-surface">Téléphone</label>
+                <input className="w-full h-[56px] px-4 rounded-lg border border-outline bg-surface-bright focus:ring-2 focus:ring-primary focus:border-primary" placeholder="06 00 00 00 00" type="tel" />
+                <p className="text-xs text-on-surface-variant mt-1">Nous vous rappellerons sous 24h.</p>
+              </div>
+              <button className="w-full h-[56px] bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all mt-4" type="submit">
+                Être rappelé gratuitement
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloc Juridique */}
+      <section className="pb-12 px-4">
+        <div className="max-w-[800px] mx-auto p-6 bg-error-container/20 border-l-4 border-error rounded-r-lg">
+          <div className="flex gap-4">
+            <Gavel className="text-error w-8 h-8 shrink-0" />
+            <div>
+              <h5 className="font-bold text-error mb-1">Information Importante</h5>
+              <p className="text-sm text-on-surface-variant">
+                {siteName} est un organisme de formation privé. Nous ne sommes pas un service de l'État ou de la Préfecture. Les décisions finales concernant l'obtention de votre titre de séjour ou de votre nationalité dépendent exclusivement des autorités compétentes. Nos formations et bilans visent à vous préparer aux exigences linguistiques officielles.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

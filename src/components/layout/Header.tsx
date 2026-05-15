@@ -1,77 +1,126 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/bff/Button";
-import { siteName } from "@/config/site";
-
-const NAV = [
-  { to: "/niveaux", label: "Niveaux" },
-  { to: "/financement", label: "Financement" },
-  { to: "/passer-test/$token", params: { token: "latest" }, label: "Évaluation" },
-  { to: "/contact", label: "Contact" },
-] as const;
+import { Menu, X, GraduationCap, Banknote, Calculator } from "lucide-react";
 
 export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-outline-variant bg-surface-bright/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link to="/" className="font-semibold text-on-surface text-lg">
-          {siteName}
-        </Link>
-
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Navigation principale">
-          {NAV.map((n) => (
+    <>
+      <header className="w-full bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40">
+        <nav className="max-w-[1200px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <GraduationCap className="text-primary h-8 w-8" />
+            <div className="flex flex-col">
+              <span className="font-headline-md text-[20px] font-bold text-primary leading-tight">
+                Bilan Français
+              </span>
+              <span className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">
+                Accompagnement
+              </span>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-8 font-bold text-on-surface">
             <Link
-              key={n.to}
-              to={n.to}
-              className="body-md text-on-surface-variant hover:text-primary transition-colors"
-              activeProps={{ className: "text-primary font-semibold" }}
+              to="/niveaux"
+              className="hover:text-primary transition-colors flex items-center gap-1"
             >
-              {n.label}
+              <GraduationCap className="h-4 w-4" /> Niveaux
             </Link>
-          ))}
-          <Link to="/passer-test/$token" params={{ token: "latest" }}>
-            <Button size="md" variant="primary">
-              Faire le test complet
-            </Button>
+            <Link
+              to="/financement"
+              className="hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <Banknote className="h-4 w-4" /> Financement
+            </Link>
+            <Link
+              to="/simulateur"
+              className="hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <Calculator className="h-4 w-4" /> Simulateur
+            </Link>
+          </div>
+          <Link to="/simulateur">
+            <button className="hidden md:block bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
+              Faire mon estimation gratuite
+            </button>
+          </Link>
+          <button
+            className="md:hidden text-primary"
+            onClick={() => setOpen(true)}
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </nav>
+      </header>
+
+      {/* SideNavBar (Mobile Only Drawer) */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-outline-variant shadow-lg transform transition-transform md:hidden flex flex-col ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="p-6 border-b border-outline-variant flex justify-between items-center">
+          <div>
+            <div className="font-headline-md text-[20px] font-bold text-primary">
+              Bilan Français
+            </div>
+            <div className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">
+              Accompagnement
+            </div>
+          </div>
+          <button onClick={() => setOpen(false)} className="text-on-surface">
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+        <nav className="p-4 flex-1 flex flex-col gap-2">
+          <Link
+            to="/niveaux"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
+            activeProps={{
+              className: "bg-secondary-container text-on-secondary-container font-bold",
+            }}
+          >
+            <GraduationCap className="h-5 w-5" /> Niveaux
+          </Link>
+          <Link
+            to="/financement"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
+            activeProps={{
+              className: "bg-secondary-container text-on-secondary-container font-bold",
+            }}
+          >
+            <Banknote className="h-5 w-5" /> Financement
+          </Link>
+          <Link
+            to="/simulateur"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
+            activeProps={{
+              className: "bg-secondary-container text-on-secondary-container font-bold",
+            }}
+          >
+            <Calculator className="h-5 w-5" /> Simulateur
           </Link>
         </nav>
-
-        <button
-          type="button"
-          className="md:hidden p-2 text-on-surface"
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X /> : <Menu />}
-        </button>
-      </div>
-
-      {open && (
-        <div className="border-t border-outline-variant bg-surface-bright md:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4" aria-label="Navigation mobile">
-            {NAV.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 body-lg text-on-surface hover:bg-surface-container"
-                activeProps={{ className: "bg-surface-container text-primary font-semibold" }}
-              >
-                {n.label}
-              </Link>
-            ))}
-            <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => setOpen(false)} className="mt-2">
-              <Button size="md" variant="primary" className="w-full">
-                Faire le test complet
-              </Button>
-            </Link>
-          </nav>
+        <div className="p-4 border-t border-outline-variant">
+          <Link to="/simulateur" onClick={() => setOpen(false)}>
+            <button className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm">
+              Estimation Gratuite
+            </button>
+          </Link>
         </div>
+      </aside>
+      
+      {/* Overlay mobile */}
+      {open && (
+        <div 
+          className="fixed inset-0 bg-black/20 z-40 md:hidden"
+          onClick={() => setOpen(false)}
+        />
       )}
-    </header>
+    </>
   );
 }
