@@ -10,11 +10,11 @@ export function Hero() {
           Évaluez votre niveau de français et trouvez la formation adaptée
         </h1>
         <p className="body-lg mt-6 text-on-surface-variant">
-          Préparation au TCF, carte de séjour, naturalisation, français professionnel
+          Préparation linguistique selon le référentiel CECRL, carte de séjour, naturalisation, français professionnel
           et intégration en France.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link to="/evaluation">
+          <Link to="/passer-test/$token" params={{ token: "latest" }}>
             <Button variant="primary">Passer l'évaluation experte</Button>
           </Link>
           <Link to="/contact">

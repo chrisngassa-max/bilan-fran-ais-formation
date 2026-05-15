@@ -59,7 +59,7 @@ const RANGES: Array<{ min: number; max: number; low: QuickScanResult["rangeLow"]
   { min: 0, max: 2, low: "A1", high: "A2", label: "A1 → A2" },
   { min: 3, max: 5, low: "A2", high: "B1", label: "A2 → B1" },
   { min: 6, max: 8, low: "B1", high: "B2", label: "B1 → B2" },
-  { min: 9, max: 12, low: "B2", high: "C1", label: "B2 → C1" },
+  { min: 9, max: 13, low: "B2", high: "C1", label: "B2 → C1" },
 ];
 
 function scoreToRange(score: number) {
@@ -122,7 +122,7 @@ export function QuickScan() {
           complète (15–20 min).
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link to="/evaluation">
+          <Link to="/passer-test/$token" params={{ token: "latest" }}>
             <Button variant="primary" className="bg-[var(--color-eval-orange)] hover:opacity-90">
               Passer l'évaluation experte (Certification CECRL)
               <ArrowRight className="h-4 w-4" />

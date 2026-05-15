@@ -7,7 +7,7 @@ import { siteName } from "@/config/site";
 const NAV = [
   { to: "/niveaux", label: "Niveaux" },
   { to: "/financement", label: "Financement" },
-  { to: "/evaluation", label: "Évaluation" },
+  { to: "/passer-test/$token", params: { token: "latest" }, label: "Évaluation" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -32,7 +32,7 @@ export function Header() {
               {n.label}
             </Link>
           ))}
-          <Link to="/evaluation">
+          <Link to="/passer-test/$token" params={{ token: "latest" }}>
             <Button size="md" variant="primary">
               Faire le test complet
             </Button>
@@ -64,7 +64,7 @@ export function Header() {
                 {n.label}
               </Link>
             ))}
-            <Link to="/evaluation" onClick={() => setOpen(false)} className="mt-2">
+            <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => setOpen(false)} className="mt-2">
               <Button size="md" variant="primary" className="w-full">
                 Faire le test complet
               </Button>

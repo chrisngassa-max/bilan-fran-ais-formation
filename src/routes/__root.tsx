@@ -33,7 +33,8 @@ function NotFoundComponent() {
             Retour à l'accueil
           </Link>
           <Link
-            to="/evaluation"
+            to="/passer-test/$token"
+            params={{ token: "latest" }}
             className="inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-bright px-5 py-3 font-semibold text-on-surface hover:bg-surface-container"
           >
             Faire l'évaluation
@@ -85,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Préparation TCF, carte de séjour, naturalisation et français professionnel. Faites le bilan de votre niveau de français et découvrez le parcours adapté.",
+          "Préparation linguistique, carte de séjour, naturalisation et français professionnel. Faites le bilan de votre niveau de français et découvrez le parcours adapté.",
       },
       { property: "og:site_name", content: siteName },
       { property: "og:type", content: "website" },
@@ -94,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Évaluez votre niveau de français et trouvez la formation adaptée à votre projet (TCF, carte de séjour, naturalisation, travail).",
+          "Évaluez votre niveau de français et trouvez la formation adaptée à votre projet (CECRL, carte de séjour, naturalisation, travail).",
       },
       { name: "twitter:card", content: "summary" },
     ],
