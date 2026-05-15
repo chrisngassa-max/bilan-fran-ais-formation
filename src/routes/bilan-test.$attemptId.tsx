@@ -68,7 +68,7 @@ function BilanTestPage() {
           <p className="text-primary font-bold bg-primary-container/10 p-4 rounded-xl border border-primary-container/20">
             Nous vous invitons à vous reposer et à repasser l'évaluation dans de meilleures conditions.
           </p>
-          <Link to="/passer-test/$token" params={{ token: "latest" }} className="block w-full">
+          <Link to="/passer-test/latest" className="block w-full">
             <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-all">Recommencer plus tard</button>
           </Link>
         </div>
@@ -212,7 +212,7 @@ function BilanTestPage() {
             <Send className="h-5 w-5" />
             Envoyer par WhatsApp
           </a>
-          <Link to="/passer-test/$token" params={{ token: "latest" }} className="flex items-center justify-center gap-2 bg-transparent text-secondary border-2 border-secondary h-[56px] rounded-lg font-bold hover:bg-secondary/5 transition-all active:scale-95">
+          <Link to="/passer-test/latest" className="flex items-center justify-center gap-2 bg-transparent text-secondary border-2 border-secondary h-[56px] rounded-lg font-bold hover:bg-secondary/5 transition-all active:scale-95">
             <RefreshCw className="h-5 w-5" />
             Refaire le test
           </Link>
