@@ -34,13 +34,13 @@ export function Header() {
               <Banknote className="h-4 w-4" /> Financement
             </Link>
             <Link
-              to="/simulateur"
+              to="/passer-test/latest"
               className="hover:text-primary transition-colors flex items-center gap-1"
             >
               <Calculator className="h-4 w-4" /> Test de niveau
             </Link>
           </div>
-          <Link to="/simulateur">
+          <Link to="/passer-test/latest">
             <button className="hidden md:block bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
               Évaluer mon niveau (gratuit, 30 min)
             </button>
@@ -95,7 +95,7 @@ export function Header() {
             <Banknote className="h-5 w-5" /> Financement
           </Link>
           <Link
-            to="/simulateur"
+            to="/passer-test/latest"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
             activeProps={{
@@ -106,7 +106,7 @@ export function Header() {
           </Link>
         </nav>
         <div className="p-4 border-t border-outline-variant">
-          <Link to="/simulateur" onClick={() => setOpen(false)}>
+          <Link to="/passer-test/latest" onClick={() => setOpen(false)}>
             <button className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm">
               Faire le test (gratuit)
             </button>
