@@ -16,6 +16,7 @@ import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QualificationAttemptIdRoute = QualificationAttemptIdRouteImport.update({
+  id: '/qualification/$attemptId',
+  path: '/qualification/$attemptId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
   id: '/passer-test/$token',
   path: '/passer-test/$token',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
+  '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
+  '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/simulateur': typeof SimulateurRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
+  '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
+    | '/qualification/$attemptId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
+    | '/qualification/$attemptId'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
+    | '/qualification/$attemptId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   SimulateurRoute: typeof SimulateurRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
+  QualificationAttemptIdRoute: typeof QualificationAttemptIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qualification/$attemptId': {
+      id: '/qualification/$attemptId'
+      path: '/qualification/$attemptId'
+      fullPath: '/qualification/$attemptId'
+      preLoaderRoute: typeof QualificationAttemptIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/passer-test/$token': {
       id: '/passer-test/$token'
       path: '/passer-test/$token'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimulateurRoute: SimulateurRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,
+  QualificationAttemptIdRoute: QualificationAttemptIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
