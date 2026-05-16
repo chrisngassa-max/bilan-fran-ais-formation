@@ -60,10 +60,10 @@ function BilanTestPage() {
       <div className="min-h-screen bg-surface flex items-center justify-center p-4">
         <div className="bg-surface-bright p-10 rounded-3xl border border-outline-variant max-w-lg w-full text-center space-y-6 shadow-sm">
           <AlertCircle className="h-20 w-20 text-primary-container mx-auto" />
-          <h2 className="text-3xl font-bold text-on-surface">Baisse d'attention détectée</h2>
+          <h2 className="text-3xl font-bold text-on-surface">Prenez une pause pour donner le meilleur de vous-même.</h2>
           <p className="text-on-surface-variant text-lg leading-relaxed">
-            Notre système a détecté une fatigue ou une baisse de concentration significative sur la fin de votre test. 
-            Le résultat actuel ne serait pas représentatif de votre vrai niveau.
+            Notre système a détecté une baisse de concentration sur la fin de votre évaluation. 
+            Pour que votre bilan soit le plus précis possible, il est préférable de le terminer quand vous serez bien reposé(e).
           </p>
           <p className="text-primary font-bold bg-primary-container/10 p-4 rounded-xl border border-primary-container/20">
             Nous vous invitons à vous reposer et à repasser l'évaluation dans de meilleures conditions.
@@ -99,17 +99,16 @@ function BilanTestPage() {
           <div className="rounded-2xl border-2 border-error/50 shadow-sm bg-error-container/10 overflow-hidden mb-12">
             <div className="bg-error text-white p-6">
               <h2 className="flex items-center gap-2 text-xl font-bold">
-                <AlertCircle className="h-6 w-6" /> Vérification Humaine Requise
+                <AlertCircle className="h-6 w-6" /> Un échange avec un formateur est recommandé pour affiner votre bilan.
               </h2>
             </div>
             <div className="p-10 space-y-6">
               <p className="text-on-surface font-medium text-xl">
-                Votre profil présente des irrégularités (vitesse d'exécution ou asymétrie de score).
-                Les résultats ont été masqués.
+                Votre profil présente des variations qui nécessitent une lecture plus approfondie par un expert pédagogique.
               </p>
               <div className="flex flex-col md:flex-row gap-6 items-center bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
                 <div className="flex-1">
-                  <p className="text-on-surface-variant">Pour débloquer vos résultats officiels, un entretien de vérification avec un de nos formateurs est nécessaire.</p>
+                  <p className="text-on-surface-variant">Un entretien de 10 minutes avec un conseiller permettra de confirmer votre niveau et de valider votre projet.</p>
                 </div>
                 <a href={phoneHref} onClick={() => trackEvent("phone_clicked")}>
                   <button className="h-14 px-8 bg-primary hover:opacity-90 text-on-primary font-bold rounded-xl whitespace-nowrap transition-all">

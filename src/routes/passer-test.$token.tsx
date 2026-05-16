@@ -344,7 +344,7 @@ function PasserTestPage() {
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="text-center p-10 bg-blue-900 text-white">
               <h2 className="text-3xl font-bold">{testPayload.test.title}</h2>
-              <p className="mt-2 text-white/70 text-lg">Votre bilan de niveau en 30 minutes — Inspiré du référentiel CECRL</p>
+              <p className="mt-2 text-white/70 text-lg">Votre bilan de niveau — Inspiré du référentiel CECRL</p>
             </div>
             <div className="p-10 space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -460,7 +460,7 @@ function PasserTestPage() {
                   ) : (
                     /* Expression Orale (Recorder) */
                     <div className="flex flex-col items-center gap-6 p-10 bg-red-50 rounded-3xl border-2 border-dashed border-red-200">
-                      <p className="text-center font-medium text-red-800">Enregistrez votre réponse à l'oral</p>
+                      <p className="text-center font-medium text-red-800">Pratiquez l’oral en direct : nous analysons votre aisance pour mieux vous orienter.</p>
                       {!isRecording ? (
                         <button 
                           onClick={startRecording} 
@@ -520,7 +520,7 @@ function PasserTestPage() {
                   token: token === 'latest' ? null : token, 
                   student_name: studentName, 
                   answers,
-                  source: 'public_site_v2'
+                  source: 'public_site_v2.0.5'
                 })}
                 disabled={submitMutation.isPending}
                 className="h-16 px-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-2xl w-full md:w-auto flex items-center justify-center"

@@ -13,15 +13,15 @@ function IndexPage() {
       <section className="relative overflow-hidden pt-12 md:pt-16 pb-12 px-4">
         <div className="max-w-[800px] mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-on-background mb-4 leading-tight">
-            Quel niveau de français pour votre carte de séjour, votre résidence ou votre naturalisation ?
+            Identifiez le niveau de français requis pour votre démarche
           </h1>
           <p className="text-lg text-on-surface-variant mb-8">
-            Carte pluriannuelle (A2), carte de résident 10 ans (B1) ou naturalisation (B2) : on évalue votre niveau et on vous oriente vers la formation adaptée.
+            Carte de séjour pluriannuelle, carte de résident 10 ans, naturalisation : obtenez un bilan clair de votre niveau, de votre objectif et des solutions de financement possibles.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <Link to="/passer-test/latest">
               <button className="h-[56px] w-full md:w-auto bg-primary text-on-primary px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md">
-                Démarrer mon test (30 min, gratuit)
+                Évaluer mon niveau et mes droits
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
@@ -54,8 +54,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">A2</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">1ère carte pluriannuelle - Niveau A2</h3>
-                <p className="text-on-surface-variant">Vous savez vous présenter, comprendre des messages simples et tenir une conversation courte du quotidien.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif séjour (A2)</h3>
+                <p className="text-on-surface-variant">Les bases utiles pour comprendre, répondre et gérer les échanges simples du quotidien en France.</p>
               </div>
               <FileText className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -66,8 +66,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B1</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Carte de résident 10 ans - Niveau B1</h3>
-                <p className="text-on-surface-variant">Vous échangez sur votre travail, vos projets, votre vie en France avec aisance.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif résidence (B1)</h3>
+                <p className="text-on-surface-variant">Un niveau d’autonomie qui vous aide à viser la carte de résident et à gagner en aisance dans votre vie en France.</p>
               </div>
               <Badge className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -78,8 +78,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B2</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Naturalisation - Niveau B2</h3>
-                <p className="text-on-surface-variant">Vous tenez une conversation soutenue, défendez une opinion, comprenez l'actualité française.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif citoyenneté (B2)</h3>
+                <p className="text-on-surface-variant">Le niveau attendu pour une demande de naturalisation avec une expression plus fluide, plus nuancée et plus sûre.</p>
               </div>
               <Flag className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -90,8 +90,8 @@ function IndexPage() {
       {/* Financements */}
       <section className="py-12 px-4">
         <div className="max-w-[800px] mx-auto text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold">Comment financer votre formation</h2>
-          <p className="text-on-surface-variant mt-4">Selon votre situation (CPF, employeur, OPCO, France Travail), la prise en charge peut couvrir une partie ou la totalité de votre formation. Nous étudions votre éligibilité avec vous.</p>
+          <h2 className="text-3xl md:text-4xl font-bold">Optimisez vos droits</h2>
+          <p className="text-on-surface-variant mt-4">Selon votre situation, votre parcours peut être financé en tout ou partie. Nous vous aidons à identifier les solutions les plus adaptées.</p>
         </div>
         <div className="max-w-[800px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
@@ -181,7 +181,7 @@ function IndexPage() {
                 <p className="text-xs text-on-surface-variant mt-1">Nous vous rappellerons sous 24h.</p>
               </div>
               <button className="w-full h-[56px] bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all mt-4" type="submit">
-                Être rappelé(e) gratuitement
+                Envoyer mon bilan à un conseiller
               </button>
             </form>
           </div>
@@ -203,7 +203,7 @@ function IndexPage() {
         </div>
         <div className="mt-8 text-center">
           <span className="text-[10px] text-on-surface-variant/30 uppercase tracking-widest font-bold">
-            v2.0.4-deployed
+            v2.0.5-deployed
           </span>
         </div>
       </section>

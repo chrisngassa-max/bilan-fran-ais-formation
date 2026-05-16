@@ -37,12 +37,12 @@ export function Header() {
               to="/passer-test/latest"
               className="hover:text-primary transition-colors flex items-center gap-1"
             >
-              <Calculator className="h-4 w-4" /> Test de niveau
+              <Calculator className="h-4 w-4" /> Diagnostic de niveau
             </Link>
           </div>
           <Link to="/passer-test/latest">
             <button className="hidden md:block bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
-              Évaluer mon niveau (gratuit, 30 min)
+              Évaluer mon niveau et mes droits
             </button>
           </Link>
           <button
@@ -102,13 +102,13 @@ export function Header() {
               className: "bg-secondary-container text-on-secondary-container font-bold",
             }}
           >
-            <Calculator className="h-5 w-5" /> Test de niveau
+            <Calculator className="h-5 w-5" /> Diagnostic de niveau
           </Link>
         </nav>
         <div className="p-4 border-t border-outline-variant">
           <Link to="/passer-test/latest" onClick={() => setOpen(false)}>
             <button className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm">
-              Faire le test (gratuit)
+              Évaluer mon niveau et mes droits
             </button>
           </Link>
         </div>
