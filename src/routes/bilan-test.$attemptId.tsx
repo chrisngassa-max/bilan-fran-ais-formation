@@ -218,9 +218,6 @@ function BilanTestPage() {
             Une question ? Nous écrire sur WhatsApp
           </a>
         </div>
-            Refaire le test
-          </Link>
-        </div>
 
         {/* Help Section */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
