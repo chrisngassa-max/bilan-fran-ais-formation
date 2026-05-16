@@ -41,13 +41,13 @@ export function Header() {
               <Banknote className="h-4 w-4" /> Financement
             </Link>
             <Link
-              to="/passer-test/latest"
+              to="/passer-test/$token" params={{ token: "latest" }}
               className="hover:text-primary transition-colors flex items-center gap-1"
             >
               <Calculator className="h-4 w-4" /> Diagnostic de niveau
             </Link>
           </div>
-          <Link to="/passer-test/latest">
+          <Link to="/passer-test/$token" params={{ token: "latest" }}>
             <button className="hidden md:block bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
               Évaluer mon niveau et mes droits
             </button>
@@ -102,7 +102,7 @@ export function Header() {
             <Banknote className="h-5 w-5" /> Financement
           </Link>
           <Link
-            to="/passer-test/latest"
+            to="/passer-test/$token" params={{ token: "latest" }}
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
             activeProps={{
@@ -113,7 +113,7 @@ export function Header() {
           </Link>
         </nav>
         <div className="p-4 border-t border-outline-variant">
-          <Link to="/passer-test/latest" onClick={() => setOpen(false)}>
+          <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => setOpen(false)}>
             <button className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-sm">
               Évaluer mon niveau et mes droits
             </button>

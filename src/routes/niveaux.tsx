@@ -153,7 +153,7 @@ function NiveauxPage() {
               Répondez à quelques questions pour estimer rapidement votre niveau (2 min). Pour un bilan complet,
               un test approfondi est disponible.
             </p>
-            <Link to="/passer-test/latest">
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
               <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
                 Démarrer (2 min, gratuit)
               </button>

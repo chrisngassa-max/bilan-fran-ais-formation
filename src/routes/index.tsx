@@ -19,7 +19,7 @@ function IndexPage() {
             Carte de séjour pluriannuelle, carte de résident 10 ans, naturalisation : obtenez un bilan clair de votre niveau, de votre objectif et des solutions de financement possibles.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link to="/passer-test/latest">
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
               <button className="h-[56px] w-full md:w-auto bg-primary text-on-primary px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md">
                 Évaluer mon niveau et mes droits
                 <ArrowRight className="w-5 h-5" />

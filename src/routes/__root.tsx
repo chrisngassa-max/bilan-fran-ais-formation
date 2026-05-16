@@ -33,7 +33,7 @@ function NotFoundComponent() {
             Retour à l'accueil
           </Link>
           <Link
-            to="/passer-test/latest"
+            to="/passer-test/$token" params={{ token: "latest" }}
             className="inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-bright px-5 py-3 font-semibold text-on-surface hover:bg-surface-container"
           >
             Faire l'évaluation
