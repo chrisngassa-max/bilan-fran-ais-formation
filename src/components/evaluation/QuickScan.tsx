@@ -127,14 +127,14 @@ export function QuickScan() {
         </h3>
         <p className="body-md mt-3 text-on-surface-variant">
           Ce diagnostic en 5 questions est un repère général. Pour obtenir votre
-          <strong> certificat de niveau expert </strong> et votre <strong>bilan détaillé</strong> par
+          <strong> bilan de niveau expert </strong> et votre <strong>analyse détaillée</strong> par
           compétence (compréhension écrite, orale, expression écrite et orale), passez l'évaluation
           complète (15–20 min).
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link to="/passer-test/$token" params={{ token: "latest" }}>
             <Button variant="primary" className="bg-[var(--color-eval-orange)] hover:opacity-90">
-              Passer l'évaluation experte (Certification CECRL)
+              Passer l'évaluation experte (Bilan CECRL)
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

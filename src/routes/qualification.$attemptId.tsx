@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState, useMemo } from 'react';
+import { type NiveauIndicatif } from '@/types/bilan';
 import { Button } from '@/components/bff/Button';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -60,6 +61,7 @@ function QualificationPage() {
     hasSiret: null as boolean | null,
     hasMainDocs: null as boolean | null,
     isSmallCompany: null as boolean | null,
+    niveau_indicatif: 'a_verifier' as NiveauIndicatif,
   });
 
   const { data: testResult, isLoading: loadingTest } = useQuery({
@@ -77,8 +79,8 @@ function QualificationPage() {
 
   // Calcul du Parcours et du Financement V4
   const simulation = useMemo(() => {
-    const current = testResult?.global_level || 'A2';
-    const target = 'B1'; // TODO: Laisser le candidat choisir son objectif ?
+    const current: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || 'A2';
+    const target: NiveauIndicatif = 'B1'; // Naturalisation / Résidence
     
     const journey = PRICING_CONFIG.journeys.find(j => j.from_level === current && j.to_level === target) 
                     || PRICING_CONFIG.journeys[0];
@@ -190,7 +192,7 @@ function QualificationPage() {
               {/* Checkboxes rapides */}
               <div className="space-y-4 pt-4 border-t">
                 <BooleanToggle 
-                  label="J'ai mes documents d'identité à disposition"
+                  label="J'ai mes documents d'identité (Niveau B1 oral et écrit requis pour naturalisation selon Service-Public F34708 — à vérifier)"
                   value={formData.hasMainDocs}
                   onChange={(v) => setFormData(p => ({ ...p, hasMainDocs: v }))}
                 />

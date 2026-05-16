@@ -18,6 +18,8 @@ import { trackEvent } from '@/lib/analytics';
 import { waHref } from '@/config/site';
 import { LeadCaptureForm } from '@/components/LeadCaptureForm';
 import { useEffect } from 'react';
+import { ChecklistDocuments } from '@/components/ChecklistDocuments';
+import { type NiveauIndicatif } from '@/types/bilan';
 
 export const Route = createFileRoute('/bilan-test/$attemptId')({
   component: BilanTestPage,
@@ -137,7 +139,11 @@ function BilanTestPage() {
                 <p className="text-on-surface-variant text-lg mb-4">{levelDesc}</p>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full mb-4">
                   <Award className="h-5 w-5" />
-                  <span className="text-xs font-bold uppercase tracking-wider">Niveau requis pour : {level === 'B2' ? 'Naturalisation' : level === 'B1' ? 'Carte de Résident' : 'Carte Pluriannuelle'}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider">
+                    Objectif indicatif : {level === 'B1' || level === 'B2' 
+                      ? 'Naturalisation (B1 oral et écrit — à vérifier) / Résidence' 
+                      : 'Séjour Pluriannuel / Résident'}
+                  </span>
                 </div>
                 
                 {/* CTA Predict Tunnel */}
@@ -192,7 +198,7 @@ function BilanTestPage() {
             <div className="mt-8 flex gap-3 p-4 bg-error-container/10 border border-error/20 rounded-lg">
               <AlertCircle className="text-error h-6 w-6 shrink-0" />
               <p className="text-on-surface-variant italic">
-                <span className="font-bold text-on-surface">Note :</span> Cette estimation indique votre niveau actuel. Pour obtenir votre carte de séjour ou votre naturalisation, vous devrez passer un examen officiel (TCF, DELF) en centre agréé.
+                <span className="font-bold text-on-surface">Note :</span> Cette estimation indique votre niveau actuel. Pour vos démarches (Séjour, Résidence, Nationalité), vous devrez passer un examen officiel (TCF, DELF) et vérifier les exigences exactes selon votre situation.
               </p>
             </div>
             {isFragile && (
@@ -200,6 +206,11 @@ function BilanTestPage() {
             )}
           </div>
         )}
+
+        {/* Checklist Section */}
+        <div className="mt-10">
+          <ChecklistDocuments type_demarche={level as NiveauIndicatif} />
+        </div>
 
         {/* Lead Capture - Bilan complet par email */}
         <div className="mt-10">
@@ -230,7 +241,7 @@ function BilanTestPage() {
           </div>
           <div className="bg-[#ffdbd0] text-[#7e2c0d] p-6 rounded-xl flex flex-col justify-center">
             <h4 className="font-bold text-xl mb-2">Guide Pratique</h4>
-            <p className="mb-4">Téléchargez gratuitement notre guide sur les étapes de la demande de naturalisation 2024.</p>
+            <p className="mb-4">Téléchargez gratuitement notre guide sur les étapes de la demande de naturalisation (Niveau B1 requis).</p>
             <a className="font-bold flex items-center gap-1 hover:underline" href="#">
                 Télécharger le PDF
                 <Download className="h-5 w-5" />

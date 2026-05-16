@@ -22,8 +22,8 @@ function NiveauxPage() {
               Comprendre les niveaux de français
             </h1>
             <p className="text-lg text-on-surface-variant max-w-[700px] mx-auto">
-              Carte de séjour pluriannuelle (A2), carte de résident 10 ans (B1), naturalisation française (B2) :
-              chaque démarche correspond à un niveau précis.
+              Carte de séjour pluriannuelle / résident (A2/B1 selon situation), naturalisation (B1 oral et écrit selon Service-Public F34708) :
+              chaque démarche correspond à un niveau indicatif.
             </p>
           </div>
         </section>
@@ -52,19 +52,19 @@ function NiveauxPage() {
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-primary">B1</td>
-                    <td className="p-4">Carte de résident (10 ans)</td>
+                    <td className="p-4">Carte de résident / Naturalisation par décret</td>
                     <td className="p-4">
                       <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-sm font-medium">
-                        Obligatoire
+                        Requis (B1 oral/écrit)
                       </span>
                     </td>
                   </tr>
                   <tr>
                     <td className="p-4 font-bold text-primary">B2</td>
-                    <td className="p-4">Naturalisation française</td>
+                    <td className="p-4">Niveau avancé (confort & intégration)</td>
                     <td className="p-4">
-                      <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-sm font-medium">
-                        Obligatoire
+                      <span className="bg-surface-container-high text-on-surface-variant px-2 py-1 rounded text-sm font-medium">
+                        Optionnel
                       </span>
                     </td>
                   </tr>
@@ -108,10 +108,11 @@ function NiveauxPage() {
                     Intermédiaire
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold mb-3">La carte de résident (10 ans)</h3>
+                <h3 className="text-2xl font-bold mb-3">La carte de résident / Naturalisation</h3>
                 <p className="text-on-surface-variant mb-6 leading-relaxed">
-                  Le niveau B1 marque une autonomie réelle. Vous devez pouvoir échanger sur votre travail, vos
-                  projets, votre vie en France et comprendre les points essentiels d'une conversation standard.
+                  Le niveau B1 marque une autonomie réelle. Il est désormais exigé pour la naturalisation par décret (oral et écrit)
+                  ainsi que pour la plupart des cartes de résident de 10 ans. Vous devez pouvoir échanger sur votre travail, vos
+                  projets et comprendre les points essentiels d'une conversation standard.
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center gap-3 text-sm text-on-surface">
@@ -137,11 +138,12 @@ function NiveauxPage() {
                     Avancé
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold mb-3">La naturalisation française</h3>
+                <h3 className="text-2xl font-bold mb-3">Niveau Avancé (B2)</h3>
                 <p className="text-on-surface-variant leading-relaxed">
-                  Le niveau B2 permet de défendre une opinion, nuancer vos idées et suivre des échanges plus
-                  soutenus. C'est le palier qui vous prépare à une demande de naturalisation avec une expression
-                  plus fluide et plus sûre.
+                  Le niveau B2 permet de défendre une opinion et nuancer vos idées avec précision. 
+                  <strong> Important :</strong> Bien que le niveau B1 soit suffisant pour la naturalisation, 
+                  le B2 est recommandé pour ceux qui visent une intégration professionnelle et sociale totale, 
+                  car il permet de suivre des échanges complexes sans effort.
                 </p>
               </div>
             </div>

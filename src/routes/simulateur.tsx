@@ -21,9 +21,9 @@ export const Route = createFileRoute("/simulateur")({
 
 function SimulateurPage() {
   const options = [
-    { label: "1ère carte pluriannuelle", icon: CreditCard, color: "bg-secondary-container text-on-secondary-container" },
-    { label: "Carte de résident 10 ans", icon: Calendar, color: "bg-secondary-container text-on-secondary-container" },
-    { label: "Naturalisation", icon: Flag, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "Carte de séjour pluriannuelle / résident : niveau requis selon situation", icon: CreditCard, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "Carte de résident / 10 ans : niveau requis selon situation", icon: Calendar, color: "bg-secondary-container text-on-secondary-container" },
+    { label: "Naturalisation par décret : objectif B1 oral et écrit selon Service-Public", icon: Flag, color: "bg-secondary-container text-on-secondary-container" },
     { label: "Travail", icon: Briefcase, color: "bg-secondary-container text-on-secondary-container" },
     { label: "Renouvellement de titre", icon: RefreshCw, color: "bg-secondary-container text-on-secondary-container" },
     { label: "Je ne sais pas encore", icon: HelpCircle, color: "bg-surface-variant text-on-surface-variant" },

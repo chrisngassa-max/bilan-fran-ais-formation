@@ -38,19 +38,18 @@ function IndexPage() {
           </h1>
           <p className="text-lg text-on-surface-variant mb-8">
             Un diagnostic rigoureux inspiré du référentiel CECRL pour vos démarches de carte de séjour, carte
-            de résident ou naturalisation. Reçu automatiquement, en quelques minutes.
+            de résident ou naturalisation (B1). Reçu automatiquement, en quelques minutes.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <Link
-              to="/passer-test/$token"
-              params={{ token: "latest" }}
-              onClick={() => trackEvent("landing_cta_click", { location: "hero" })}
+              to="/test-rapide"
+              onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
             >
               <button
                 className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md text-white"
                 style={{ backgroundColor: "#f97316" }}
               >
-                Démarrer mon diagnostic gratuit
+                Estimez votre niveau en 2 minutes
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
@@ -102,8 +101,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B1</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Objectif résidence (B1)</h3>
-                <p className="text-on-surface-variant">Un niveau d'autonomie qui vous aide à viser la carte de résident et à gagner en aisance dans votre vie en France.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif résidence & naturalisation (B1)</h3>
+                <p className="text-on-surface-variant">Le niveau désormais requis pour la naturalisation par décret (oral/écrit) et la plupart des cartes de résident.</p>
               </div>
               <Badge className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -113,8 +112,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B2</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Objectif citoyenneté (B2)</h3>
-                <p className="text-on-surface-variant">Le niveau attendu pour une demande de naturalisation avec une expression plus fluide, plus nuancée et plus sûre.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif confort & expertise (B2)</h3>
+                <p className="text-on-surface-variant">Une expression plus fluide et nuancée pour sécuriser votre projet citoyen et professionnel.</p>
               </div>
               <Flag className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -199,68 +198,50 @@ function IndexPage() {
         </div>
       </section>
 
-      {/* Bloc Réassurance - 100% autonome */}
-      <section className="py-16 px-4">
-        <div className="max-w-[900px] mx-auto bg-surface-bright rounded-3xl border border-outline-variant shadow-sm p-8 md:p-12">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Un service pensé pour votre autonomie</h2>
-            <p className="text-on-surface-variant max-w-2xl mx-auto">
-              Vous avancez à votre rythme, sans rendez-vous imposé. Notre tunnel est 100% autonome — vous
-              gardez la main de bout en bout.
-            </p>
+      {/* Sprint 2 Blocks */}
+      <section className="py-16 px-4 bg-surface">
+        <div className="max-w-[900px] mx-auto space-y-12">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Prêt à évaluer votre français ?</h2>
+            <p className="text-on-surface-variant max-w-2xl mx-auto">Choisissez le format qui vous convient pour obtenir un bilan précis et des conseils personnalisés.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center space-y-2">
-              <div
-                className="mx-auto w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "#1e3a8a20", color: "#1e3a8a" }}
-              >
-                <ShieldCheck className="w-6 h-6" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-primary/20 shadow-sm hover:border-primary transition-all group">
+              <div className="bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+                <Clock className="w-8 h-8" />
               </div>
-              <h4 className="font-bold">Sans engagement</h4>
-              <p className="text-sm text-on-surface-variant">
-                Gratuit, sans inscription longue, sans obligation de suite.
+              <h3 className="text-2xl font-bold mb-2">Test rapide 2 minutes</h3>
+              <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
+                10 questions ciblées pour obtenir une estimation immédiate et découvrir la formule adaptée à votre délai.
               </p>
+              <Link to="/test-rapide">
+                <button className="w-full h-14 bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
+                  Lancer le test rapide
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </Link>
             </div>
-            <div className="text-center space-y-2">
-              <div
-                className="mx-auto w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "#1e3a8a20", color: "#1e3a8a" }}
-              >
-                <Lock className="w-6 h-6" />
+
+            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-secondary/20 shadow-sm hover:border-secondary transition-all group">
+              <div className="bg-secondary/10 text-secondary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-white transition-colors">
+                <Sparkles className="w-8 h-8" />
               </div>
-              <h4 className="font-bold">Sans appel obligatoire</h4>
-              <p className="text-sm text-on-surface-variant">
-                Aucun conseiller ne vous appelle. Vous décidez si et quand vous voulez échanger.
+              <h3 className="text-2xl font-bold mb-2">Diagnostic complet</h3>
+              <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
+                30 minutes d'évaluation approfondie sur les 4 compétences (oral, écrit, grammaire) pour un programme sur-mesure.
               </p>
-            </div>
-            <div className="text-center space-y-2">
-              <div
-                className="mx-auto w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "#1e3a8a20", color: "#1e3a8a" }}
+              <Link 
+                to="/passer-test/$token" 
+                params={{ token: "latest" }}
+                onClick={() => trackEvent("home_diagnostic_click")}
               >
-                <Mail className="w-6 h-6" />
-              </div>
-              <h4 className="font-bold">Tout par email</h4>
-              <p className="text-sm text-on-surface-variant">
-                Bilan, guide pratique et pistes de financement directement dans votre boîte mail.
-              </p>
+                <button className="w-full h-14 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
+                  Lancer le diagnostic complet
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </Link>
             </div>
-          </div>
-          <div className="mt-10 text-center">
-            <Link
-              to="/passer-test/$token"
-              params={{ token: "latest" }}
-              onClick={() => trackEvent("landing_cta_click", { location: "reassurance" })}
-            >
-              <button
-                className="h-[56px] px-8 rounded-lg font-bold text-white inline-flex items-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md"
-                style={{ backgroundColor: "#f97316" }}
-              >
-                Lancer mon diagnostic
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
           </div>
         </div>
       </section>
