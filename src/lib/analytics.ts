@@ -1,7 +1,4 @@
-// Plausible Analytics wrapper (cookie-less, pas de bandeau requis pour l'analytics seul).
-// TODO: ajouter dans index.html une fois le domaine actif :
-// <script defer data-domain="bilanfrancaisformation.fr" src="https://plausible.io/js/script.js"></script>
-
+// Plausible Analytics wrapper (cookie-less).
 declare global {
   interface Window {
     plausible?: (event: string, options?: { props?: Record<string, unknown> }) => void;
@@ -9,15 +6,21 @@ declare global {
 }
 
 export type AnalyticsEvent =
+  | "test_started"
+  | "test_completed"
+  | "lead_capture_submitted"
+  | "lead_capture_succeeded"
+  | "lead_capture_failed"
+  | "whatsapp_clicked"
+  | "phone_clicked"
+  | "page_view"
+  | "landing_cta_click"
+  // Legacy (kept for compatibility)
   | "simulator_started"
   | "simulator_step_completed"
   | "simulator_completed"
   | "result_viewed"
-  | "contact_form_submitted"
-  | "whatsapp_clicked"
-  | "phone_clicked"
-  | "page_view"
-  | "landing_cta_click";
+  | "contact_form_submitted";
 
 export function trackEvent(name: AnalyticsEvent, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
