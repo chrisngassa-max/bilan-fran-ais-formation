@@ -16,7 +16,9 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
-import { contactInfo, phoneHref, waHref } from '@/config/site';
+import { waHref } from '@/config/site';
+import { LeadCaptureForm } from '@/components/LeadCaptureForm';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/bilan-test/$attemptId')({
   component: BilanTestPage,
@@ -24,6 +26,9 @@ export const Route = createFileRoute('/bilan-test/$attemptId')({
 
 function BilanTestPage() {
   const { attemptId } = Route.useParams();
+  useEffect(() => {
+    trackEvent('test_completed', { attempt_id: attemptId });
+  }, [attemptId]);
 
   const { data: result, isLoading } = useQuery({
     queryKey: ['placement-result', attemptId],
