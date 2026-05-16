@@ -383,7 +383,7 @@ function PasserTestPage() {
               </div>
               <Button 
                 disabled={!studentName.trim()}
-                onClick={() => setCurrentStep(1)}
+                onClick={() => { import('@/lib/analytics').then(m => m.trackEvent('test_started')); setCurrentStep(1); }}
                 className="w-full h-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-xl shadow-lg flex items-center justify-center"
               >
                 Démarrer mon évaluation
