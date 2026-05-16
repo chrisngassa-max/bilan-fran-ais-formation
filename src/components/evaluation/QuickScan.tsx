@@ -69,20 +69,25 @@ function scoreToRange(score: number) {
 export function QuickScan() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [done, setDone] = useState(false);
 
   const total = QUESTIONS.length;
   const current = QUESTIONS[step];
+  
   const rawScore = QUESTIONS.reduce((acc, q) => {
     const a = answers[q.id];
     if (a === undefined) return acc;
     return acc + (a === q.correctIndex ? q.level : 0);
   }, 0);
 
-  function handleAnswer(idx: number) {
-    if (!current) return;
-    const next = { ...answers, [current.id]: idx };
+  function handleNext() {
+    if (selectedIdx === null || !current) return;
+    
+    const next = { ...answers, [current.id]: selectedIdx };
     setAnswers(next);
+    setSelectedIdx(null); // Reset selection for next question
+
     if (step + 1 < total) {
       setStep(step + 1);
     } else {
@@ -98,10 +103,15 @@ export function QuickScan() {
     }
   }
 
+  function handleAnswer(idx: number) {
+    setSelectedIdx(idx);
+  }
+
   function reset() {
     setAnswers({});
     setStep(0);
     setDone(false);
+    setSelectedIdx(null);
   }
 
   if (done) {
@@ -131,7 +141,7 @@ export function QuickScan() {
           <button
             type="button"
             onClick={reset}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant px-5 py-3 body-md hover:bg-surface-container"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant px-5 py-3 body-md hover:bg-surface-container transition-all"
           >
             <RotateCcw className="h-4 w-4" /> Refaire le diagnostic
           </button>
@@ -161,16 +171,33 @@ export function QuickScan() {
         <div className="mt-6">
           <p className="body-lg font-medium text-on-surface">{current.prompt}</p>
           <div className="mt-4 grid gap-2">
-            {current.choices.map((c, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => handleAnswer(i)}
-                className="rounded-lg border-2 border-outline-variant bg-surface-bright px-4 py-3 text-left body-md hover:border-[var(--color-eval-navy)] hover:bg-[var(--color-eval-navy-soft)] transition-colors"
-              >
-                {c}
-              </button>
-            ))}
+            {current.choices.map((c, i) => {
+              const isSelected = selectedIdx === i;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => handleAnswer(i)}
+                  className={`rounded-lg border-2 px-4 py-3 text-left body-md transition-all ${
+                    isSelected 
+                    ? "border-[var(--color-eval-orange)] bg-[var(--color-eval-orange-soft)] font-bold shadow-sm" 
+                    : "border-outline-variant bg-surface-bright hover:border-[var(--color-eval-navy)] hover:bg-[var(--color-eval-navy-soft)]"
+                  }`}
+                >
+                  {c}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-6 flex justify-end">
+             <Button 
+                onClick={handleNext} 
+                disabled={selectedIdx === null}
+                className="bg-[var(--color-eval-navy)] text-white px-8 py-3 rounded-lg font-bold disabled:opacity-30 transition-all flex items-center gap-2"
+             >
+                Suivant
+                <ArrowRight className="h-4 w-4" />
+             </Button>
           </div>
         </div>
       )}

@@ -84,8 +84,20 @@ function PasserTestPage() {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [activeStartTime]);
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (currentStep > 0 && currentStep < 5) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [activeStartTime, currentStep]);
 
   const { data: testPayload, isLoading, error } = useQuery({
     queryKey: ['public-placement-test', token],
@@ -233,6 +245,7 @@ function PasserTestPage() {
     retry: 3, // FIX CRITIQUE: Retry x3
     onSuccess: (data) => {
       sessionStorage.removeItem(SESSION_KEY); // Clear session on success
+      sessionStorage.setItem('last_attempt_id', data.attempt_id); // Save for back nav
       toast.success('Test terminé !');
       navigate({ to: '/bilan-test/$attemptId', params: { attemptId: data.attempt_id } });
     },
@@ -376,6 +389,16 @@ function PasserTestPage() {
                 Démarrer mon évaluation
                 <ChevronRight className="ml-2 h-6 w-6" />
               </Button>
+              
+              {/* Point 2 de l'audit : Retour au bilan si existant */}
+              {sessionStorage.getItem('last_attempt_id') && (
+                <Link to="/bilan-test/$attemptId" params={{ attemptId: sessionStorage.getItem('last_attempt_id')! }} className="block">
+                  <button className="w-full py-4 text-primary font-bold hover:underline flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Consulter mon dernier bilan enregistré
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         )}

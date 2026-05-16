@@ -1,9 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, GraduationCap, Banknote, Calculator } from "lucide-react";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+
+  // Close menu on back/forward browser navigation
+  useEffect(() => {
+    const handlePopState = () => setOpen(false);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   return (
     <>
