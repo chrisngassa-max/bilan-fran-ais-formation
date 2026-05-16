@@ -203,7 +203,7 @@ function IndexPage() {
         </div>
         <div className="mt-8 text-center">
           <span className="text-[10px] text-on-surface-variant/30 uppercase tracking-widest font-bold">
-            v2.0.5-deployed
+            v2.0.6-deployed
           </span>
         </div>
       </section>
