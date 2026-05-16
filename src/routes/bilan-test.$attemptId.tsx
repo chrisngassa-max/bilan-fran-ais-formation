@@ -111,15 +111,11 @@ function BilanTestPage() {
               <p className="text-on-surface font-medium text-xl">
                 Votre profil présente des variations qui nécessitent une lecture plus approfondie par un expert pédagogique.
               </p>
-              <div className="flex flex-col md:flex-row gap-6 items-center bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
-                <div className="flex-1">
-                  <p className="text-on-surface-variant">Un entretien de 10 minutes avec un conseiller permettra de confirmer votre niveau et de valider votre projet.</p>
-                </div>
-                <a href={phoneHref} onClick={() => trackEvent("phone_clicked")}>
-                  <button className="h-14 px-8 bg-primary hover:opacity-90 text-on-primary font-bold rounded-xl whitespace-nowrap transition-all">
-                    Réserver mon entretien
-                  </button>
-                </a>
+              <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
+                <p className="text-on-surface-variant mb-4">
+                  Renseignez votre email ci-dessous : nous vous envoyons votre bilan détaillé avec une lecture
+                  pédagogique de votre profil.
+                </p>
               </div>
             </div>
           </div>
@@ -206,18 +202,22 @@ function BilanTestPage() {
           </div>
         )}
 
-        {/* Action Grid */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href={phoneHref} className="flex items-center justify-center gap-2 bg-primary text-on-primary h-[56px] rounded-lg font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
-            <Phone className="h-5 w-5" />
-            Être rappelé
-          </a>
-          <a href={waHref()} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-surface-container-highest text-on-surface h-[56px] rounded-lg font-bold border border-outline-variant hover:bg-surface-variant transition-all active:scale-95">
-            <Send className="h-5 w-5" />
-            Envoyer par WhatsApp
-          </a>
+        {/* Lead Capture - Bilan complet par email */}
+        <div className="mt-10">
+          <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
+        </div>
+
+        {/* Action Grid - canaux secondaires */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link to="/passer-test/$token" params={{ token: "latest" }} className="flex items-center justify-center gap-2 bg-transparent text-secondary border-2 border-secondary h-[56px] rounded-lg font-bold hover:bg-secondary/5 transition-all active:scale-95">
             <RefreshCw className="h-5 w-5" />
+            Refaire le test
+          </Link>
+          <a href={waHref()} target="_blank" rel="noreferrer" onClick={() => trackEvent("whatsapp_clicked", { location: "bilan_secondary" })} className="flex items-center justify-center gap-2 bg-surface-container-highest text-on-surface h-[56px] rounded-lg font-bold border border-outline-variant hover:bg-surface-variant transition-all active:scale-95">
+            <Send className="h-5 w-5" />
+            Une question ? Nous écrire sur WhatsApp
+          </a>
+        </div>
             Refaire le test
           </Link>
         </div>
