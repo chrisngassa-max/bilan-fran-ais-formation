@@ -26,7 +26,7 @@ export const evaluerProductionFn = createServerFn({ method: "POST" })
         .from("test_sessions")
         .update({
           score_production: result.score,
-          production_feedback: result as unknown as Record<string, unknown>,
+          production_feedback: JSON.parse(JSON.stringify(result)),
           ia_evaluation_consent: true,
           ia_evaluation_consent_at: new Date().toISOString(),
         })
