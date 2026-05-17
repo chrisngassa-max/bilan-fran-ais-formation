@@ -143,9 +143,9 @@ export async function evaluerProductionIA(
 ): Promise<EvaluationIAOutput> {
   assertServeurUniquement();
 
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.warn("[evaluation-ia] LOVABLE_API_KEY manquant — fallback déterministe.");
+    console.warn("[evaluation-ia] ANTHROPIC_API_KEY manquant — fallback déterministe.");
     return scoringFallback(input.texte_candidat, input.niveau_cible);
   }
 
@@ -173,33 +173,35 @@ Production écrite du candidat :
 }`;
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        response_format: { type: "json_object" },
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }],
       }),
     });
 
     if (!res.ok) {
       console.warn(
-        `[evaluation-ia] Gateway HTTP ${res.status} — fallback déterministe.`,
+        `[evaluation-ia] Anthropic HTTP ${res.status} — fallback déterministe.`,
       );
       return scoringFallback(input.texte_candidat, input.niveau_cible);
     }
 
     const data = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
+      content?: Array<{ type?: string; text?: string }>;
     };
-    const raw = data.choices?.[0]?.message?.content ?? "";
+    let raw = data.content?.find((c) => c.type === "text")?.text ?? "";
+    // Claude peut entourer le JSON de ```json ... ``` — on extrait le bloc.
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (match) raw = match[0];
     const parsed = JSON.parse(raw) as Partial<EvaluationIAOutput>;
 
     const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score ?? 0))));
