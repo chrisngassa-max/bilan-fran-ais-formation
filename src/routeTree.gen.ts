@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestRapideRouteImport } from './routes/test-rapide'
 import { Route as TestCompletRouteImport } from './routes/test-complet'
 import { Route as SimulateurRouteImport } from './routes/simulateur'
+import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
@@ -24,6 +25,7 @@ import { Route as QualificationAttemptIdRouteImport } from './routes/qualificati
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
+import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
 
 const TestRapideRoute = TestRapideRouteImport.update({
   id: '/test-rapide',
@@ -38,6 +40,11 @@ const TestCompletRoute = TestCompletRouteImport.update({
 const SimulateurRoute = SimulateurRouteImport.update({
   id: '/simulateur',
   path: '/simulateur',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartenaireRoute = PartenaireRouteImport.update({
+  id: '/partenaire',
+  path: '/partenaire',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NiveauxRoute = NiveauxRouteImport.update({
@@ -100,6 +107,11 @@ const BilanTestAttemptIdRoute = BilanTestAttemptIdRouteImport.update({
   path: '/bilan-test/$attemptId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartenaireLeadsLeadIdRoute = PartenaireLeadsLeadIdRouteImport.update({
+  id: '/leads/$leadId',
+  path: '/leads/$leadId',
+  getParentRoute: () => PartenaireRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
+  '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
@@ -117,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -127,6 +141,7 @@ export interface FileRoutesByTo {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
+  '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
@@ -134,6 +149,7 @@ export interface FileRoutesByTo {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,6 +161,7 @@ export interface FileRoutesById {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
+  '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
@@ -152,6 +169,7 @@ export interface FileRoutesById {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,6 +182,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
+    | '/partenaire'
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
@@ -171,6 +190,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/partenaire/leads/$leadId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -181,6 +201,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
+    | '/partenaire'
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
@@ -188,6 +209,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/partenaire/leads/$leadId'
   id:
     | '__root__'
     | '/'
@@ -198,6 +220,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
+    | '/partenaire'
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
@@ -205,6 +228,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/partenaire/leads/$leadId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -216,6 +240,7 @@ export interface RootRouteChildren {
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
+  PartenaireRoute: typeof PartenaireRouteWithChildren
   SimulateurRoute: typeof SimulateurRoute
   TestCompletRoute: typeof TestCompletRoute
   TestRapideRoute: typeof TestRapideRoute
@@ -245,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/simulateur'
       fullPath: '/simulateur'
       preLoaderRoute: typeof SimulateurRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partenaire': {
+      id: '/partenaire'
+      path: '/partenaire'
+      fullPath: '/partenaire'
+      preLoaderRoute: typeof PartenaireRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/niveaux': {
@@ -331,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BilanTestAttemptIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partenaire/leads/$leadId': {
+      id: '/partenaire/leads/$leadId'
+      path: '/leads/$leadId'
+      fullPath: '/partenaire/leads/$leadId'
+      preLoaderRoute: typeof PartenaireLeadsLeadIdRouteImport
+      parentRoute: typeof PartenaireRoute
+    }
   }
 }
 
@@ -346,6 +385,18 @@ const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
   FinancementRouteChildren,
 )
 
+interface PartenaireRouteChildren {
+  PartenaireLeadsLeadIdRoute: typeof PartenaireLeadsLeadIdRoute
+}
+
+const PartenaireRouteChildren: PartenaireRouteChildren = {
+  PartenaireLeadsLeadIdRoute: PartenaireLeadsLeadIdRoute,
+}
+
+const PartenaireRouteWithChildren = PartenaireRoute._addFileChildren(
+  PartenaireRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
@@ -355,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   MentionsLegalesRoute: MentionsLegalesRoute,
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
+  PartenaireRoute: PartenaireRouteWithChildren,
   SimulateurRoute: SimulateurRoute,
   TestCompletRoute: TestCompletRoute,
   TestRapideRoute: TestRapideRoute,
@@ -365,3 +417,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
