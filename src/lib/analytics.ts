@@ -15,6 +15,7 @@ export type AnalyticsEvent =
   | "phone_clicked"
   | "page_view"
   | "landing_cta_click"
+  | "home_diagnostic_click"
   // Legacy (kept for compatibility)
   | "simulator_started"
   | "simulator_step_completed"
