@@ -143,9 +143,9 @@ export async function evaluerProductionIA(
 ): Promise<EvaluationIAOutput> {
   assertServeurUniquement();
 
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.warn("[evaluation-ia] LOVABLE_API_KEY manquant — fallback déterministe.");
+    console.warn("[evaluation-ia] ANTHROPIC_API_KEY manquant — fallback déterministe.");
     return scoringFallback(input.texte_candidat, input.niveau_cible);
   }
 
