@@ -13,6 +13,7 @@ import { Route as TestRapideRouteImport } from './routes/test-rapide'
 import { Route as TestCompletRouteImport } from './routes/test-complet'
 import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
+import { Route as MonEspaceRouteImport } from './routes/mon-espace'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -41,6 +42,11 @@ const SimulateurRoute = SimulateurRouteImport.update({
 const NiveauxRoute = NiveauxRouteImport.update({
   id: '/niveaux',
   path: '/niveaux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonEspaceRoute = MonEspaceRouteImport.update({
+  id: '/mon-espace',
+  path: '/mon-espace',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/financement'
     | '/mentions-legales'
+    | '/mon-espace'
     | '/niveaux'
     | '/simulateur'
     | '/test-complet'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/financement'
     | '/mentions-legales'
+    | '/mon-espace'
     | '/niveaux'
     | '/simulateur'
     | '/test-complet'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/financement'
     | '/mentions-legales'
+    | '/mon-espace'
     | '/niveaux'
     | '/simulateur'
     | '/test-complet'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
+  MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
   SimulateurRoute: typeof SimulateurRoute
   TestCompletRoute: typeof TestCompletRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/niveaux'
       fullPath: '/niveaux'
       preLoaderRoute: typeof NiveauxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mon-espace': {
+      id: '/mon-espace'
+      path: '/mon-espace'
+      fullPath: '/mon-espace'
+      preLoaderRoute: typeof MonEspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mentions-legales': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
+  MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
   SimulateurRoute: SimulateurRoute,
   TestCompletRoute: TestCompletRoute,
