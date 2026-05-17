@@ -226,3 +226,8 @@ Production écrite du candidat :
     return scoringFallback(input.texte_candidat, input.niveau_cible);
   }
 }
+
+
+// Alias rétrocompatible.
+export const evaluerProductionEcrite = evaluerProductionIA;
+
