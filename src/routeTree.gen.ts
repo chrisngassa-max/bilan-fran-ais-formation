@@ -9,10 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestRapideRouteImport } from './routes/test-rapide'
+import { Route as TestCompletRouteImport } from './routes/test-complet'
 import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as FinancementRouteImport } from './routes/financement'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +23,16 @@ import { Route as QualificationAttemptIdRouteImport } from './routes/qualificati
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
+const TestRapideRoute = TestRapideRouteImport.update({
+  id: '/test-rapide',
+  path: '/test-rapide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestCompletRoute = TestCompletRouteImport.update({
+  id: '/test-complet',
+  path: '/test-complet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SimulateurRoute = SimulateurRouteImport.update({
   id: '/simulateur',
   path: '/simulateur',
@@ -38,6 +51,11 @@ const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
 const FinancementRoute = FinancementRouteImport.update({
   id: '/financement',
   path: '/financement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -75,10 +93,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
+  '/test-complet': typeof TestCompletRoute
+  '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -87,10 +108,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
+  '/test-complet': typeof TestCompletRoute
+  '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -100,10 +124,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/niveaux': typeof NiveauxRoute
   '/simulateur': typeof SimulateurRoute
+  '/test-complet': typeof TestCompletRoute
+  '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -114,10 +141,13 @@ export interface FileRouteTypes {
     | '/'
     | '/confidentialite'
     | '/contact'
+    | '/dashboard'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
     | '/simulateur'
+    | '/test-complet'
+    | '/test-rapide'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -126,10 +156,13 @@ export interface FileRouteTypes {
     | '/'
     | '/confidentialite'
     | '/contact'
+    | '/dashboard'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
     | '/simulateur'
+    | '/test-complet'
+    | '/test-rapide'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -138,10 +171,13 @@ export interface FileRouteTypes {
     | '/'
     | '/confidentialite'
     | '/contact'
+    | '/dashboard'
     | '/financement'
     | '/mentions-legales'
     | '/niveaux'
     | '/simulateur'
+    | '/test-complet'
+    | '/test-rapide'
     | '/bilan-test/$attemptId'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -151,10 +187,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
   FinancementRoute: typeof FinancementRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   NiveauxRoute: typeof NiveauxRoute
   SimulateurRoute: typeof SimulateurRoute
+  TestCompletRoute: typeof TestCompletRoute
+  TestRapideRoute: typeof TestRapideRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
   QualificationAttemptIdRoute: typeof QualificationAttemptIdRoute
@@ -162,6 +201,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/test-rapide': {
+      id: '/test-rapide'
+      path: '/test-rapide'
+      fullPath: '/test-rapide'
+      preLoaderRoute: typeof TestRapideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-complet': {
+      id: '/test-complet'
+      path: '/test-complet'
+      fullPath: '/test-complet'
+      preLoaderRoute: typeof TestCompletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/simulateur': {
       id: '/simulateur'
       path: '/simulateur'
@@ -188,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/financement'
       fullPath: '/financement'
       preLoaderRoute: typeof FinancementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -239,10 +299,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
   FinancementRoute: FinancementRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   NiveauxRoute: NiveauxRoute,
   SimulateurRoute: SimulateurRoute,
+  TestCompletRoute: TestCompletRoute,
+  TestRapideRoute: TestRapideRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,
   QualificationAttemptIdRoute: QualificationAttemptIdRoute,
@@ -250,3 +313,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
