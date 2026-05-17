@@ -14,44 +14,264 @@ export type Database = {
   }
   public: {
     Tables: {
+      lead_partenaire_assignments: {
+        Row: {
+          created_at: string
+          id: string
+          lead_id: string | null
+          partenaire_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          partenaire_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          partenaire_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_partenaire_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_partenaire_assignments_partenaire_id_fkey"
+            columns: ["partenaire_id"]
+            isOneToOne: false
+            referencedRelation: "partenaire_comptes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           attempt_id: string | null
+          checklist_states: Json | null
           consent_marketing: boolean
           created_at: string
+          date_rdv_prefecture: string | null
+          dispense_demandee: boolean | null
           email: string
           estimated_level: string | null
           id: string
           metadata: Json
+          partenaire_consent: boolean
+          partenaire_consent_at: string | null
+          prenom: string | null
+          situation_pro: string | null
           source: string
           status: string
+          type_demarche: string | null
           whatsapp_phone: string | null
         }
         Insert: {
           attempt_id?: string | null
+          checklist_states?: Json | null
           consent_marketing?: boolean
           created_at?: string
+          date_rdv_prefecture?: string | null
+          dispense_demandee?: boolean | null
           email: string
           estimated_level?: string | null
           id?: string
           metadata?: Json
+          partenaire_consent?: boolean
+          partenaire_consent_at?: string | null
+          prenom?: string | null
+          situation_pro?: string | null
           source?: string
           status?: string
+          type_demarche?: string | null
           whatsapp_phone?: string | null
         }
         Update: {
           attempt_id?: string | null
+          checklist_states?: Json | null
           consent_marketing?: boolean
           created_at?: string
+          date_rdv_prefecture?: string | null
+          dispense_demandee?: boolean | null
           email?: string
           estimated_level?: string | null
           id?: string
           metadata?: Json
+          partenaire_consent?: boolean
+          partenaire_consent_at?: string | null
+          prenom?: string | null
+          situation_pro?: string | null
           source?: string
           status?: string
+          type_demarche?: string | null
           whatsapp_phone?: string | null
         }
         Relationships: []
+      }
+      leads_partenaire_status: {
+        Row: {
+          contacte_at: string | null
+          created_at: string
+          id: string
+          lead_id: string | null
+          note: string | null
+          partenaire_id: string | null
+          statut: string
+          updated_at: string
+        }
+        Insert: {
+          contacte_at?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          note?: string | null
+          partenaire_id?: string | null
+          statut?: string
+          updated_at?: string
+        }
+        Update: {
+          contacte_at?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          note?: string | null
+          partenaire_id?: string | null
+          statut?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_partenaire_status_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_partenaire_status_partenaire_id_fkey"
+            columns: ["partenaire_id"]
+            isOneToOne: false
+            referencedRelation: "partenaire_comptes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      magic_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          lead_id: string | null
+          token: string
+          used: boolean
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          lead_id?: string | null
+          token?: string
+          used?: boolean
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          lead_id?: string | null
+          token?: string
+          used?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "magic_links_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partenaire_comptes: {
+        Row: {
+          actif: boolean
+          created_at: string
+          email: string
+          id: string
+          nom: string | null
+          password_hash: string
+        }
+        Insert: {
+          actif?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          nom?: string | null
+          password_hash: string
+        }
+        Update: {
+          actif?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          nom?: string | null
+          password_hash?: string
+        }
+        Relationships: []
+      }
+      test_sessions: {
+        Row: {
+          created_at: string
+          duree_secondes: number | null
+          flags: Json
+          ia_evaluation_consent: boolean | null
+          ia_evaluation_consent_at: string | null
+          id: string
+          lead_id: string | null
+          niveau_estime: string | null
+          production_feedback: Json | null
+          score_production: number | null
+          scores: Json
+        }
+        Insert: {
+          created_at?: string
+          duree_secondes?: number | null
+          flags?: Json
+          ia_evaluation_consent?: boolean | null
+          ia_evaluation_consent_at?: string | null
+          id?: string
+          lead_id?: string | null
+          niveau_estime?: string | null
+          production_feedback?: Json | null
+          score_production?: number | null
+          scores?: Json
+        }
+        Update: {
+          created_at?: string
+          duree_secondes?: number | null
+          flags?: Json
+          ia_evaluation_consent?: boolean | null
+          ia_evaluation_consent_at?: string | null
+          id?: string
+          lead_id?: string | null
+          niveau_estime?: string | null
+          production_feedback?: Json | null
+          score_production?: number | null
+          scores?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_sessions_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
