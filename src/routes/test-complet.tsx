@@ -236,13 +236,29 @@ function TestCompletPage() {
               </div>
             ))}
 
+            {currentSection.id === "production" && (
+              <label className="flex items-start gap-3 p-5 rounded-2xl border-2 border-amber-300 bg-amber-50 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={iaConsent}
+                  onChange={e => setIaConsent(e.target.checked)}
+                  className="mt-1 h-5 w-5 accent-amber-600"
+                />
+                <span className="text-sm text-amber-900 leading-relaxed">
+                  <AlertTriangle className="inline h-4 w-4 mr-1 -mt-0.5" />
+                  <strong>Évaluation IA optionnelle.</strong> J'accepte que mon texte soit analysé par une IA pour estimer mon niveau (résultat indicatif, non officiel). Mon texte n'est pas conservé à des fins d'entraînement.
+                </span>
+              </label>
+            )}
+
             <div className="flex justify-center pt-8">
-              <Button 
+              <Button
                 onClick={handleNextSection}
-                className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl flex items-center justify-center gap-3 shadow-xl"
+                disabled={iaLoading}
+                className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl flex items-center justify-center gap-3 shadow-xl disabled:opacity-60"
               >
-                {sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante"}
-                <ChevronRight className="h-6 w-6" />
+                {iaLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : (sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante")}
+                {!iaLoading && <ChevronRight className="h-6 w-6" />}
               </Button>
             </div>
           </div>
