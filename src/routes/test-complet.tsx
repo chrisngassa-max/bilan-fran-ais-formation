@@ -63,31 +63,60 @@ function TestCompletPage() {
     setIsStarting(false);
   };
 
-  const handleNextSection = () => {
+  const handleNextSection = async () => {
     if (sectionIndex < SECTIONS.length - 1) {
       setSectionIndex(prev => prev + 1);
       window.scrollTo(0, 0);
-    } else {
-      const duration = Math.round((Date.now() - startTime.current) / 1000);
-      setFinalDuration(duration);
-      
-      const scores = {
-        oral: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "oral")),
-        ecrit: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "ecrit")),
-        grammaire: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "grammaire")),
-        production: 40 // Mock for now as per spec "estimated via length/keywords"
-      };
-
-      const niveau = calculerNiveauGlobal(scores);
-      const flags = calculerFlags({
-        score_oral: scores.oral,
-        score_ecrit: scores.ecrit,
-        duree_secondes: duration
-      });
-
-      setResults({ scores, niveau, flags });
-      setPhase(3);
+      return;
     }
+
+    const duration = Math.round((Date.now() - startTime.current) / 1000);
+    setFinalDuration(duration);
+
+    const scoresBase = {
+      oral: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "oral")),
+      ecrit: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "ecrit")),
+      grammaire: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "grammaire")),
+      production: 40,
+    };
+
+    // Niveau provisoire pour cibler l'IA
+    const niveauProvisoire = calculerNiveauGlobal(scoresBase);
+
+    let productionScore = scoresBase.production;
+    if (iaConsent) {
+      const prodQuestion = QUESTIONS_COMPLET.find(q => q.section === "production");
+      const texte = prodQuestion ? String(answers[prodQuestion.id] ?? '') : '';
+      if (prodQuestion && texte.trim().length > 0) {
+        setIaLoading(true);
+        try {
+          const result = await evaluerProduction({
+            data: {
+              consigne: prodQuestion.consigne ?? prodQuestion.enonce,
+              texte_candidat: texte,
+              niveau_cible: niveauProvisoire,
+              ia_consent: true,
+            },
+          });
+          productionScore = result.score;
+        } catch (err) {
+          console.error('[test-complet] evaluerProductionFn failed', err);
+        } finally {
+          setIaLoading(false);
+        }
+      }
+    }
+
+    const scores = { ...scoresBase, production: productionScore };
+    const niveau = calculerNiveauGlobal(scores);
+    const flags = calculerFlags({
+      score_oral: scores.oral,
+      score_ecrit: scores.ecrit,
+      duree_secondes: duration,
+    });
+
+    setResults({ scores, niveau, flags });
+    setPhase(3);
   };
 
   if (phase === 1) {
