@@ -22,6 +22,7 @@ import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
+import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 
 const TestRapideRoute = TestRapideRouteImport.update({
@@ -89,6 +90,11 @@ const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
   path: '/passer-test/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FinancementCpfRoute = FinancementCpfRouteImport.update({
+  id: '/cpf',
+  path: '/cpf',
+  getParentRoute: () => FinancementRoute,
+} as any)
 const BilanTestAttemptIdRoute = BilanTestAttemptIdRouteImport.update({
   id: '/bilan-test/$attemptId',
   path: '/bilan-test/$attemptId',
@@ -100,7 +106,7 @@ export interface FileRoutesByFullPath {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/financement': typeof FinancementRoute
+  '/financement': typeof FinancementRouteWithChildren
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
@@ -116,7 +123,7 @@ export interface FileRoutesByTo {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/financement': typeof FinancementRoute
+  '/financement': typeof FinancementRouteWithChildren
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
@@ -133,7 +141,7 @@ export interface FileRoutesById {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/financement': typeof FinancementRoute
+  '/financement': typeof FinancementRouteWithChildren
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
+  '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/test-complet'
     | '/test-rapide'
     | '/bilan-test/$attemptId'
+    | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/test-complet'
     | '/test-rapide'
     | '/bilan-test/$attemptId'
+    | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/test-complet'
     | '/test-rapide'
     | '/bilan-test/$attemptId'
+    | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
   fileRoutesById: FileRoutesById
@@ -200,7 +212,7 @@ export interface RootRouteChildren {
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
-  FinancementRoute: typeof FinancementRoute
+  FinancementRoute: typeof FinancementRouteWithChildren
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
@@ -305,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasserTestTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/financement/cpf': {
+      id: '/financement/cpf'
+      path: '/cpf'
+      fullPath: '/financement/cpf'
+      preLoaderRoute: typeof FinancementCpfRouteImport
+      parentRoute: typeof FinancementRoute
+    }
     '/bilan-test/$attemptId': {
       id: '/bilan-test/$attemptId'
       path: '/bilan-test/$attemptId'
@@ -315,12 +334,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface FinancementRouteChildren {
+  FinancementCpfRoute: typeof FinancementCpfRoute
+}
+
+const FinancementRouteChildren: FinancementRouteChildren = {
+  FinancementCpfRoute: FinancementCpfRoute,
+}
+
+const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
+  FinancementRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
-  FinancementRoute: FinancementRoute,
+  FinancementRoute: FinancementRouteWithChildren,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,

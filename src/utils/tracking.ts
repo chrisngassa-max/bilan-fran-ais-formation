@@ -25,3 +25,11 @@ export function trackFormulairesSoumis(params: {
   console.log("Tracking: formulaire_soumis", params);
   // posthog.capture("formulaire_soumis", params)
 }
+
+export function trackCPFClic(params: {
+  etape: "solde" | "numero_copie" | "mcf_lien" | "aide_conseiller"
+  tunnel_origine: "T2" | "T3" | "espace_prospect"
+}) {
+  console.log("Tracking: cpf_clic", params);
+  // posthog.capture("cpf_clic", params)
+}

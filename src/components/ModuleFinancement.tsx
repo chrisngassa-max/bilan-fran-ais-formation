@@ -1,7 +1,11 @@
 import { useState } from "react"
-import { Wallet, Building2, Handshake, Briefcase, Info } from "lucide-react"
+import { Wallet, Building2, Handshake, Briefcase, Info, ExternalLink, Copy, CheckCheck, HelpCircle } from "lucide-react"
 import { SituationPro, FormuleExpress } from "../types/leads"
 import { NiveauIndicatif } from "../types/bilan"
+import { trackCPFClic } from "../utils/tracking"
+
+const NOM_ORGANISME = import.meta.env.VITE_ORGANISME_NOM ?? "CAPTCF Formation"
+const NUMERO_CPF = import.meta.env.VITE_ORGANISME_NUMERO_CPF ?? "000000000"
 
 interface Props {
   formule?: FormuleExpress
@@ -10,6 +14,18 @@ interface Props {
 
 export function ModuleFinancement({}: Props) {
   const [situation, setSituation] = useState<SituationPro>("salarie")
+  const [cpfCopied, setCpfCopied] = useState(false)
+
+  const copierNumero = async () => {
+    try {
+      await navigator.clipboard.writeText(NUMERO_CPF)
+      setCpfCopied(true)
+      trackCPFClic({ etape: "numero_copie", tunnel_origine: "T3" })
+      setTimeout(() => setCpfCopied(false), 2500)
+    } catch (e) {
+      console.error("Clipboard error", e)
+    }
+  }
 
   return (
     <div className="bg-surface-bright rounded-2xl border border-outline-variant p-6 md:p-8 shadow-sm">
@@ -35,8 +51,8 @@ export function ModuleFinancement({}: Props) {
               key={s.id}
               onClick={() => setSituation(s.id as SituationPro)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 font-bold transition-all ${
-                situation === s.id 
-                ? 'border-primary bg-primary/5 text-primary' 
+                situation === s.id
+                ? 'border-primary bg-primary/5 text-primary'
                 : 'border-outline-variant hover:border-outline text-on-surface-variant'
               }`}
             >
@@ -49,21 +65,76 @@ export function ModuleFinancement({}: Props) {
 
       <div className="space-y-4">
         {situation === "salarie" && (
-          <div className="p-6 bg-primary-container/10 border border-primary/20 rounded-2xl">
-            <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
-              <Building2 className="h-5 w-5" /> Mon Compte Formation (CPF)
-            </h4>
-            <p className="text-sm text-on-surface-variant mb-4">
-              Votre formation peut être financée jusqu'à 100% selon votre solde CPF disponible.
-            </p>
-            <a 
-              href="https://www.moncompteformation.gouv.fr" 
-              target="_blank" 
-              rel="noreferrer"
-              className="inline-flex items-center justify-center w-full h-12 bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all"
-            >
-              Vérifier mon solde CPF
-            </a>
+          <div className="p-6 bg-primary-container/10 border border-primary/20 rounded-2xl space-y-5">
+            <div>
+              <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
+                <Building2 className="h-5 w-5" /> 💼 Mon Compte Formation (CPF)
+              </h4>
+              <p className="text-sm text-on-surface-variant">
+                Certaines formations peuvent être finançables via le CPF selon leur éligibilité et votre situation personnelle.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-bold text-on-surface">Étape 1 — Vérifiez votre solde CPF</p>
+              <a
+                id="cpf-solde-button"
+                href="https://www.moncompteformation.gouv.fr"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackCPFClic({ etape: "solde", tunnel_origine: "T3" })}
+                className="inline-flex items-center justify-center gap-2 w-full h-11 bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-all"
+              >
+                Voir mon solde <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-bold text-on-surface">Étape 2 — Recherchez notre formation</p>
+              <p className="text-sm text-on-surface-variant">Organisme : <span className="font-semibold">{NOM_ORGANISME}</span></p>
+              <div className="flex items-center gap-2 p-2 bg-surface-container rounded-lg border border-outline-variant">
+                <code className="flex-1 text-sm font-mono px-2">{NUMERO_CPF}</code>
+                <button
+                  id="cpf-copy-button"
+                  onClick={copierNumero}
+                  className="inline-flex items-center gap-1 px-3 h-9 rounded-md bg-primary/10 text-primary hover:bg-primary/20 text-sm font-bold transition-all"
+                >
+                  {cpfCopied ? (
+                    <><CheckCheck className="h-4 w-4" /> Copié !</>
+                  ) : (
+                    <><Copy className="h-4 w-4" /> Copier</>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-sm font-bold text-on-surface">Étape 3 — Inscrivez-vous</p>
+              <a
+                id="cpf-mcf-lien"
+                href="https://www.moncompteformation.gouv.fr"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackCPFClic({ etape: "mcf_lien", tunnel_origine: "T3" })}
+                className="inline-flex items-center justify-center gap-2 w-full h-11 bg-surface-container text-on-surface border border-outline-variant rounded-lg font-bold hover:bg-surface transition-all"
+              >
+                Aller sur Mon Compte Formation <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+
+            <div className="pt-3 border-t border-outline-variant/50 flex flex-col gap-2">
+              <a
+                id="cpf-aide-conseiller"
+                href="/contact"
+                onClick={() => trackCPFClic({ etape: "aide_conseiller", tunnel_origine: "T3" })}
+                className="inline-flex items-center gap-2 text-sm text-primary font-bold hover:underline"
+              >
+                <HelpCircle className="h-4 w-4" /> Besoin d'aide pour le dossier CPF ?
+              </a>
+              <a href="/financement/cpf" className="text-sm text-on-surface-variant hover:text-primary hover:underline">
+                Voir le guide complet →
+              </a>
+            </div>
           </div>
         )}
 
