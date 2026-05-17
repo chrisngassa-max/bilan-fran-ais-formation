@@ -9,7 +9,9 @@ import { ResultatIncoherent } from '@/components/ResultatIncoherent';
 import { PageContactHumain } from '@/components/PageContactHumain';
 import { trackFormulairesSoumis } from '@/utils/tracking';
 import { NiveauIndicatif } from '@/types/bilan';
-import { Loader2, ChevronRight, Sparkles, Target, BookOpen, PenTool, Mic } from 'lucide-react';
+import { Loader2, ChevronRight, Sparkles, Target, BookOpen, PenTool, Mic, AlertTriangle } from 'lucide-react';
+import { evaluerProductionFn } from '@/lib/evaluation-production.functions';
+import { useServerFn } from '@tanstack/react-start';
 
 export const Route = createFileRoute('/test-complet')({
   component: TestCompletPage,
@@ -34,6 +36,9 @@ function TestCompletPage() {
   const [partenaireConsent, setPartenaireConsent] = useState(false);
   const [wsConsent, setWsConsent] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
+  const [iaConsent, setIaConsent] = useState(false);
+  const [iaLoading, setIaLoading] = useState(false);
+  const evaluerProduction = useServerFn(evaluerProductionFn);
 
   // Timer
   const startTime = useRef<number>(0);
@@ -58,31 +63,60 @@ function TestCompletPage() {
     setIsStarting(false);
   };
 
-  const handleNextSection = () => {
+  const handleNextSection = async () => {
     if (sectionIndex < SECTIONS.length - 1) {
       setSectionIndex(prev => prev + 1);
       window.scrollTo(0, 0);
-    } else {
-      const duration = Math.round((Date.now() - startTime.current) / 1000);
-      setFinalDuration(duration);
-      
-      const scores = {
-        oral: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "oral")),
-        ecrit: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "ecrit")),
-        grammaire: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "grammaire")),
-        production: 40 // Mock for now as per spec "estimated via length/keywords"
-      };
-
-      const niveau = calculerNiveauGlobal(scores);
-      const flags = calculerFlags({
-        score_oral: scores.oral,
-        score_ecrit: scores.ecrit,
-        duree_secondes: duration
-      });
-
-      setResults({ scores, niveau, flags });
-      setPhase(3);
+      return;
     }
+
+    const duration = Math.round((Date.now() - startTime.current) / 1000);
+    setFinalDuration(duration);
+
+    const scoresBase = {
+      oral: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "oral")),
+      ecrit: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "ecrit")),
+      grammaire: calculerScoreSection(answers, QUESTIONS_COMPLET.filter(q => q.section === "grammaire")),
+      production: 40,
+    };
+
+    // Niveau provisoire pour cibler l'IA
+    const niveauProvisoire = calculerNiveauGlobal(scoresBase);
+
+    let productionScore = scoresBase.production;
+    if (iaConsent) {
+      const prodQuestion = QUESTIONS_COMPLET.find(q => q.section === "production");
+      const texte = prodQuestion ? String(answers[prodQuestion.id] ?? '') : '';
+      if (prodQuestion && texte.trim().length > 0) {
+        setIaLoading(true);
+        try {
+          const result = await evaluerProduction({
+            data: {
+              consigne: prodQuestion.consigne ?? prodQuestion.enonce,
+              texte_candidat: texte,
+              niveau_cible: niveauProvisoire,
+              ia_consent: true,
+            },
+          });
+          productionScore = result.score;
+        } catch (err) {
+          console.error('[test-complet] evaluerProductionFn failed', err);
+        } finally {
+          setIaLoading(false);
+        }
+      }
+    }
+
+    const scores = { ...scoresBase, production: productionScore };
+    const niveau = calculerNiveauGlobal(scores);
+    const flags = calculerFlags({
+      score_oral: scores.oral,
+      score_ecrit: scores.ecrit,
+      duree_secondes: duration,
+    });
+
+    setResults({ scores, niveau, flags });
+    setPhase(3);
   };
 
   if (phase === 1) {
@@ -202,13 +236,29 @@ function TestCompletPage() {
               </div>
             ))}
 
+            {currentSection.id === "production" && (
+              <label className="flex items-start gap-3 p-5 rounded-2xl border-2 border-amber-300 bg-amber-50 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={iaConsent}
+                  onChange={e => setIaConsent(e.target.checked)}
+                  className="mt-1 h-5 w-5 accent-amber-600"
+                />
+                <span className="text-sm text-amber-900 leading-relaxed">
+                  <AlertTriangle className="inline h-4 w-4 mr-1 -mt-0.5" />
+                  <strong>Évaluation IA optionnelle.</strong> J'accepte que mon texte soit analysé par une IA pour estimer mon niveau (résultat indicatif, non officiel). Mon texte n'est pas conservé à des fins d'entraînement.
+                </span>
+              </label>
+            )}
+
             <div className="flex justify-center pt-8">
-              <Button 
+              <Button
                 onClick={handleNextSection}
-                className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl flex items-center justify-center gap-3 shadow-xl"
+                disabled={iaLoading}
+                className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl flex items-center justify-center gap-3 shadow-xl disabled:opacity-60"
               >
-                {sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante"}
-                <ChevronRight className="h-6 w-6" />
+                {iaLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : (sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante")}
+                {!iaLoading && <ChevronRight className="h-6 w-6" />}
               </Button>
             </div>
           </div>
