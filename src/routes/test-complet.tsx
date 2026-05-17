@@ -36,6 +36,9 @@ function TestCompletPage() {
   const [partenaireConsent, setPartenaireConsent] = useState(false);
   const [wsConsent, setWsConsent] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
+  const [iaConsent, setIaConsent] = useState(false);
+  const [iaLoading, setIaLoading] = useState(false);
+  const evaluerProduction = useServerFn(evaluerProductionFn);
 
   // Timer
   const startTime = useRef<number>(0);
