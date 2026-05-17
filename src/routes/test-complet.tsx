@@ -12,6 +12,7 @@ import { NiveauIndicatif } from '@/types/bilan';
 import { Loader2, ChevronRight, Sparkles, Target, BookOpen, PenTool, Mic, AlertTriangle } from 'lucide-react';
 import { evaluerProductionFn } from '@/lib/evaluation-production.functions';
 import { useServerFn } from '@tanstack/react-start';
+import { track } from '@/utils/tracking-plausible';
 
 export const Route = createFileRoute('/test-complet')({
   component: TestCompletPage,
@@ -54,9 +55,16 @@ function TestCompletPage() {
   const currentSection = SECTIONS[sectionIndex];
   const sectionQuestions = QUESTIONS_COMPLET.filter(q => q.section === currentSection.id);
 
+  useEffect(() => {
+    if (phase === 3) {
+      track("result_viewed");
+    }
+  }, [phase]);
+
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsStarting(true);
+    track("test_started");
     await new Promise(r => setTimeout(r, 1000));
     startTime.current = Date.now();
     setPhase(2);
@@ -70,6 +78,7 @@ function TestCompletPage() {
       return;
     }
 
+    track("test_completed");
     const duration = Math.round((Date.now() - startTime.current) / 1000);
     setFinalDuration(duration);
 

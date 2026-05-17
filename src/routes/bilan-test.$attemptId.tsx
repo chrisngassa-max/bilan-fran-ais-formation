@@ -20,6 +20,7 @@ import { LeadCaptureForm } from '@/components/LeadCaptureForm';
 import { useEffect } from 'react';
 import { ChecklistDocuments } from '@/components/ChecklistDocuments';
 import { type NiveauIndicatif } from '@/types/bilan';
+import { track } from '@/utils/tracking-plausible';
 
 export const Route = createFileRoute('/bilan-test/$attemptId')({
   component: BilanTestPage,
@@ -29,6 +30,7 @@ function BilanTestPage() {
   const { attemptId } = Route.useParams();
   useEffect(() => {
     trackEvent('test_completed', { attempt_id: attemptId });
+    track("result_viewed");
   }, [attemptId]);
 
   const { data: result, isLoading } = useQuery({

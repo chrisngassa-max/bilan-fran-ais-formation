@@ -16,16 +16,27 @@ import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AccompagnementAdministratifRouteImport } from './routes/accompagnement-administratif'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
+import { Route as ApiCaptureLeadRouteImport } from './routes/api.capture-lead'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminReportingRouteImport } from './routes/admin.reporting'
+import { Route as AdminPartenairesRouteImport } from './routes/admin.partenaires'
+import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
+import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
+import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
 
 const TestRapideRoute = TestRapideRouteImport.update({
   id: '/test-rapide',
@@ -62,6 +73,11 @@ const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   path: '/mentions-legales',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinancementRoute = FinancementRouteImport.update({
   id: '/financement',
   path: '/financement',
@@ -82,10 +98,26 @@ const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
   path: '/confidentialite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccompagnementAdministratifRoute =
+  AccompagnementAdministratifRouteImport.update({
+    id: '/accompagnement-administratif',
+    path: '/accompagnement-administratif',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const QualificationAttemptIdRoute = QualificationAttemptIdRouteImport.update({
   id: '/qualification/$attemptId',
@@ -107,18 +139,56 @@ const BilanTestAttemptIdRoute = BilanTestAttemptIdRouteImport.update({
   path: '/bilan-test/$attemptId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCaptureLeadRoute = ApiCaptureLeadRouteImport.update({
+  id: '/api/capture-lead',
+  path: '/api/capture-lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportingRoute = AdminReportingRouteImport.update({
+  id: '/reporting',
+  path: '/reporting',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPartenairesRoute = AdminPartenairesRouteImport.update({
+  id: '/partenaires',
+  path: '/partenaires',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PartenaireLeadsLeadIdRoute = PartenaireLeadsLeadIdRouteImport.update({
   id: '/leads/$leadId',
   path: '/leads/$leadId',
   getParentRoute: () => PartenaireRoute,
 } as any)
+const AdminPartenairesNewRoute = AdminPartenairesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminPartenairesRoute,
+} as any)
+const AdminLeadsLeadIdRoute = AdminLeadsLeadIdRouteImport.update({
+  id: '/$leadId',
+  path: '/$leadId',
+  getParentRoute: () => AdminLeadsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accompagnement-administratif': typeof AccompagnementAdministratifRoute
+  '/admin': typeof AdminRouteWithChildren
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -126,18 +196,28 @@ export interface FileRoutesByFullPath {
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
+  '/admin/leads': typeof AdminLeadsRouteWithChildren
+  '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
+  '/admin/reporting': typeof AdminReportingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
+  '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accompagnement-administratif': typeof AccompagnementAdministratifRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -145,19 +225,30 @@ export interface FileRoutesByTo {
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
+  '/admin/leads': typeof AdminLeadsRouteWithChildren
+  '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
+  '/admin/reporting': typeof AdminReportingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
+  '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accompagnement-administratif': typeof AccompagnementAdministratifRoute
+  '/admin': typeof AdminRouteWithChildren
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
@@ -165,20 +256,31 @@ export interface FileRoutesById {
   '/simulateur': typeof SimulateurRoute
   '/test-complet': typeof TestCompletRoute
   '/test-rapide': typeof TestRapideRoute
+  '/admin/leads': typeof AdminLeadsRouteWithChildren
+  '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
+  '/admin/reporting': typeof AdminReportingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
+  '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/accompagnement-administratif'
+    | '/admin'
     | '/confidentialite'
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/login'
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
@@ -186,18 +288,28 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
+    | '/admin/leads'
+    | '/admin/partenaires'
+    | '/admin/reporting'
+    | '/admin/users'
+    | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/admin/'
+    | '/admin/leads/$leadId'
+    | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/accompagnement-administratif'
     | '/confidentialite'
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/login'
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
@@ -205,18 +317,29 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
+    | '/admin/leads'
+    | '/admin/partenaires'
+    | '/admin/reporting'
+    | '/admin/users'
+    | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/admin'
+    | '/admin/leads/$leadId'
+    | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
   id:
     | '__root__'
     | '/'
+    | '/accompagnement-administratif'
+    | '/admin'
     | '/confidentialite'
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/login'
     | '/mentions-legales'
     | '/mon-espace'
     | '/niveaux'
@@ -224,19 +347,30 @@ export interface FileRouteTypes {
     | '/simulateur'
     | '/test-complet'
     | '/test-rapide'
+    | '/admin/leads'
+    | '/admin/partenaires'
+    | '/admin/reporting'
+    | '/admin/users'
+    | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/admin/'
+    | '/admin/leads/$leadId'
+    | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccompagnementAdministratifRoute: typeof AccompagnementAdministratifRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   FinancementRoute: typeof FinancementRouteWithChildren
+  LoginRoute: typeof LoginRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
@@ -244,6 +378,7 @@ export interface RootRouteChildren {
   SimulateurRoute: typeof SimulateurRoute
   TestCompletRoute: typeof TestCompletRoute
   TestRapideRoute: typeof TestRapideRoute
+  ApiCaptureLeadRoute: typeof ApiCaptureLeadRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
   QualificationAttemptIdRoute: typeof QualificationAttemptIdRoute
@@ -300,6 +435,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/financement': {
       id: '/financement'
       path: '/financement'
@@ -328,12 +470,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accompagnement-administratif': {
+      id: '/accompagnement-administratif'
+      path: '/accompagnement-administratif'
+      fullPath: '/accompagnement-administratif'
+      preLoaderRoute: typeof AccompagnementAdministratifRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/qualification/$attemptId': {
       id: '/qualification/$attemptId'
@@ -363,6 +526,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BilanTestAttemptIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/capture-lead': {
+      id: '/api/capture-lead'
+      path: '/api/capture-lead'
+      fullPath: '/api/capture-lead'
+      preLoaderRoute: typeof ApiCaptureLeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reporting': {
+      id: '/admin/reporting'
+      path: '/reporting'
+      fullPath: '/admin/reporting'
+      preLoaderRoute: typeof AdminReportingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/partenaires': {
+      id: '/admin/partenaires'
+      path: '/partenaires'
+      fullPath: '/admin/partenaires'
+      preLoaderRoute: typeof AdminPartenairesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/partenaire/leads/$leadId': {
       id: '/partenaire/leads/$leadId'
       path: '/leads/$leadId'
@@ -370,8 +568,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartenaireLeadsLeadIdRouteImport
       parentRoute: typeof PartenaireRoute
     }
+    '/admin/partenaires/new': {
+      id: '/admin/partenaires/new'
+      path: '/new'
+      fullPath: '/admin/partenaires/new'
+      preLoaderRoute: typeof AdminPartenairesNewRouteImport
+      parentRoute: typeof AdminPartenairesRoute
+    }
+    '/admin/leads/$leadId': {
+      id: '/admin/leads/$leadId'
+      path: '/$leadId'
+      fullPath: '/admin/leads/$leadId'
+      preLoaderRoute: typeof AdminLeadsLeadIdRouteImport
+      parentRoute: typeof AdminLeadsRoute
+    }
   }
 }
+
+interface AdminLeadsRouteChildren {
+  AdminLeadsLeadIdRoute: typeof AdminLeadsLeadIdRoute
+}
+
+const AdminLeadsRouteChildren: AdminLeadsRouteChildren = {
+  AdminLeadsLeadIdRoute: AdminLeadsLeadIdRoute,
+}
+
+const AdminLeadsRouteWithChildren = AdminLeadsRoute._addFileChildren(
+  AdminLeadsRouteChildren,
+)
+
+interface AdminPartenairesRouteChildren {
+  AdminPartenairesNewRoute: typeof AdminPartenairesNewRoute
+}
+
+const AdminPartenairesRouteChildren: AdminPartenairesRouteChildren = {
+  AdminPartenairesNewRoute: AdminPartenairesNewRoute,
+}
+
+const AdminPartenairesRouteWithChildren =
+  AdminPartenairesRoute._addFileChildren(AdminPartenairesRouteChildren)
+
+interface AdminRouteChildren {
+  AdminLeadsRoute: typeof AdminLeadsRouteWithChildren
+  AdminPartenairesRoute: typeof AdminPartenairesRouteWithChildren
+  AdminReportingRoute: typeof AdminReportingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLeadsRoute: AdminLeadsRouteWithChildren,
+  AdminPartenairesRoute: AdminPartenairesRouteWithChildren,
+  AdminReportingRoute: AdminReportingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface FinancementRouteChildren {
   FinancementCpfRoute: typeof FinancementCpfRoute
@@ -399,10 +652,13 @@ const PartenaireRouteWithChildren = PartenaireRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccompagnementAdministratifRoute: AccompagnementAdministratifRoute,
+  AdminRoute: AdminRouteWithChildren,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   FinancementRoute: FinancementRouteWithChildren,
+  LoginRoute: LoginRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
@@ -410,6 +666,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimulateurRoute: SimulateurRoute,
   TestCompletRoute: TestCompletRoute,
   TestRapideRoute: TestRapideRoute,
+  ApiCaptureLeadRoute: ApiCaptureLeadRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,
   QualificationAttemptIdRoute: QualificationAttemptIdRoute,
@@ -417,3 +674,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

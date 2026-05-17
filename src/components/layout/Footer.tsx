@@ -12,6 +12,9 @@ export function Footer() {
           <Link to="/mentions-legales" className="text-sm text-on-surface-variant hover:text-primary transition-colors">
             Mentions Légales
           </Link>
+          <Link to="/accompagnement-administratif" className="text-sm text-on-surface-variant hover:text-primary transition-colors">
+            Accompagnement Administratif
+          </Link>
           <Link to="/confidentialite" className="text-sm text-on-surface-variant hover:text-primary transition-colors">
             Politique de Confidentialité
           </Link>

@@ -245,6 +245,31 @@ function IndexPage() {
           </div>
         </div>
       </section>
+      {/* Section Accompagnement Administratif */}
+      <section className="py-12 px-4 bg-primary-container/10 border-t border-b border-outline-variant/50">
+        <div className="max-w-[800px] mx-auto flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-1 space-y-4 text-center md:text-left">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold uppercase tracking-wider">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Nouveau service
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold text-on-surface">Dossier préfecture complexe ?</h3>
+            <p className="text-on-surface-variant leading-relaxed">
+              Bénéficiez d'un accompagnement personnalisé avec nos experts partenaires sélectionnés pour analyser votre dossier, identifier les pièces manquantes et sécuriser vos démarches administratives.
+            </p>
+          </div>
+          <div className="shrink-0 w-full md:w-auto">
+            <Link to="/accompagnement-administratif">
+              <button
+                className="w-full md:w-auto h-14 px-8 rounded-xl font-bold text-white shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2"
+                style={{ backgroundColor: "#ea580c" }}
+              >
+                Demander un accompagnement →
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Bloc Juridique */}
       <section className="pb-12 px-4">

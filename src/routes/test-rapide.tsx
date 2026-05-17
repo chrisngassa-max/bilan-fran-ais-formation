@@ -8,6 +8,7 @@ import { FormuleExpressComponent } from '@/components/FormuleExpress';
 import { ResultatNiveau } from '@/components/ResultatNiveau';
 import { NiveauIndicatif } from '@/types/bilan';
 import { trackFormulairesSoumis } from '@/utils/tracking';
+import { track } from '@/utils/tracking-plausible';
 
 export const Route = createFileRoute('/test-rapide')({
   component: TestRapidePage,
@@ -27,6 +28,16 @@ function TestRapidePage() {
   const [whatsappConsent, setWhatsappConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    track("test_started");
+  }, []);
+
+  useEffect(() => {
+    if (phase === 3) {
+      track("result_viewed");
+    }
+  }, [phase]);
+
   const currentQuestion = QUESTIONS[currentStep];
   const score = Object.entries(answers).reduce((acc, [id, ans]) => {
     const q = QUESTIONS.find(q => q.id === parseInt(id));
@@ -38,6 +49,7 @@ function TestRapidePage() {
     if (currentStep < QUESTIONS.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
+      track("test_completed");
       setPhase(2);
     }
   };

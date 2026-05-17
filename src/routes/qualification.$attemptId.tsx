@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { type NiveauIndicatif } from '@/types/bilan';
 import { Button } from '@/components/bff/Button';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -19,6 +19,7 @@ import {
   Award
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { track } from '@/utils/tracking-plausible';
 
 // --- CONFIGURATION PRICING V4 (Golden Master) ---
 const PRICING_CONFIG = {
@@ -53,6 +54,10 @@ export const Route = createFileRoute('/qualification/$attemptId')({
 function QualificationPage() {
   const { attemptId } = Route.useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    track("result_viewed");
+  }, []);
   
   const [formData, setFormData] = useState({
     status: '',

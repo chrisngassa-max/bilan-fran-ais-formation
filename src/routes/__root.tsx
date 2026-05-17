@@ -15,6 +15,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { siteName, siteUrl } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
+import { AuthProvider } from "@/hooks/useAuth";
 
 function NotFoundComponent() {
   return (
@@ -151,14 +152,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-surface">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
-      <Toaster position="top-right" richColors />
+      <AuthProvider>
+        <div className="flex min-h-screen flex-col bg-surface">
+          <Header />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+        <Toaster position="top-right" richColors />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

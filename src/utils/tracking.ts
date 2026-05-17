@@ -1,4 +1,5 @@
 import { NiveauIndicatif } from "../types/bilan"
+import { track } from "./tracking-plausible"
 
 export function trackAlerteAffichee(params: {
   tunnel: "T1" | "T2" | "T3"
@@ -31,5 +32,6 @@ export function trackCPFClic(params: {
   tunnel_origine: "T2" | "T3" | "espace_prospect"
 }) {
   console.log("Tracking: cpf_clic", params);
+  track("cpf_link_clicked", { etape: params.etape, tunnel: params.tunnel_origine });
   // posthog.capture("cpf_clic", params)
 }
