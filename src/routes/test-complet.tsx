@@ -9,7 +9,9 @@ import { ResultatIncoherent } from '@/components/ResultatIncoherent';
 import { PageContactHumain } from '@/components/PageContactHumain';
 import { trackFormulairesSoumis } from '@/utils/tracking';
 import { NiveauIndicatif } from '@/types/bilan';
-import { Loader2, ChevronRight, Sparkles, Target, BookOpen, PenTool, Mic } from 'lucide-react';
+import { Loader2, ChevronRight, Sparkles, Target, BookOpen, PenTool, Mic, AlertTriangle } from 'lucide-react';
+import { evaluerProductionFn } from '@/lib/evaluation-production.functions';
+import { useServerFn } from '@tanstack/react-start';
 
 export const Route = createFileRoute('/test-complet')({
   component: TestCompletPage,
