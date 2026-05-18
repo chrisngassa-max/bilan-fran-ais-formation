@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start"
 import { z } from "zod"
 import { supabaseAdmin } from "@/integrations/supabase/client.server"
-import * as bcrypt from "bcryptjs"
 import { signSession } from "./partner-session"
 import { requirePartnerSession } from "./partner-session.middleware"
 import { setResponseHeader } from "@tanstack/react-start/server"
@@ -38,6 +37,7 @@ export const loginPartenaireFn = createServerFn({ method: "POST" })
     z.object({ email: z.string().email(), password: z.string().min(8) }).parse(input),
   )
   .handler(async ({ data }) => {
+    const bcrypt = await import("bcryptjs")
     const emailLower = data.email.toLowerCase().trim()
     const { data: compte } = await supabaseAdmin
       .from("partenaire_comptes")
