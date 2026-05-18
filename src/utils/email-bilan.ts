@@ -105,7 +105,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
     const { data, error } = await resend.emails.send({
       from: "Bilan Français Formation <bilan@bilanfrancaisformation.fr>",
       to: lead.email,
-      subject: `Votre bilan officiel de niveau de français (${level})`,
+      subject: `Votre bilan de positionnement de niveau de français (${level})`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #334155; line-height: 1.6; padding: 20px;">
           <div style="text-align: center; margin-bottom: 25px;">
@@ -130,7 +130,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
 
           ${lead.consent_partner ? `
           <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; color: #065f46; font-size: 13px; font-weight: 600; margin-top: 25px;">
-            💼 <strong>Accompagnement préfecture :</strong> Vous avez demandé la vérification gratuite de vos pièces. Un conseiller expert prendra contact avec vous prochainement par téléphone ou WhatsApp.
+            💼 <strong>Accompagnement préfecture :</strong> Vous avez demandé la vérification gratuite de vos pièces. Un conseiller expert prendra contact avec vous sous 24h à 48h ouvrées par téléphone ou WhatsApp.
           </div>
           ` : ""}
 

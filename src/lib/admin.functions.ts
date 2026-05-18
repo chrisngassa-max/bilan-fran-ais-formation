@@ -47,7 +47,7 @@ export const getLeadsAdminFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     let query = supabaseAdmin
       .from("leads")
-      .select("id, created_at, source, lead_type, first_name, last_name, email, whatsapp_phone, estimated_level, goal, status, partner_status, partner_id, assigned_to", { count: "exact" });
+      .select("id, created_at, source, lead_type, first_name, last_name, email, whatsapp_phone, estimated_level, goal, status, partner_status, partner_id, assigned_to, metadata", { count: "exact" });
 
     // Apply search filter (first_name, last_name, email, phone)
     if (data.search && data.search.trim() !== "") {

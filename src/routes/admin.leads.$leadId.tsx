@@ -241,6 +241,42 @@ export function LeadDetailAdmin() {
                   <p className="text-on-surface font-medium leading-relaxed">{lead.message}</p>
                 </div>
               )}
+
+              {lead.attempt_id && (
+                <div className="space-y-1 sm:col-span-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">ID Session d'évaluation</span>
+                  <p className="font-mono text-xs text-on-surface bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 w-fit">
+                    {lead.attempt_id}
+                  </p>
+                </div>
+              )}
+
+              {lead.metadata?.flags && Array.isArray(lead.metadata.flags) && lead.metadata.flags.length > 0 && (
+                <div className="sm:col-span-2 space-y-1 bg-amber-50/50 p-4 rounded-2xl border border-amber-200/60">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-800">Alertes & Anomalies (IA/Algorithme)</span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {lead.metadata.flags.map((flag: string) => (
+                      <span key={flag} className="bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2.5 py-1 rounded text-[10px]">
+                        {flag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {lead.metadata?.reliability_by_level && Object.keys(lead.metadata.reliability_by_level).length > 0 && (
+                <div className="sm:col-span-2 space-y-1 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Indices de Fiabilité Pédagogique par Compétence</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 text-xs">
+                    {Object.entries(lead.metadata.reliability_by_level).map(([lvl, score]: [string, any]) => (
+                      <div key={lvl} className="bg-white p-2.5 rounded-lg border border-slate-100 text-center shadow-sm">
+                        <span className="font-bold text-slate-500 uppercase">{lvl}</span>
+                        <p className="font-extrabold text-slate-900 mt-0.5">{Math.round(score * 100)}%</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 

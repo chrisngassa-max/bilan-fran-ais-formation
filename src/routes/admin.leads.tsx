@@ -279,10 +279,21 @@ export function AdminLeads() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center gap-1 text-xs font-black text-[#9d4222] bg-[#9d4222]/10 border border-[#9d4222]/20 px-2.5 py-1 rounded-lg">
-                        <Award size={12} />
-                        {lead.estimated_level || "—"}
-                      </span>
+                      <div className="flex flex-col gap-1.5 items-start">
+                        <span className="inline-flex items-center gap-1 text-xs font-black text-[#9d4222] bg-[#9d4222]/10 border border-[#9d4222]/20 px-2.5 py-1 rounded-lg">
+                          <Award size={12} />
+                          {lead.estimated_level || "—"}
+                        </span>
+                        {lead.metadata?.flags && Array.isArray(lead.metadata.flags) && lead.metadata.flags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 max-w-[150px]">
+                            {lead.metadata.flags.map((flag: string) => (
+                              <span key={flag} className="bg-amber-100 text-amber-900 border border-amber-300 font-extrabold px-1.5 py-0.5 rounded text-[8px] whitespace-nowrap">
+                                {flag.replace("FIABILITE_FAIBLE_", "FAIBLE_")}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-800"}`}>

@@ -115,7 +115,7 @@ function BilanTestPage() {
         {/* Result Header */}
         <div className="text-center space-y-2">
           <span className="text-xs font-black text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-            Bilan de Niveau Officiel
+            Bilan de Positionnement Linguistique
           </span>
           <h1 className="text-4xl font-black text-slate-900">Votre Rapport de Positionnement</h1>
           {result.placement_test_attempts?.student_name && (
@@ -260,7 +260,7 @@ function BilanTestPage() {
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
               <div className="space-y-1">
                 <h3 className="text-xl font-black text-slate-900">Recevoir le rapport complet par email</h3>
-                <p className="text-xs text-slate-500">Un document PDF officiel récapitulant vos scores et votre plan de formation.</p>
+                <p className="text-xs text-slate-500">Un récapitulatif détaillé de vos scores et de votre plan de formation.</p>
               </div>
               <LeadCaptureForm 
                 attemptId={attemptId} 

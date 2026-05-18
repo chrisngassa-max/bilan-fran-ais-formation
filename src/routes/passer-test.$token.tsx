@@ -264,16 +264,29 @@ function PasserTestPage() {
   }
 
   if (error) {
+    const errorMsg = error.message || "";
+    const isTimeout = errorMsg.includes("délai") || errorMsg.includes("timeout") || errorMsg.includes("répond pas");
+    const isNotFound = errorMsg.includes("introuvable") || errorMsg.includes("trouver") || errorMsg.includes("not found") || errorMsg.includes("404");
+
+    let errorTitle = "Service de positionnement momentanément indisponible";
+    let errorDesc = "Notre moteur d'évaluation pédagogique rencontre des difficultés de connexion. Nos équipes sont mobilisées pour le rétablir rapidement.";
+
+    if (isNotFound) {
+      errorTitle = "Évaluation introuvable ou expirée";
+      errorDesc = "Le test demandé n'a pas pu être trouvé. Il est possible que le lien d'accès soit incorrect ou que la session d'évaluation ait expiré.";
+    } else if (isTimeout) {
+      errorTitle = "Délai de connexion dépassé";
+      errorDesc = "Le chargement du test a pris trop de temps en raison d'une lenteur réseau. Veuillez vérifier votre connexion internet et réessayer.";
+    }
+
     return (
       <div className="min-h-screen bg-[#fcfaf7] py-20 px-4 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-10 text-center space-y-6">
           <div className="h-20 w-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto text-amber-500">
             <AlertTriangle className="h-10 w-10 animate-bounce" />
           </div>
-          <h2 className="text-2xl font-black text-slate-800 leading-tight">Service de positionnement momentanément indisponible</h2>
-          <p className="text-slate-500 text-base leading-relaxed">
-            Notre moteur d'évaluation pédagogique subit actuellement une maintenance technique périodique. Nos équipes sont mobilisées pour le rétablir dans les plus brefs délais.
-          </p>
+          <h2 className="text-2xl font-black text-slate-800 leading-tight">{errorTitle}</h2>
+          <p className="text-slate-500 text-sm leading-relaxed">{errorDesc}</p>
           <div className="pt-4 flex flex-col gap-3">
             <Button
               onClick={() => refetch()}

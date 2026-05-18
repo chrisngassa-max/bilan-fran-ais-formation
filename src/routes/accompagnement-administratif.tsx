@@ -254,7 +254,7 @@ function AccompagnementAdministratifPage() {
                 <h3 className="text-2xl font-black text-slate-800">Demande validée !</h3>
                 <p className="text-slate-600 text-sm leading-relaxed font-semibold">
                   Votre demande d'accompagnement a été enregistrée avec succès.<br />
-                  <span className="text-[#ea580c] font-bold">Notre partenaire spécialisé vous contacte directement sur WhatsApp sous 24h</span> pour analyser votre dossier complet et vérifier vos dispenses possibles.
+                  <span className="text-[#ea580c] font-bold">Notre partenaire spécialisé vous contacte directement sur WhatsApp sous 24h à 48h ouvrées</span> pour analyser votre dossier complet et vérifier vos dispenses possibles.
                 </p>
               </div>
               <div className="pt-4">
@@ -268,7 +268,7 @@ function AccompagnementAdministratifPage() {
               <div className="space-y-1">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fdf2f8] text-[#db2777] text-[10px] font-bold uppercase tracking-wider border border-[#fbcfe8]">
                   <PhoneCall className="h-3.5 w-3.5 animate-bounce" />
-                  Rappel direct sous 24h
+                  Rappel sous 24h à 48h ouvrées
                 </span>
                 <h2 className="text-xl font-black text-slate-800 pt-2">2. Vos coordonnées de contact</h2>
                 <p className="text-xs text-slate-500 font-semibold">

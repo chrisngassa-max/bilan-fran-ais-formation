@@ -238,7 +238,7 @@ function TestCompletPage() {
           
           <form onSubmit={handleStart} className="p-8 md:p-10 space-y-6">
             <div className="bg-slate-50 p-4 rounded-xl text-xs text-slate-500 font-semibold leading-relaxed border border-slate-100">
-              Saisissez vos coordonnées pour enregistrer votre progression et recevoir votre diagnostic officiel par email.
+              Saisissez vos coordonnées pour enregistrer votre progression et recevoir votre bilan de positionnement détaillé par email.
             </div>
 
             <div className="space-y-4">
@@ -424,8 +424,24 @@ function TestCompletPage() {
   }
 
   if (phase === 3 && results) {
-    if (results.flags.ALERTE_VITESSE) return <PageContactHumain />;
-    if (results.flags.PROFIL_INCOHERENT) return <ResultatIncoherent prenom={prenom} partenaire_consent={partenaireConsent} />;
+    if (results.flags.ALERTE_VITESSE) return (
+      <PageContactHumain 
+        prenom={prenom} 
+        email={email} 
+        whatsapp={whatsapp} 
+        whatsappConsent={wsConsent} 
+        partenaireConsent={partenaireConsent} 
+      />
+    );
+    if (results.flags.PROFIL_INCOHERENT) return (
+      <ResultatIncoherent 
+        prenom={prenom} 
+        email={email} 
+        whatsapp={whatsapp} 
+        partenaire_consent={partenaireConsent} 
+        whatsapp_consent={wsConsent} 
+      />
+    );
     
     return (
       <ResultatComplet 
