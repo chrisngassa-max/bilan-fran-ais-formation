@@ -3,14 +3,12 @@ import { Button } from '@/components/bff/Button';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { 
-  Award, 
   Loader2,
   AlertCircle,
   Send,
   RefreshCw,
-  Download,
-  GraduationCap,
-  Banknote,
+  Clock,
+  ShieldCheck,
   Wallet,
   ArrowRight
 } from 'lucide-react';
@@ -21,6 +19,8 @@ import { useEffect } from 'react';
 import { ChecklistDocuments } from '@/components/ChecklistDocuments';
 import { type NiveauIndicatif } from '@/types/bilan';
 import { track } from '@/utils/tracking-plausible';
+import { getRecommendedJourney } from '@/data/pricing';
+import { Stepper } from '@/components/Stepper';
 
 export const Route = createFileRoute('/bilan-test/$attemptId')({
   component: BilanTestPage,
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/bilan-test/$attemptId')({
 
 function BilanTestPage() {
   const { attemptId } = Route.useParams();
+  
   useEffect(() => {
     trackEvent('test_completed', { attempt_id: attemptId });
     track("result_viewed");
@@ -55,8 +56,23 @@ function BilanTestPage() {
     },
   });
 
-  if (isLoading) return <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center"><Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" /> Analyse de votre profil expert...</div>;
-  if (!result) return <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">Résultat introuvable.</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">
+        <Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" />
+        <span className="font-extrabold text-slate-800 text-lg">Analyse linguistique et calcul de votre profil expert...</span>
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">
+        <AlertCircle className="h-10 w-10 text-red-500 mx-auto mb-4" />
+        <span className="font-extrabold text-slate-800 text-lg">Résultat de bilan introuvable.</span>
+      </div>
+    );
+  }
 
   const hasFatigue = result.flags?.includes('FATIGUE_DETECTEE');
   const isIncoherent = result.flags?.includes('PROFIL_INCOHERENT') || result.flags?.includes('ALERTE_VITESSE_INCOHERENTE');
@@ -65,19 +81,21 @@ function BilanTestPage() {
   // Modale bloquante de fatigue
   if (hasFatigue) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
-        <div className="bg-surface-bright p-10 rounded-3xl border border-outline-variant max-w-lg w-full text-center space-y-6 shadow-sm">
-          <AlertCircle className="h-20 w-20 text-primary-container mx-auto" />
-          <h2 className="text-3xl font-bold text-on-surface">Prenez une pause pour donner le meilleur de vous-même.</h2>
-          <p className="text-on-surface-variant text-lg leading-relaxed">
-            Notre système a détecté une baisse de concentration sur la fin de votre évaluation. 
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="bg-white p-10 rounded-3xl border border-slate-200 max-w-lg w-full text-center space-y-6 shadow-sm">
+          <AlertCircle className="h-20 w-20 text-primary/80 mx-auto animate-pulse" />
+          <h2 className="text-3xl font-black text-slate-900 leading-snug">Prenez une pause pour donner le meilleur de vous-même.</h2>
+          <p className="text-slate-600 text-base leading-relaxed">
+            Notre système a détecté une baisse significative de concentration sur la fin de votre évaluation. 
             Pour que votre bilan soit le plus précis possible, il est préférable de le terminer quand vous serez bien reposé(e).
           </p>
-          <p className="text-primary font-bold bg-primary-container/10 p-4 rounded-xl border border-primary-container/20">
+          <p className="text-primary font-bold bg-primary/5 p-4 rounded-xl border border-primary/20">
             Nous vous invitons à vous reposer et à repasser l'évaluation dans de meilleures conditions.
           </p>
           <Link to="/passer-test/$token" params={{ token: "latest" }} className="block w-full">
-            <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-all">Recommencer plus tard</button>
+            <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-xl hover:opacity-90 transition-all">
+              Recommencer plus tard
+            </button>
           </Link>
         </div>
       </div>
@@ -85,170 +103,166 @@ function BilanTestPage() {
   }
 
   const level = result.global_level || 'A2';
-  const levelText = level === 'B1' ? 'Intermédiaire' : level === 'B2' ? 'Avancé' : level === 'A1' ? 'Débutant' : 'Élémentaire';
-  const levelDesc = level === 'B1' ? 'Vous comprenez les points essentiels quand un langage clair et standard est utilisé. Vous pouvez vous débrouiller dans la plupart des situations rencontrées en voyage.' : 
-                    level === 'B2' ? 'Vous pouvez comprendre le contenu essentiel de sujets concrets ou abstraits dans un texte complexe.' :
-                    'Vous pouvez comprendre des phrases isolées et des expressions fréquemment utilisées.';
+  const journey = getRecommendedJourney(level as NiveauIndicatif);
 
   return (
-    <div className="min-h-screen bg-surface py-12 px-4">
-      <div className="max-w-[1000px] mx-auto">
+    <div className="min-h-screen bg-slate-50 py-12 px-4">
+      <div className="max-w-[850px] mx-auto space-y-8">
         
+        {/* Stepper de Progression */}
+        <Stepper currentStep={2} />
+
         {/* Result Header */}
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold font-label text-secondary uppercase tracking-widest block mb-2">Résultat de votre test (30 min)</span>
-          <h1 className="text-3xl md:text-4xl font-bold text-on-surface">Votre bilan de niveau estimé</h1>
+        <div className="text-center space-y-2">
+          <span className="text-xs font-black text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+            Bilan de Niveau Officiel
+          </span>
+          <h1 className="text-4xl font-black text-slate-900">Votre Rapport de Positionnement</h1>
           {result.placement_test_attempts?.student_name && (
-            <p className="text-on-surface-variant mt-2 text-lg">Candidat : {result.placement_test_attempts.student_name}</p>
+            <p className="text-slate-500 font-semibold text-base">Candidat : {result.placement_test_attempts.student_name}</p>
           )}
         </div>
 
         {isIncoherent ? (
-          <div className="rounded-2xl border-2 border-error/50 shadow-sm bg-error-container/10 overflow-hidden mb-12">
-            <div className="bg-error text-white p-6">
+          <div className="rounded-3xl border-2 border-red-200 shadow-sm bg-red-50/50 overflow-hidden">
+            <div className="bg-red-500 text-white p-6">
               <h2 className="flex items-center gap-2 text-xl font-bold">
-                <AlertCircle className="h-6 w-6" /> Un échange avec un formateur est recommandé pour affiner votre bilan.
+                <AlertCircle className="h-6 w-6" /> Un échange pédagogique est recommandé.
               </h2>
             </div>
-            <div className="p-10 space-y-6">
-              <p className="text-on-surface font-medium text-xl">
-                Votre profil présente des variations qui nécessitent une lecture plus approfondie par un expert pédagogique.
+            <div className="p-8 space-y-6">
+              <p className="text-slate-800 font-bold text-lg">
+                Votre profil présente des variations de vitesse ou de réussite nécessitant une analyse humaine.
               </p>
-              <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
-                <p className="text-on-surface-variant mb-4">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <p className="text-slate-600 text-sm mb-4">
                   Renseignez votre email ci-dessous : nous vous envoyons votre bilan détaillé avec une lecture
-                  pédagogique de votre profil.
+                  pédagogique affinée par notre équipe.
                 </p>
+                <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-surface-bright border border-outline-variant rounded-xl p-8 md:p-10 shadow-sm relative overflow-hidden">
-            {/* Decorative Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-secondary-container opacity-20 rounded-bl-full -mr-16 -mt-16"></div>
+          <div className="space-y-8">
             
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8">
-              {/* Level Badge */}
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-primary-container flex flex-col items-center justify-center bg-surface shrink-0">
-                <span className="text-xs font-bold font-label text-on-surface-variant uppercase">NIVEAU</span>
-                <span className="text-4xl md:text-5xl font-bold text-primary flex items-baseline">
-                  {level}
-                  {isFragile && <span className="text-xl ml-1 text-primary-container">*</span>}
-                </span>
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h2 className="text-2xl font-bold text-on-surface mb-2">{levelText}</h2>
-                <p className="text-on-surface-variant text-lg mb-4">{levelDesc}</p>
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full mb-4">
-                  <Award className="h-5 w-5" />
-                  <span className="text-xs font-bold uppercase tracking-wider">
-                    Objectif indicatif : {level === 'B1' || level === 'B2' 
-                      ? 'Naturalisation (B1 oral et écrit — à vérifier) / Résidence' 
-                      : 'Séjour Pluriannuel / Résident'}
+            {/* BLOC PRINCIPAL — Score et Recommandation Unifiée */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden space-y-8">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16"></div>
+              
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-slate-100 pb-8">
+                {/* Badge Niveau */}
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-slate-900 flex flex-col items-center justify-center bg-slate-900 text-white shrink-0 shadow-lg">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Niveau</span>
+                  <span className="text-5xl font-black text-primary flex items-baseline">
+                    {level}
+                    {isFragile && <span className="text-xl ml-1 text-primary">*</span>}
                   </span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">CECRL</span>
                 </div>
                 
-                {/* CTA Predict Tunnel */}
-                <div className="mt-4">
-                  <Link to="/qualification/$attemptId" params={{ attemptId }} className="block md:inline-block">
-                    <Button className="w-full md:w-auto h-12 px-6 bg-primary text-on-primary font-bold rounded-xl shadow-md hover:opacity-90 flex items-center justify-center gap-2">
-                      <Wallet className="h-5 w-5" />
-                      Vérifier mon éligibilité au financement
-                      <ArrowRight className="h-5 w-5" />
-                    </Button>
-                  </Link>
+                <div className="flex-1 text-center md:text-left space-y-3">
+                  <span className="text-xs font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+                    PROFIL VALIDÉ PAR L'ALGORITHME
+                  </span>
+                  <h2 className="text-2xl font-black text-slate-900">Parcours Recommandé : {journey.name}</h2>
+                  <p className="text-slate-600 text-sm leading-relaxed italic">
+                    "{journey.objective}"
+                  </p>
                 </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-outline-variant pt-8">
-              {/* Recommendations */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-3 flex items-center gap-2">
-                  <GraduationCap className="h-4 w-4" />
-                  CERTIFICATIONS RECOMMANDÉES
-                </h3>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2 text-on-surface">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    Examen Officiel (Intégration, Résidence, Nationalité)
-                  </li>
-                  <li className="flex items-center gap-2 text-on-surface">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    TEF Carte de Résident
-                  </li>
-                  <li className="flex items-center gap-2 text-on-surface">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                    {level === 'B1' || level === 'B2' ? `DELF ${level}` : 'DELF A2'}
-                  </li>
-                </ul>
-              </div>
-              
-              {/* Financing */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-3 flex items-center gap-2">
-                  <Banknote className="h-4 w-4" />
-                  FINANCEMENTS DISPONIBLES
-                </h3>
-                <div className="bg-surface-container p-4 rounded-lg">
-                  <p className="text-on-surface-variant mb-2">Vos droits (CPF, OPCO, employeur) peuvent couvrir tout ou partie de votre préparation. Testons votre éligibilité.</p>
+              {/* Fiche Technique & Grille Tarifaire */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <div className="space-y-4">
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Structure Pédagogique</h4>
+                  <ul className="space-y-3">
+                    <li className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                      <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                      {journey.hours}h de formation ({journey.sessions} séances)
+                    </li>
+                    <li className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
+                      1 formateur référent - 6 élèves maximum
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-slate-600">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+                      Préparation : {journey.examTarget}
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="space-y-4 md:border-l md:border-slate-200 md:pl-8">
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Tarification et Financement</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-baseline text-xs font-semibold text-slate-500">
+                      <span>Prix public</span>
+                      <span>{journey.publicPrice} €</span>
+                    </div>
+                    <div className="flex justify-between items-baseline border-b border-dashed pb-2">
+                      <span className="text-xs font-semibold text-slate-500">Tarif financé de référence</span>
+                      <span className="text-base font-extrabold text-emerald-600">{journey.financedReferencePrice} €</span>
+                    </div>
+                    <div className="flex justify-between items-baseline pt-1">
+                      <span className="text-xs font-bold text-slate-900">Mensualité (3x sans frais)</span>
+                      <span className="text-lg font-black text-slate-900">{journey.monthlyInstallment} €<span className="text-xs font-normal text-slate-500">/mois</span></span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Caution Message */}
-            <div className="mt-8 flex gap-3 p-4 bg-error-container/10 border border-error/20 rounded-lg">
-              <AlertCircle className="text-error h-6 w-6 shrink-0" />
-              <p className="text-on-surface-variant italic">
-                <span className="font-bold text-on-surface">Note :</span> Cette estimation indique votre niveau actuel. Pour vos démarches (Séjour, Résidence, Nationalité), vous devrez passer un examen officiel (TCF, DELF) et vérifier les exigences exactes selon votre situation.
+              {/* Primary action buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-slate-100">
+                <Link to="/qualification/$attemptId" params={{ attemptId }} className="flex-1">
+                  <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-xl hover:opacity-95 active:scale-95 transition-all">
+                    <Wallet className="h-5 w-5" />
+                    Vérifier mon financement
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
+                </Link>
+                <Link to="/contact" className="flex-1">
+                  <button className="w-full h-16 border-2 border-slate-900 text-slate-900 font-bold rounded-2xl hover:bg-slate-50 transition-all flex items-center justify-center">
+                    M'inscrire au prix public - {journey.publicPrice} €
+                  </button>
+                </Link>
+              </div>
+
+              <p className="text-[10px] text-center font-bold text-slate-400 uppercase tracking-wider">
+                Eligible CPF, OPCO, France Travail. Paiement en 3 fois sans frais.
               </p>
             </div>
-            {isFragile && (
-              <p className="text-xs text-on-surface-variant mt-2 italic text-right">* Profil algorithmique fragile (besoin de confirmation humaine).</p>
-            )}
+
+            {/* Checklist Section */}
+            <ChecklistDocuments type_demarche={level as NiveauIndicatif} />
+
+            {/* Lead Capture */}
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+              <div className="space-y-1">
+                <h3 className="text-xl font-black text-slate-900">Recevoir le rapport complet par email</h3>
+                <p className="text-xs text-slate-500">Un document PDF officiel récapitulant vos scores et votre plan de formation.</p>
+              </div>
+              <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
+            </div>
+
           </div>
         )}
 
-        {/* Checklist Section */}
-        <div className="mt-10">
-          <ChecklistDocuments type_demarche={level as NiveauIndicatif} />
-        </div>
-
-        {/* Lead Capture - Bilan complet par email */}
-        <div className="mt-10">
-          <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
-        </div>
-
         {/* Action Grid - canaux secondaires */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link to="/passer-test/$token" params={{ token: "latest" }} className="flex items-center justify-center gap-2 bg-transparent text-secondary border-2 border-secondary h-[56px] rounded-lg font-bold hover:bg-secondary/5 transition-all active:scale-95">
             <RefreshCw className="h-5 w-5" />
             Refaire le test
           </Link>
-          <a href={waHref()} target="_blank" rel="noreferrer" onClick={() => trackEvent("whatsapp_clicked", { location: "bilan_secondary" })} className="flex items-center justify-center gap-2 bg-surface-container-highest text-on-surface h-[56px] rounded-lg font-bold border border-outline-variant hover:bg-surface-variant transition-all active:scale-95">
+          <a 
+            href={waHref()} 
+            target="_blank" 
+            rel="noreferrer" 
+            onClick={() => trackEvent("whatsapp_clicked", { location: "bilan_secondary" })} 
+            className="flex items-center justify-center gap-2 bg-emerald-600 text-white h-[56px] rounded-lg font-bold hover:bg-emerald-700 transition-all active:scale-95 shadow-md"
+          >
             <Send className="h-5 w-5" />
             Une question ? Nous écrire sur WhatsApp
           </a>
-        </div>
-
-        {/* Help Section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="relative group overflow-hidden rounded-xl h-48 bg-surface-container-high border border-outline-variant flex items-center justify-center">
-            {/* Fallback pattern if image is missing */}
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-surface"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 z-10">
-              <h4 className="text-white font-bold text-xl mb-1">Besoin d'aide ?</h4>
-              <p className="text-white/80">Un expert vous guide pour votre dossier de nationalité.</p>
-            </div>
-          </div>
-          <div className="bg-[#ffdbd0] text-[#7e2c0d] p-6 rounded-xl flex flex-col justify-center">
-            <h4 className="font-bold text-xl mb-2">Guide Pratique</h4>
-            <p className="mb-4">Téléchargez gratuitement notre guide sur les étapes de la demande de naturalisation (Niveau B1 requis).</p>
-            <a className="font-bold flex items-center gap-1 hover:underline" href="#">
-                Télécharger le PDF
-                <Download className="h-5 w-5" />
-            </a>
-          </div>
         </div>
 
       </div>

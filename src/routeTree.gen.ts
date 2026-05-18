@@ -17,6 +17,7 @@ import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as FormationsRouteImport } from './routes/formations'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -76,6 +77,11 @@ const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormationsRoute = FormationsRouteImport.update({
+  id: '/formations',
+  path: '/formations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinancementRoute = FinancementRouteImport.update({
@@ -188,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/mon-espace': typeof MonEspaceRoute
@@ -280,6 +289,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/formations'
     | '/login'
     | '/mentions-legales'
     | '/mon-espace'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/formations'
     | '/login'
     | '/mentions-legales'
     | '/mon-espace'
@@ -339,6 +350,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/formations'
     | '/login'
     | '/mentions-legales'
     | '/mon-espace'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   FinancementRoute: typeof FinancementRouteWithChildren
+  FormationsRoute: typeof FormationsRoute
   LoginRoute: typeof LoginRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MonEspaceRoute: typeof MonEspaceRoute
@@ -440,6 +453,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/formations': {
+      id: '/formations'
+      path: '/formations'
+      fullPath: '/formations'
+      preLoaderRoute: typeof FormationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/financement': {
@@ -658,6 +678,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   FinancementRoute: FinancementRouteWithChildren,
+  FormationsRoute: FormationsRoute,
   LoginRoute: LoginRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MonEspaceRoute: MonEspaceRoute,

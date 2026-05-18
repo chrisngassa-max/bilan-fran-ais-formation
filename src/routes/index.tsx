@@ -28,40 +28,59 @@ function IndexPage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-12 md:pt-16 pb-12 px-4">
-        <div className="max-w-[820px] mx-auto text-center">
+        <div className="max-w-[850px] mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold uppercase tracking-wider mb-5">
             <Sparkles className="h-3.5 w-3.5" />
-            100% automatisé · Sans appel obligatoire
+            Votre français, votre rythme, un suivi pédagogique dédié.
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-on-background mb-4 leading-tight">
-            Votre bilan de niveau, votre guide pratique et vos pistes de financement — par email.
+          <h1 className="text-4xl md:text-5xl font-extrabold text-on-background mb-4 leading-tight">
+            Petits groupes de 6 élèves maximum. <br />
+            <span className="text-primary">Un formateur référent à chaque étape.</span>
           </h1>
-          <p className="text-lg text-on-surface-variant mb-8">
-            Un diagnostic rigoureux inspiré du référentiel CECRL pour vos démarches de carte de séjour, carte
-            de résident ou naturalisation (B1). Reçu automatiquement, en quelques minutes.
+          <p className="text-lg md:text-xl font-bold text-on-surface-variant mb-8">
+            Formations à partir de 2 400 € · Financement possible selon votre situation.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <Link
               to="/test-rapide"
               onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
+              className="w-full md:w-auto"
             >
               <button
                 className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md text-white"
                 style={{ backgroundColor: "#f97316" }}
               >
-                Estimez votre niveau en 2 minutes
+                Estimer mon niveau gratuitement
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
-            <Link to="/niveaux">
+            
+            <Link 
+              to="/formations" 
+              className="w-full md:w-auto"
+            >
               <button
-                className="h-[58px] w-full md:w-auto border-2 px-8 rounded-lg font-bold flex items-center justify-center hover:bg-primary/5 active:scale-95 transition-all"
-                style={{ borderColor: "#1e3a8a", color: "#1e3a8a" }}
+                className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-95 transition-all shadow-md"
+                style={{ backgroundColor: "#1e3a8a" }}
               >
-                Comprendre les niveaux A2, B1, B2
+                Voir les parcours disponibles
+              </button>
+            </Link>
+
+            <Link 
+              to="/accompagnement-administratif"
+              className="w-full md:w-auto"
+            >
+              <button
+                className="h-[58px] w-full md:w-auto border-2 px-8 rounded-lg font-bold flex items-center justify-center hover:bg-primary/5 active:scale-95 transition-all text-slate-800 border-slate-800"
+              >
+                Besoin d'aide pour mes papiers
               </button>
             </Link>
           </div>
+          <p className="mt-4 text-xs font-bold text-slate-500">
+            CPF, France Travail, OPCO, employeur : vérification possible après votre test.
+          </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6 text-xs text-on-surface-variant">
             <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> ≈ 5 min</span>
             <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Données protégées</span>
