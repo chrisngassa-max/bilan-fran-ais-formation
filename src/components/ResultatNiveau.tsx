@@ -84,9 +84,9 @@ export function ResultatNiveau({
               </div>
               <div className="flex justify-between items-baseline pt-1">
                 <span className="text-xs font-bold text-slate-900">
-                  <Tooltip content="La somme restante après déduction de vos droits CPF/OPCO.">Reste à charge (RAC)</Tooltip>
+                  <Tooltip content="La somme restante à votre charge après déduction des aides publiques (estimation).">Reste à charge (après mobilisations CPF/OPCO)</Tooltip>
                 </span>
-                <span className="text-lg font-black text-slate-900">{journey.monthlyInstallment} €<span className="text-[10px] font-normal text-slate-500">/mois</span></span>
+                <span className="text-lg font-black text-slate-900">À définir *</span>
               </div>
             </div>
           </div>

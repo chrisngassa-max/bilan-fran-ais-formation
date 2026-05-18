@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start"
 import { Loader2, LogIn, Users, Clock, CheckCircle2, ExternalLink, MessageCircle, AlertTriangle } from "lucide-react"
 import {
   loginPartenaireFn,
+  logoutPartenaireFn,
   getPartenaireStatsFn,
   getLeadsPartenaireFn,
   changerStatutLeadFn,
@@ -37,12 +38,12 @@ const STATUT_LABELS: Record<Statut, string> = {
 }
 
 function PartenaireLoginOrDashboard() {
-  const [session, setSession] = useState<{ id: string; nom: string } | null>(null)
-  if (!session) return <LoginPartenaire onLogin={(id, nom) => setSession({ id, nom })} />
-  return <Dashboard partenaireId={session.id} nom={session.nom} onLogout={() => setSession(null)} />
+  const [session, setSession] = useState<{ nom: string; email: string } | null>(null)
+  if (!session) return <LoginPartenaire onLogin={(nom, email) => setSession({ nom, email })} />
+  return <Dashboard nom={session.nom} email={session.email} onLogout={() => setSession(null)} />
 }
 
-function LoginPartenaire({ onLogin }: { onLogin: (id: string, nom: string) => void }) {
+function LoginPartenaire({ onLogin }: { onLogin: (nom: string, email: string) => void }) {
   const loginFn = useServerFn(loginPartenaireFn)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -55,7 +56,7 @@ function LoginPartenaire({ onLogin }: { onLogin: (id: string, nom: string) => vo
     setErreur(null)
     try {
       const res = await loginFn({ data: { email, password } })
-      if (res.ok) onLogin(res.partenaire_id, res.nom ?? email)
+      if (res.ok) onLogin(res.nom ?? email, res.email)
       else setErreur("Identifiants incorrects")
     } catch {
       setErreur("Identifiants incorrects")
@@ -117,11 +118,12 @@ interface LeadListe {
   jours_restants_rdv: number | null
 }
 
-function Dashboard({ partenaireId, nom, onLogout }: { partenaireId: string; nom: string; onLogout: () => void }) {
+function Dashboard({ nom, email, onLogout }: { nom: string; email: string; onLogout: () => void }) {
   const navigate = useNavigate()
   const statsFn = useServerFn(getPartenaireStatsFn)
   const leadsFn = useServerFn(getLeadsPartenaireFn)
   const statutFn = useServerFn(changerStatutLeadFn)
+  const logoutFn = useServerFn(logoutPartenaireFn)
 
   const [stats, setStats] = useState({ nouveaux: 0, en_cours: 0, traites_ce_mois: 0 })
   const [filtre, setFiltre] = useState<FiltreStatut>("tous")
@@ -133,25 +135,41 @@ function Dashboard({ partenaireId, nom, onLogout }: { partenaireId: string; nom:
     setLoading(true)
     try {
       const [s, l] = await Promise.all([
-        statsFn({ data: { partenaire_id: partenaireId } }),
-        leadsFn({ data: { partenaire_id: partenaireId, statut_filtre: filtre, page: 1, par_page: 50 } }),
+        statsFn({ data: {} }),
+        leadsFn({ data: { statut_filtre: filtre, page: 1, par_page: 50 } }),
       ])
       setStats(s)
       setLeads(l.leads as LeadListe[])
+    } catch (err: any) {
+      if (err instanceof Error && (err.message.includes("Session partenaire requise") || err.message.includes("Session partenaire invalide ou expirée"))) {
+        onLogout()
+      }
     } finally {
       setLoading(false)
     }
-  }, [partenaireId, filtre, statsFn, leadsFn])
+  }, [filtre, statsFn, leadsFn, onLogout])
 
   useEffect(() => { chargerDonnees() }, [chargerDonnees])
 
   const changerStatut = async (lead_id: string, statut: Statut) => {
     setStatutLoading(lead_id)
     try {
-      await statutFn({ data: { partenaire_id: partenaireId, lead_id, statut } })
+      await statutFn({ data: { lead_id, statut } })
       await chargerDonnees()
+    } catch (err: any) {
+      if (err instanceof Error && (err.message.includes("Session partenaire requise") || err.message.includes("Session partenaire invalide ou expirée"))) {
+        onLogout()
+      }
     } finally {
       setStatutLoading(null)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logoutFn()
+    } finally {
+      onLogout()
     }
   }
 
@@ -166,9 +184,9 @@ function Dashboard({ partenaireId, nom, onLogout }: { partenaireId: string; nom:
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-on-surface">Tableau de bord partenaire</h1>
-            <p className="text-sm text-on-surface-variant">Connecté en tant que {nom}</p>
+            <p className="text-sm text-on-surface-variant">Connecté en tant que {nom} ({email})</p>
           </div>
-          <button onClick={onLogout} className="text-sm text-on-surface-variant hover:text-primary">
+          <button onClick={handleLogout} className="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
             Se déconnecter
           </button>
         </div>
@@ -185,7 +203,7 @@ function Dashboard({ partenaireId, nom, onLogout }: { partenaireId: string; nom:
           {filtres.map((f) => (
             <button
               key={f} onClick={() => setFiltre(f)}
-              className={`px-4 h-9 rounded-full text-sm font-bold border transition-all ${
+              className={`px-4 h-9 rounded-full text-sm font-bold border transition-all cursor-pointer ${
                 filtre === f
                   ? "bg-primary text-on-primary border-primary"
                   : "bg-surface-bright text-on-surface-variant border-outline-variant hover:border-outline"
@@ -252,14 +270,14 @@ function Dashboard({ partenaireId, nom, onLogout }: { partenaireId: string; nom:
                       key={s}
                       disabled={statutLoading === lead.id}
                       onClick={() => changerStatut(lead.id, s)}
-                      className="px-3 h-8 rounded-md bg-surface-container hover:bg-surface text-xs font-bold border border-outline-variant disabled:opacity-50"
+                      className="px-3 h-8 rounded-md bg-surface-container hover:bg-surface text-xs font-bold border border-outline-variant disabled:opacity-50 cursor-pointer"
                     >
                       → {STATUT_LABELS[s]}
                     </button>
                   ))}
                   <button
-                    onClick={() => navigate({ to: "/partenaire/leads/$leadId", params: { leadId: lead.id }, search: { pid: partenaireId } })}
-                    className="ml-auto inline-flex items-center gap-1 text-sm text-primary font-bold hover:underline"
+                    onClick={() => navigate({ to: "/partenaire/leads/$leadId", params: { leadId: lead.id } })}
+                    className="ml-auto inline-flex items-center gap-1 text-sm text-primary font-bold hover:underline cursor-pointer bg-transparent border-0"
                   >
                     Voir fiche <ExternalLink className="h-3.5 w-3.5" />
                   </button>

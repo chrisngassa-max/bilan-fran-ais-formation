@@ -251,12 +251,11 @@ function IndexPage() {
                 30 minutes d'évaluation approfondie sur les 4 compétences (oral, écrit, grammaire) pour un programme sur-mesure.
               </p>
               <Link 
-                to="/passer-test/$token" 
-                params={{ token: "latest" }}
+                to="/test-complet" 
                 onClick={() => trackEvent("home_diagnostic_click")}
               >
                 <button className="w-full h-14 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
-                  Lancer le diagnostic complet
+                  Passer le test de positionnement complet
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </Link>

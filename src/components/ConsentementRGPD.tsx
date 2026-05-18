@@ -23,7 +23,7 @@ export function ConsentementRGPD({
           className="mt-1 h-5 w-5 accent-primary shrink-0"
         />
         <span className="text-sm text-on-surface-variant leading-relaxed">
-          J'accepte que mes informations soient transmises au partenaire spécialisé en accompagnement administratif afin d'être recontacté pour vérifier mon dossier.
+          J'accepte que mes informations soient transmises au partenaire spécialisé en accompagnement administratif afin d'être recontacté pour vérifier mon dossier. <strong className="text-primary">(Facultatif - Recommandé pour éviter un refus de dossier)</strong>
         </span>
       </label>
 

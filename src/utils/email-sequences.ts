@@ -81,7 +81,7 @@ export function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magicLink: 
         </ul>
       </div>
       <p style="font-size:13px; color:#475569;">
-        Nos partenaires administratifs peuvent analyser gratuitement vos pièces justificatives afin d'éviter tout rejet de votre dossier en préfecture.
+        Nos partenaires administratifs peuvent analyser vos pièces justificatives afin d'éviter tout rejet de votre dossier en préfecture.
       </p>
     `;
     ctaLabel = "🔎 Faire vérifier mon dossier administrativement";
@@ -92,7 +92,7 @@ export function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magicLink: 
       <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 20px; border-radius: 12px; margin: 20px 0; color: #065f46;">
         <h4 style="margin-top:0; color:#047857;">💰 Financements Mobilisables</h4>
         <p style="font-size:13px; margin-bottom:10px;">
-          Selon votre situation professionnelle (salarié, demandeur d'emploi, indépendant), le <strong>tarif financé de référence</strong> peut être abaissé à <strong>${journey.financedReferencePrice} €</strong>, avec un reste à charge de <strong>0 €</strong> via le CPF.
+          Selon votre situation professionnelle (salarié, demandeur d'emploi, indépendant), le <strong>tarif financé de référence</strong> peut être abaissé à <strong>${journey.financedReferencePrice} €</strong>, avec une prise en charge possible de vos droits CPF.
         </p>
         <p style="font-size:12px; font-weight: bold; margin: 0;">
           Mensualité maximale en 3x sans frais : ${journey.monthlyInstallment} €/mois.

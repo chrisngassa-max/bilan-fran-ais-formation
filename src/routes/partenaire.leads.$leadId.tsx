@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect, useState, useCallback } from "react"
 import { useServerFn } from "@tanstack/react-start"
-import { z } from "zod"
 import { Loader2, ArrowLeft, MessageCircle, AlertTriangle, CheckCircle2, XCircle, Save } from "lucide-react"
 import {
   getLeadDetailFn,
@@ -17,7 +16,6 @@ export const Route = createFileRoute("/partenaire/leads/$leadId")({
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
-  validateSearch: (s) => z.object({ pid: z.string().uuid() }).parse(s),
   component: LeadDetailPage,
 })
 
@@ -28,7 +26,6 @@ const STATUT_LABELS: Record<Statut, string> = {
 
 function LeadDetailPage() {
   const { leadId } = Route.useParams()
-  const { pid } = Route.useSearch()
   const navigate = useNavigate()
 
   const detailFn = useServerFn(getLeadDetailFn)
@@ -46,7 +43,7 @@ function LeadDetailPage() {
   const charger = useCallback(async () => {
     setLoading(true)
     try {
-      const r = await detailFn({ data: { partenaire_id: pid, lead_id: leadId } })
+      const r = await detailFn({ data: { lead_id: leadId } })
       setLead(r.lead)
       setStatut(r.statut as Statut)
       setNote(r.note ?? "")
@@ -55,15 +52,19 @@ function LeadDetailPage() {
     } finally {
       setLoading(false)
     }
-  }, [pid, leadId, detailFn, navigate])
+  }, [leadId, detailFn, navigate])
 
   useEffect(() => { charger() }, [charger])
 
   const changerStatut = async (s: Statut) => {
     setStatutLoading(s)
     try {
-      await statutFn({ data: { partenaire_id: pid, lead_id: leadId, statut: s } })
+      await statutFn({ data: { lead_id: leadId, statut: s } })
       setStatut(s)
+    } catch (err: any) {
+      if (err instanceof Error && (err.message.includes("Session partenaire requise") || err.message.includes("Session partenaire invalide ou expirée"))) {
+        navigate({ to: "/partenaire" })
+      }
     } finally {
       setStatutLoading(null)
     }
@@ -73,9 +74,13 @@ function LeadDetailPage() {
     setNoteSaving(true)
     setNoteSaved(false)
     try {
-      await noteFn({ data: { partenaire_id: pid, lead_id: leadId, note } })
+      await noteFn({ data: { lead_id: leadId, note } })
       setNoteSaved(true)
       setTimeout(() => setNoteSaved(false), 2500)
+    } catch (err: any) {
+      if (err instanceof Error && (err.message.includes("Session partenaire requise") || err.message.includes("Session partenaire invalide ou expirée"))) {
+        navigate({ to: "/partenaire" })
+      }
     } finally {
       setNoteSaving(false)
     }
@@ -98,7 +103,7 @@ function LeadDetailPage() {
   return (
     <div className="min-h-screen bg-surface">
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-        <button onClick={() => navigate({ to: "/partenaire" })} className="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary">
+        <button onClick={() => navigate({ to: "/partenaire" })} className="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary cursor-pointer bg-transparent border-0">
           <ArrowLeft className="h-4 w-4" /> Retour au tableau de bord
         </button>
 
@@ -113,7 +118,7 @@ function LeadDetailPage() {
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </a>
             ) : lead.whatsapp_phone ? (
-              <span className="text-sm text-on-surface-variant">Tél. : {lead.whatsapp_phone}</span>
+              <span className="text-sm text-on-surface-variant font-semibold">Tél. : {lead.whatsapp_phone}</span>
             ) : null}
           </div>
 
@@ -178,7 +183,7 @@ function LeadDetailPage() {
                 key={s}
                 disabled={statutLoading !== null}
                 onClick={() => changerStatut(s)}
-                className="inline-flex items-center gap-2 px-3 h-9 rounded-md bg-surface-container hover:bg-surface text-sm font-bold border border-outline-variant disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-3 h-9 rounded-md bg-surface-container hover:bg-surface text-sm font-bold border border-outline-variant disabled:opacity-50 cursor-pointer"
               >
                 {statutLoading === s && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                 → {STATUT_LABELS[s]}
@@ -198,7 +203,7 @@ function LeadDetailPage() {
             <span className="text-xs text-on-surface-variant">{note.length} / 2000</span>
             <button
               onClick={sauverNote} disabled={noteSaving}
-              className="inline-flex items-center gap-2 px-4 h-10 bg-primary text-on-primary rounded-lg font-bold text-sm hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 h-10 bg-primary text-on-primary rounded-lg font-bold text-sm hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
               {noteSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {noteSaved ? "Enregistré ✓" : "Sauvegarder"}

@@ -28,7 +28,7 @@ function ConfidentialitePage() {
               Les traitements de données personnelles décrits ci-dessous sont réalisés par la société exploitant la plateforme <strong>{siteName}</strong>, dont le siège social est situé en France, représentée par son représentant légal.
             </p>
             <p>
-              Pour toute question ou réclamation concernant vos données personnelles, vous pouvez nous écrire directement par e-mail à : <a href={`mailto:${contactInfo.email}`} className="text-primary underline font-medium">{contactInfo.email}</a>.
+              Pour toute question ou réclamation concernant vos données personnelles, vous pouvez contacter notre Délégué à la Protection des Données (DPO) « TODO-LEGAL-DPO » à l'adresse e-mail dédiée : <a href="mailto:dpo@bilanfrancais.fr" className="text-primary underline font-medium">dpo@bilanfrancais.fr</a> ou à l'adresse postale indiquée dans nos mentions légales.
             </p>
           </section>
 
@@ -106,7 +106,7 @@ function ConfidentialitePage() {
               Conformément à la réglementation européenne, vous disposez d'un droit d'accès, de rectification, d'effacement (droit à l'oubli), de limitation de traitement, d'opposition et de portabilité de vos données personnelles. Vous pouvez également retirer votre consentement à tout moment.
             </p>
             <p>
-              Pour exercer vos droits, vous pouvez nous écrire par e-mail à : <a href={`mailto:${contactInfo.email}`} className="text-primary underline font-medium">{contactInfo.email}</a>. Nous nous engageons à vous apporter une réponse motivée sous un délai maximum de <strong>30 jours</strong>.
+              Pour exercer vos droits, vous pouvez contacter notre Délégué à la Protection des Données (DPO) « TODO-LEGAL-DPO » par e-mail à : <a href="mailto:dpo@bilanfrancais.fr" className="text-primary underline font-medium">dpo@bilanfrancais.fr</a>. Nous nous engageons à vous apporter une réponse motivée sous un délai maximum de <strong>30 jours</strong>.
             </p>
           </section>
 

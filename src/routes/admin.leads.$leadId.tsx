@@ -364,12 +364,20 @@ export function LeadDetailAdmin() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="bg-surface p-4 rounded-2xl border border-outline-variant/30 text-center">
-                      <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Financement disponible (CPF)</span>
-                      <p className="text-2xl font-black text-emerald-600 mt-1">1 500 €</p>
+                      <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Solde CPF déclaré</span>
+                      <p className="text-2xl font-black text-emerald-600 mt-1">
+                        {lead.context?.administration?.declarative_info?.soldeCpf !== undefined 
+                          ? `${lead.context.administration.declarative_info.soldeCpf} €` 
+                          : "Non renseigné"}
+                      </p>
                     </div>
                     <div className="bg-surface p-4 rounded-2xl border border-outline-variant/30 text-center">
                       <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Reste à charge estimé</span>
-                      <p className="text-2xl font-black text-on-surface mt-1">0 €</p>
+                      <p className="text-2xl font-black text-on-surface mt-1">
+                        {lead.context?.finances?.rac !== undefined 
+                          ? `${lead.context.finances.rac} €` 
+                          : "À définir"}
+                      </p>
                     </div>
                   </div>
 

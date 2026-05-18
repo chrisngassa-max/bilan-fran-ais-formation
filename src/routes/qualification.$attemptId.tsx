@@ -191,7 +191,7 @@ function QualificationPage() {
                   />
                 </div>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                  Vos droits <Tooltip content="Mon Compte Formation : l'argent gagné en travaillant pour financer vos cours.">CPF</Tooltip> cumulés en travaillant en France peuvent financer 100% de votre formation.
+                  Vos droits <Tooltip content="Mon Compte Formation : l'argent gagné en travaillant pour financer vos cours.">CPF</Tooltip> cumulés en travaillant en France peuvent financer votre formation, sous réserve de solde suffisant.
                 </p>
               </div>
 

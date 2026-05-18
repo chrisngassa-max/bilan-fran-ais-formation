@@ -1,10 +1,11 @@
-import { AlertTriangle, ChevronRight, Zap, Target, ClipboardList } from "lucide-react"
+import { AlertTriangle, ChevronRight, Zap, Target, ClipboardList, HelpCircle } from "lucide-react"
 import { Link } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { NiveauIndicatif } from "../types/bilan"
 import { TypeDemarche } from "../types/leads"
 import { ordreBlocsAlerte, calculerJoursRestants } from "../utils/calcul-formule"
 import { trackAlerteAffichee, trackAlerteClic } from "../utils/tracking"
+import { track } from "../utils/tracking-plausible"
 
 interface Props {
   date_rdv?: string
@@ -14,6 +15,7 @@ interface Props {
   whatsapp?: string
   type_demarche?: TypeDemarche
   partenaire_consent: boolean
+  onDispenseClick?: () => void
 }
 
 export function AlerteAttestationManquante({
@@ -22,7 +24,9 @@ export function AlerteAttestationManquante({
   tunnel,
   prenom,
   whatsapp,
-  partenaire_consent
+  type_demarche,
+  partenaire_consent,
+  onDispenseClick
 }: Props) {
   const blocsOrder = ordreBlocsAlerte(date_rdv)
   const joursRestants = date_rdv ? calculerJoursRestants(date_rdv) : undefined
@@ -35,98 +39,147 @@ export function AlerteAttestationManquante({
     trackAlerteClic({ bloc_choisi: bloc, tunnel, type_titre })
   }
 
+  const handleDispenseClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    track("dispense_verifiee", { tunnel, type_titre })
+    onDispenseClick?.()
+  }
+
   const renderBloc = (type: "A" | "B" | "C") => {
+    // Generate pre-filled search params for next steps
+    const prefilledParams = new URLSearchParams()
+    if (prenom) prefilledParams.append("prenom", prenom)
+    if (whatsapp) prefilledParams.append("whatsapp", whatsapp)
+    if (type_demarche) prefilledParams.append("type_demarche", type_demarche)
+    if (date_rdv) prefilledParams.append("date_rdv", date_rdv)
+    const prefillQuery = prefilledParams.toString() ? `?${prefilledParams.toString()}` : ""
+
     switch (type) {
       case "A":
         return (
           <Link 
             key="A"
-            to="/test-rapide" 
+            to={`/test-rapide${prefillQuery}`}
+            id="card-alerte-action-a"
             onClick={() => handleBlocClic("A")}
-            className="flex items-center p-6 bg-blue-50 border border-blue-200 rounded-2xl hover:bg-blue-100 transition-all group"
+            className="flex items-center p-5 bg-[#eff6ff] border-2 border-blue-100 hover:border-blue-300 rounded-2xl hover:bg-blue-50/50 transition-all duration-200 group select-none"
           >
-            <div className="bg-blue-600 p-3 rounded-xl mr-4 text-white">
+            <div className="bg-[#2563eb] p-3 rounded-xl mr-4 text-white shrink-0 shadow-sm">
               <Zap className="h-6 w-6" />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-blue-900 flex items-center gap-2">
+              <h4 className="font-extrabold text-blue-900 text-sm flex items-center gap-2">
                 ⚡ Je veux estimer mon niveau rapidement
               </h4>
-              <p className="text-xs text-blue-700">Test 2 minutes — estimation + formule adaptée à votre délai</p>
+              <p className="text-xs text-blue-700 leading-normal font-semibold mt-1">
+                Test rapide en 2 minutes · Première estimation instantanée + formule adaptée à votre délai de rendez-vous en préfecture.
+              </p>
             </div>
-            <ChevronRight className="h-5 w-5 text-blue-400 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="h-5 w-5 text-blue-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
           </Link>
         )
       case "B":
         return (
           <Link 
             key="B"
-            to="/test-complet" 
+            to={`/test-complet${prefillQuery}`}
+            id="card-alerte-action-b"
             onClick={() => handleBlocClic("B")}
-            className="flex items-center p-6 bg-purple-50 border border-purple-200 rounded-2xl hover:bg-purple-100 transition-all group"
+            className="flex items-center p-5 bg-[#faf5ff] border-2 border-purple-100 hover:border-purple-300 rounded-2xl hover:bg-purple-50/50 transition-all duration-200 group select-none"
           >
-            <div className="bg-purple-600 p-3 rounded-xl mr-4 text-white">
+            <div className="bg-[#9333ea] p-3 rounded-xl mr-4 text-white shrink-0 shadow-sm">
               <Target className="h-6 w-6" />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-purple-900 flex items-center gap-2">
+              <h4 className="font-extrabold text-purple-900 text-sm flex items-center gap-2">
                 🎯 Je veux un diagnostic précis
               </h4>
-              <p className="text-xs text-purple-700">Test 30 minutes — oral, écrit, grammaire, production</p>
+              <p className="text-xs text-purple-700 leading-normal font-semibold mt-1">
+                Test de positionnement complet en 30 minutes · Analyse détaillée de 4 compétences (écrit, oral, production, grammaire) pour un programme sur-mesure.
+              </p>
             </div>
-            <ChevronRight className="h-5 w-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="h-5 w-5 text-purple-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
           </Link>
         )
       case "C":
         if (!partenaire_consent) return null
         return (
-          <div 
+          <Link
             key="C"
-            onClick={() => handleBlocClic("C")}
-            className="flex items-center p-6 bg-orange-50 border border-orange-200 rounded-2xl hover:bg-orange-100 transition-all group cursor-pointer"
+            to={`/accompagnement-administratif${prefillQuery}`}
+            id="card-alerte-action-c"
+            onClick={(e) => {
+              handleBlocClic("C")
+              if (onDispenseClick) {
+                e.preventDefault()
+                onDispenseClick()
+              }
+            }}
+            className="flex items-center p-5 bg-[#fff7ed] border-2 border-orange-100 hover:border-orange-300 rounded-2xl hover:bg-orange-50/50 transition-all duration-200 group select-none cursor-pointer text-left"
           >
-            <div className="bg-orange-600 p-3 rounded-xl mr-4 text-white">
+            <div className="bg-[#ea580c] p-3 rounded-xl mr-4 text-white shrink-0 shadow-sm">
               <ClipboardList className="h-6 w-6" />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-orange-900 flex items-center gap-2">
+              <h4 className="font-extrabold text-orange-900 text-sm flex items-center gap-2">
                 📋 Je veux faire vérifier mon dossier
               </h4>
-              <p className="text-xs text-orange-700">Partenaire spécialisé — pièces + cas de dispense</p>
+              <p className="text-xs text-orange-700 leading-normal font-semibold mt-1">
+                Partenaire spécialisé en accompagnement administratif · Analyse complète de vos pièces administratives et vérification de votre éligibilité à une dispense légale.
+              </p>
             </div>
-            <ChevronRight className="h-5 w-5 text-orange-400 group-hover:translate-x-1 transition-transform" />
-          </div>
+            <ChevronRight className="h-5 w-5 text-orange-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
+          </Link>
         )
     }
   }
 
   return (
-    <div className="space-y-6">
-      <div className="p-6 bg-error-container/10 border-2 border-error/20 rounded-2xl">
-        <div className="flex gap-4 mb-4">
-          <AlertTriangle className="h-8 w-8 text-error shrink-0" />
+    <div className="space-y-6 my-6">
+      <div className="p-6 bg-red-50/40 border-2 border-red-200 rounded-3xl shadow-sm transition-all duration-300">
+        <div className="flex gap-4 mb-6">
+          <div className="bg-red-100 p-2.5 rounded-xl border border-red-200 shrink-0">
+            <AlertTriangle className="h-7 w-7 text-red-600" />
+          </div>
           <div>
-            <h3 className="text-lg font-bold text-on-surface leading-tight mb-2">
-              ⚠️ Il vous manque peut-être un justificatif de niveau de langue
+            <h3 className="text-base font-extrabold text-slate-800 leading-snug mb-2">
+              ⚠️ Justificatif de niveau de langue obligatoire
             </h3>
-            <p className="text-sm text-on-surface-variant leading-relaxed">
-              Pour certaines démarches en préfecture, un justificatif officiel peut être demandé. 
-              Sans justificatif valable, votre dossier peut être <span className="font-bold text-error">retardé ou bloqué</span>.
+            <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+              Pour la plupart des demandes en préfecture (séjour pluriannuel, carte de résident, naturalisation par décret), un justificatif officiel de niveau de français (A2 ou B1 minimum) doit être joint à votre dossier.
+            </p>
+            <p className="text-xs text-red-700 font-bold leading-relaxed mt-2">
+              Sans ce justificatif valable, votre dossier peut être retardé, bloqué ou faire l'objet d'une demande de pièce complémentaire.
             </p>
           </div>
         </div>
         
-        <div className="flex flex-col gap-3 mt-6">
-          {blocsOrder.map(type => renderBloc(type))}
+        <div className="space-y-3">
+          <p className="text-xs text-slate-500 font-bold uppercase tracking-wider pl-1">
+            Que souhaitez-vous faire maintenant ?
+          </p>
+          <div className="flex flex-col gap-3">
+            {blocsOrder.map(type => renderBloc(type))}
+          </div>
         </div>
-      </div>
 
-      <div className="text-center">
-        <p className="text-sm text-on-surface-variant mb-2">Vous pensez être dispensé ?</p>
-        <button className="text-primary font-bold hover:underline flex items-center justify-center gap-1 mx-auto">
-          Vérifier si je suis dispensé
-          <ChevronRight className="h-4 w-4" />
-        </button>
+        <div className="mt-6 pt-5 border-t border-red-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <HelpCircle className="h-5 w-5 text-slate-400 shrink-0" />
+            <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+              Vous pensez être dispensé de test ? Notre partenaire peut valider votre éligibilité à une dispense.
+            </p>
+          </div>
+          <button 
+            type="button"
+            id="btn-alerte-dispense"
+            onClick={handleDispenseClick}
+            className="w-full sm:w-auto h-10 px-5 bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 shrink-0"
+          >
+            Vérifier ma situation →
+          </button>
+        </div>
       </div>
     </div>
   )

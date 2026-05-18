@@ -30,7 +30,7 @@ function TestCompletPage() {
   const [sectionIndex, setSectionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number | string>>({});
   
-  // Phase 1 state
+  // Phase 1 contact capture state
   const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
@@ -40,9 +40,11 @@ function TestCompletPage() {
   const [iaConsent, setIaConsent] = useState(false);
   const [iaLoading, setIaLoading] = useState(false);
   const evaluerProduction = useServerFn(evaluerProductionFn);
+  const [startError, setStartError] = useState<string | null>(null);
 
-  // Timer
+  // Timer: 30 minutes = 1800 seconds countdown
   const startTime = useRef<number>(0);
+  const [timeLeft, setTimeLeft] = useState(1800);
   const [finalDuration, setFinalDuration] = useState(0);
 
   // Results
@@ -55,6 +57,21 @@ function TestCompletPage() {
   const currentSection = SECTIONS[sectionIndex];
   const sectionQuestions = QUESTIONS_COMPLET.filter(q => q.section === currentSection.id);
 
+  // Countdown timer logic
+  useEffect(() => {
+    if (phase !== 2) return;
+    if (timeLeft <= 0) {
+      handleNextSection(); // Auto-complete when 30 minutes run out
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft, phase]);
+
   useEffect(() => {
     if (phase === 3) {
       track("result_viewed");
@@ -63,12 +80,58 @@ function TestCompletPage() {
 
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStartError(null);
+
+    if (!prenom.trim()) {
+      setStartError("Le prénom est obligatoire.");
+      return;
+    }
+
+    if (!email.trim()) {
+      setStartError("L'adresse e-mail est obligatoire.");
+      return;
+    }
+
+    if (whatsapp.trim() && !whatsapp.trim().startsWith("+") && !whatsapp.trim().startsWith("00")) {
+      setStartError("Veuillez saisir votre numéro au format international (ex: +33 6 12 34 56 78).");
+      return;
+    }
+
     setIsStarting(true);
     track("test_started");
-    await new Promise(r => setTimeout(r, 1000));
-    startTime.current = Date.now();
-    setPhase(2);
-    setIsStarting(false);
+
+    // Capture contact details early before starting the QCM to catch abandoned leads (growth hacking)
+    const payload = {
+      tunnel: "T3_test_complet",
+      source: "test_complet_pre_capture",
+      prenom: prenom.trim(),
+      email: email.trim(),
+      whatsapp: whatsapp.trim() || undefined,
+      partenaire_consent: partenaireConsent,
+      whatsapp_consent: whatsapp.trim() ? wsConsent : false,
+      consent_at: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch("/api/capture-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Une erreur est survenue lors de l'enregistrement de vos coordonnées.");
+      }
+
+      startTime.current = Date.now();
+      setPhase(2);
+    } catch (err: any) {
+      console.error("[TestComplet] pre-capture failed:", err);
+      setStartError(err?.message || "Une erreur de connexion est survenue. Veuillez réessayer.");
+    } finally {
+      setIsStarting(false);
+    }
   };
 
   const handleNextSection = async () => {
@@ -124,38 +187,104 @@ function TestCompletPage() {
       duree_secondes: duration,
     });
 
+    // Save final scores to the database!
+    const finalPayload = {
+      tunnel: "T3_test_complet",
+      source: "test_complet_final",
+      prenom: prenom.trim(),
+      email: email.trim(),
+      whatsapp: whatsapp.trim() || undefined,
+      estimated_level: niveau,
+      score_brut: scores.oral + scores.ecrit + scores.grammaire + scores.production,
+      partenaire_consent: partenaireConsent,
+      whatsapp_consent: whatsapp.trim() ? wsConsent : false,
+      consent_at: new Date().toISOString(),
+    };
+
+    try {
+      await fetch("/api/capture-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(finalPayload),
+      });
+
+      trackFormulairesSoumis({ 
+        tunnel: "T3", 
+        destination: partenaireConsent ? "les_deux" : "formation" 
+      });
+    } catch (err) {
+      console.error("[TestComplet] final result capture failed:", err);
+    }
+
     setResults({ scores, niveau, flags });
     setPhase(3);
   };
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
   if (phase === 1) {
     return (
-      <div className="min-h-screen bg-[#fcfaf7] py-16 px-4">
-        <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="min-h-screen bg-slate-50 py-16 px-4">
+        <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden animate-fade-in">
           <div className="bg-primary p-10 text-center text-on-primary">
-            <Target className="h-12 w-12 mx-auto mb-4" />
-            <h2 className="text-3xl font-black mb-3">Diagnostic Complet</h2>
-            <p className="opacity-90 font-medium">Évaluation approfondie de 30 minutes sur les 4 compétences clés.</p>
+            <Target className="h-12 w-12 mx-auto mb-4 text-white" />
+            <h2 className="text-3xl font-black mb-3 text-white">Diagnostic Complet</h2>
+            <p className="opacity-90 font-medium text-white/90 text-sm">Évaluation approfondie de 30 minutes sur les 4 compétences clés.</p>
           </div>
           
           <form onSubmit={handleStart} className="p-8 md:p-10 space-y-6">
-            <div className="bg-surface-container p-4 rounded-xl text-sm text-on-surface-variant leading-relaxed">
-              Entrez vos coordonnées pour recevoir vos résultats, même si vous ne terminez pas le test en une seule fois.
+            <div className="bg-slate-50 p-4 rounded-xl text-xs text-slate-500 font-semibold leading-relaxed border border-slate-100">
+              Saisissez vos coordonnées pour enregistrer votre progression et recevoir votre diagnostic officiel par email.
             </div>
 
             <div className="space-y-4">
-              <input 
-                type="text" required placeholder="Votre prénom" value={prenom} onChange={e => setPrenom(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-surface-container border-none font-bold"
-              />
-              <input 
-                type="email" required placeholder="Votre email" value={email} onChange={e => setEmail(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-surface-container border-none font-bold"
-              />
-              <input 
-                type="tel" placeholder="WhatsApp (optionnel)" value={whatsapp} onChange={e => setWhatsapp(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-surface-container border-none font-bold"
-              />
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" htmlFor="lead-prenom">
+                  Votre prénom <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  id="lead-prenom"
+                  type="text" 
+                  required 
+                  placeholder="Ex: Amine" 
+                  value={prenom} 
+                  onChange={e => setPrenom(e.target.value)}
+                  className="w-full h-12 px-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-primary focus:bg-white transition-all font-bold text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" htmlFor="lead-email">
+                  Votre adresse e-mail <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  id="lead-email"
+                  type="email" 
+                  required 
+                  placeholder="amine.kadi@exemple.com" 
+                  value={email} 
+                  onChange={e => setEmail(e.target.value)}
+                  className="w-full h-12 px-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-primary focus:bg-white transition-all font-bold text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" htmlFor="lead-whatsapp">
+                  Numéro WhatsApp <span className="text-slate-400 font-normal text-[10px]">(Optionnel)</span>
+                </label>
+                <input 
+                  id="lead-whatsapp"
+                  type="tel" 
+                  placeholder="+33 6 12 34 56 78" 
+                  value={whatsapp} 
+                  onChange={e => setWhatsapp(e.target.value)}
+                  className="w-full h-12 px-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-primary focus:bg-white transition-all font-bold text-sm"
+                />
+              </div>
             </div>
 
             <ConsentementRGPD 
@@ -165,12 +294,20 @@ function TestCompletPage() {
               onConsentChange={(p, w) => { setPartenaireConsent(p); setWsConsent(w); }}
             />
 
+            {startError && (
+              <div className="p-4 bg-red-50 border-2 border-red-100 text-red-600 text-xs font-bold rounded-xl flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 shrink-0" />
+                <span>{startError}</span>
+              </div>
+            )}
+
             <Button 
               type="submit"
-              disabled={isStarting || !prenom || !email || !partenaireConsent}
-              className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl shadow-xl flex items-center justify-center gap-2"
+              id="btn-start-test-complet"
+              disabled={isStarting || !prenom || !email}
+              className="w-full h-14 bg-primary text-on-primary font-black text-base rounded-xl shadow-xl flex items-center justify-center gap-2 text-white disabled:opacity-50 transition-all active:scale-95"
             >
-              {isStarting ? <Loader2 className="h-6 w-6 animate-spin" /> : "Commencer le test →"}
+              {isStarting ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : "Commencer le test →"}
             </Button>
           </form>
         </div>
@@ -181,43 +318,51 @@ function TestCompletPage() {
   if (phase === 2) {
     const Icon = currentSection.icon;
     return (
-      <div className="min-h-screen bg-[#fcfaf7] py-12 px-4">
+      <div className="min-h-screen bg-slate-50 py-12 px-4">
         <div className="max-w-3xl mx-auto">
-          {/* Progress Header */}
-          <div className="mb-10 space-y-4">
-            <div className="flex justify-between items-end">
-              <div className="flex items-center gap-3">
-                <div className="bg-primary text-on-primary p-2 rounded-lg">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div>
-                  <span className="text-xs font-black uppercase tracking-widest text-on-surface-variant">Section {sectionIndex + 1} / 4</span>
-                  <h3 className="text-xl font-black text-on-surface">{currentSection.label}</h3>
-                </div>
+          {/* Progress & Chronometer Header */}
+          <div className="mb-10 flex items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="bg-primary text-on-primary p-2.5 rounded-xl text-white">
+                <Icon className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400">Section {sectionIndex + 1} / 4</span>
+                <h3 className="text-lg font-black text-slate-800 leading-tight">{currentSection.label}</h3>
               </div>
             </div>
-            <div className="w-full h-3 bg-surface-container rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary transition-all duration-700" 
-                style={{ width: `${((sectionIndex + 1) / 4) * 100}%` }}
-              ></div>
+
+            {/* Premium chronometer */}
+            <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border-2 border-slate-100 shrink-0 select-none">
+              <Clock className={`h-5 w-5 ${timeLeft <= 180 ? 'text-red-500 animate-pulse' : 'text-slate-400'}`} />
+              <span className={`font-black text-sm ${timeLeft <= 180 ? 'text-red-500 font-extrabold' : 'text-slate-700'}`}>
+                {formatTime(timeLeft)}
+              </span>
             </div>
+          </div>
+
+          <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden mb-8">
+            <div 
+              className="h-full bg-primary transition-all duration-700" 
+              style={{ width: `${((sectionIndex + 1) / 4) * 100}%` }}
+            ></div>
           </div>
 
           <div className="space-y-8 pb-20">
             {sectionQuestions.map((q, idx) => (
-              <div key={q.id} className="bg-white rounded-3xl p-8 shadow-sm border border-outline-variant animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${idx * 100}ms` }}>
-                <p className="text-lg font-bold text-on-surface mb-6 leading-relaxed">
+              <div key={q.id} className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white" style={{ animationDelay: `${idx * 100}ms` }}>
+                <p className="text-base sm:text-lg font-bold text-slate-800 mb-6 leading-relaxed">
                   {q.id}. {q.enonce}
-                  {q.consigne && <span className="block mt-2 text-primary font-black uppercase text-sm tracking-wider">👉 {q.consigne}</span>}
+                  {q.consigne && <span className="block mt-2 text-primary font-black uppercase text-xs tracking-wider">👉 {q.consigne}</span>}
                 </p>
 
                 {q.section === "production" ? (
                   <textarea 
                     rows={6}
+                    id={`textarea-q-${q.id}`}
                     value={(answers[q.id] as string) || ''}
                     onChange={e => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                    className="w-full p-6 rounded-2xl bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white outline-none font-medium transition-all"
+                    className="w-full p-6 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white outline-none font-medium transition-all text-sm leading-relaxed"
                     placeholder="Tapez votre texte ici..."
                   />
                 ) : (
@@ -225,19 +370,20 @@ function TestCompletPage() {
                     {q.options?.map((opt, oIdx) => (
                       <button
                         key={oIdx}
+                        id={`btn-q-${q.id}-opt-${oIdx}`}
                         onClick={() => setAnswers(prev => ({ ...prev, [q.id]: oIdx }))}
-                        className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left ${
+                        className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all text-left bg-white ${
                           answers[q.id] === oIdx 
                           ? 'border-primary bg-primary/5 shadow-inner' 
-                          : 'border-outline-variant hover:border-primary/40 hover:bg-surface'
+                          : 'border-slate-100 hover:border-primary/40 hover:bg-slate-50/50'
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm shrink-0 ${
-                          answers[q.id] === oIdx ? 'bg-primary border-primary text-on-primary' : 'border-outline-variant text-on-surface-variant'
+                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm shrink-0 transition-colors ${
+                          answers[q.id] === oIdx ? 'bg-primary border-primary text-white font-extrabold' : 'border-slate-200 text-slate-400'
                         }`}>
                           {String.fromCharCode(65 + oIdx)}
                         </div>
-                        <span className="font-bold text-on-surface">{opt}</span>
+                        <span className="font-bold text-slate-700 text-sm sm:text-base">{opt}</span>
                       </button>
                     ))}
                   </div>
@@ -246,14 +392,14 @@ function TestCompletPage() {
             ))}
 
             {currentSection.id === "production" && (
-              <label className="flex items-start gap-3 p-5 rounded-2xl border-2 border-amber-300 bg-amber-50 cursor-pointer">
+              <label className="flex items-start gap-3 p-5 rounded-2xl border-2 border-amber-300 bg-amber-50 cursor-pointer animate-fade-in">
                 <input
                   type="checkbox"
                   checked={iaConsent}
                   onChange={e => setIaConsent(e.target.checked)}
-                  className="mt-1 h-5 w-5 accent-amber-600"
+                  className="mt-1 h-5 w-5 accent-amber-600 cursor-pointer shrink-0"
                 />
-                <span className="text-sm text-amber-900 leading-relaxed">
+                <span className="text-xs text-amber-900 leading-relaxed font-semibold">
                   <AlertTriangle className="inline h-4 w-4 mr-1 -mt-0.5" />
                   <strong>Évaluation IA optionnelle.</strong> J'accepte que mon texte soit analysé par une IA pour estimer mon niveau (résultat indicatif, non officiel). Mon texte n'est pas conservé à des fins d'entraînement.
                 </span>
@@ -262,12 +408,13 @@ function TestCompletPage() {
 
             <div className="flex justify-center pt-8">
               <Button
+                id="btn-next-section"
                 onClick={handleNextSection}
                 disabled={iaLoading}
-                className="w-full h-16 bg-primary text-on-primary font-black text-xl rounded-2xl flex items-center justify-center gap-3 shadow-xl disabled:opacity-60"
+                className="w-full h-14 bg-primary text-on-primary font-black text-base rounded-xl flex items-center justify-center gap-2 shadow-xl disabled:opacity-60 text-white"
               >
-                {iaLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : (sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante")}
-                {!iaLoading && <ChevronRight className="h-6 w-6" />}
+                {iaLoading ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : (sectionIndex === 3 ? "Terminer l'évaluation" : "Section suivante")}
+                {!iaLoading && <ChevronRight className="h-5 w-5 text-white" />}
               </Button>
             </div>
           </div>

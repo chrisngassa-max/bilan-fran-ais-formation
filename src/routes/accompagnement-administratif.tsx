@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, CheckCircle2, Loader2, ShieldAlert, ShieldCheck, UserCheck } from "lucide-react";
+import { Check, CheckCircle2, Loader2, ShieldAlert, ShieldCheck, UserCheck, PhoneCall } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { siteName } from "@/config/site";
 import { track } from "@/utils/tracking-plausible";
+import { ChecklistDocuments, DemarcheType } from "../components/ChecklistDocuments";
+import { AlerteAttestationManquante } from "../components/AlerteAttestationManquante";
+import { SituationPro } from "../types/leads";
 
 const LS_KEY = "bff_lead_pending";
 const CONSENT_VERSION = "v1.0";
@@ -17,49 +20,36 @@ export const Route = createFileRoute("/accompagnement-administratif")({
 
 function AccompagnementAdministratifPage() {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-  const [requestType, setRequestType] = useState("carte_sejour");
-  const [message, setMessage] = useState("");
+  const [requestType, setRequestType] = useState<DemarcheType>("pluriannuelle");
+  const [situationPro, setSituationPro] = useState<SituationPro>("salarie");
   const [consentPartner, setConsentPartner] = useState(false);
+  const [consentWhatsapp, setConsentWhatsapp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Auto-retry offline leads stored in localStorage
-  useEffect(() => {
-    const retryOfflineLeads = async () => {
-      try {
-        const stored = localStorage.getItem(LS_KEY);
-        if (!stored) return;
-
-        const payload = JSON.parse(stored);
-        console.log("[AccompagnementAdmin] Attempting to auto-retry stored lead:", payload);
-
-        const response = await fetch("/api/capture-lead", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        if (response.ok) {
-          console.log("[AccompagnementAdmin] Stored lead successfully sent, clearing localStorage.");
-          localStorage.removeItem(LS_KEY);
-        }
-      } catch (err) {
-        console.warn("[AccompagnementAdmin] Auto-retry of stored lead failed:", err);
-      }
-    };
-
-    retryOfflineLeads();
-    const interval = setInterval(retryOfflineLeads, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  // Checklist tracking state
+  const [checklistData, setChecklistData] = useState<{
+    docs_checklist: Record<string, boolean>;
+    docs_manquants: number;
+    attestation_ok: boolean;
+    dispense_demandee: boolean;
+  } | null>(null);
 
   useEffect(() => {
     track("partner_page_viewed");
   }, []);
+
+  const handleChecklistChange = (data: typeof checklistData) => {
+    setChecklistData(data);
+  };
+
+  const handleDispenseClick = () => {
+    setChecklistData(prev => prev ? { ...prev, dispense_demandee: true } : null);
+    // Auto-scroll to the contact form to make submission seamless
+    document.getElementById("lead-form-container")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,13 +60,24 @@ function AccompagnementAdministratifPage() {
       return;
     }
 
-    if (!email.trim()) {
-      setError("L'adresse email est obligatoire.");
+    if (!whatsapp.trim()) {
+      setError("Le numéro WhatsApp est obligatoire.");
+      return;
+    }
+
+    // Simple international phone format check
+    if (!whatsapp.trim().startsWith("+") && !whatsapp.trim().startsWith("00")) {
+      setError("Veuillez saisir votre numéro au format international (ex: +33 6 12 34 56 78).");
       return;
     }
 
     if (!consentPartner) {
-      setError("Vous devez accepter d'être contacté(e) par un expert partenaire pour soumettre le formulaire.");
+      setError("Vous devez consentir au traitement de vos données pour être recontacté(e).");
+      return;
+    }
+
+    if (!consentWhatsapp) {
+      setError("Vous devez accepter d'être contacté(e) par WhatsApp pour soumettre.");
       return;
     }
 
@@ -85,19 +86,20 @@ function AccompagnementAdministratifPage() {
     track("partner_lead_submitted", { request_type: requestType });
 
     const payload = {
-      source: "accompagnement_admin" as const,
-      lead_type: "admin_support" as const,
-      first_name: firstName.trim(),
-      last_name: lastName.trim() || undefined,
-      email: email.trim(),
-      whatsapp_phone: whatsapp.trim() || undefined,
-      partner_request_type: requestType,
-      message: message.trim() || undefined,
-      consent_training: false,
-      consent_partner: true,
-      consent_training_text_version: CONSENT_VERSION,
-      consent_partner_text_version: CONSENT_VERSION,
-      consent_timestamp: new Date().toISOString(),
+      tunnel: "T1_administratif_direct",
+      source: "accompagnement_admin",
+      prenom: firstName.trim(),
+      whatsapp: whatsapp.trim(),
+      type_demarche: requestType,
+      situation_pro: situationPro,
+      partenaire_consent: true,
+      whatsapp_consent: true,
+      consent_at: new Date().toISOString(),
+      demarche_inconnue: requestType === "je_ne_sais_pas",
+      docs_checklist: checklistData?.docs_checklist || {},
+      docs_manquants: checklistData?.docs_manquants || 0,
+      attestation_ok: checklistData?.attestation_ok || false,
+      dispense_demandee: checklistData?.dispense_demandee || false,
     };
 
     try {
@@ -115,287 +117,252 @@ function AccompagnementAdministratifPage() {
 
       trackEvent("admin_lead_capture_succeeded", { lead_id: result.lead_id });
       track("partner_lead_succeeded", { lead_id: result.lead_id ?? "" });
-      try {
-        localStorage.removeItem(LS_KEY);
-      } catch {}
       setSuccess(true);
     } catch (err: any) {
-      console.error("[AccompagnementAdmin] submission failed, saving to localStorage:", err);
-
-      try {
-        localStorage.setItem(LS_KEY, JSON.stringify({ ...payload, savedAt: Date.now() }));
-      } catch {}
-
+      console.error("[AccompagnementAdmin] submission failed:", err);
       trackEvent("admin_lead_capture_failed", { message: err?.message || "Unknown error" });
-      track("partner_lead_failed", { message: err?.message || "Unknown error" });
-      setError(
-        "Connexion instable. Votre demande a été sauvegardée localement sur votre appareil. Nous réessaierons de l'envoyer automatiquement d'ici quelques instants."
-      );
-      setSuccess(true); // Afficher quand même le succès car la donnée est préservée localement
+      setError(err?.message || "Une erreur de connexion est survenue. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
   };
 
+  const isAttestationMissing = checklistData ? !checklistData.attestation_ok && !checklistData.dispense_demandee : false;
+
   return (
-    <div className="min-h-screen bg-surface py-12 px-4 md:px-8">
+    <div className="min-h-screen bg-slate-50 py-12 px-4 md:px-8">
       <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Left Column: Explanatory Content */}
+        {/* Left Column: Explanatory Content & Interactive Checklist */}
         <div className="lg:col-span-7 space-y-8 pr-0 lg:pr-4">
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ea580c]/10 text-[#ea580c] text-xs font-bold uppercase tracking-wider border border-[#ea580c]/20">
               <UserCheck className="h-4 w-4" />
-              Service d'Assistance Expert
+              Service d'Assistance Expert Préfecture
             </span>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-on-surface leading-tight tracking-tight">
-              Besoin d'aide pour votre dossier en préfecture ?
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight tracking-tight">
+              Vous avez un dossier à déposer en préfecture ?
             </h1>
-            <p className="text-on-surface-variant text-lg md:text-xl leading-relaxed">
-              Nous travaillons avec un cabinet conseil expert sélectionné en démarches administratives pour les étrangers en France. Laissez vos coordonnées — nous vous recontactons pour analyser votre dossier.
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed font-semibold">
+              Nous collaborons avec un <span className="text-[#ea580c]">partenaire spécialisé en accompagnement administratif</span> pour sécuriser vos démarches, vérifier la conformité de vos pièces et vous éviter des mois de retard.
             </p>
           </div>
 
-          <div className="bg-surface-bright rounded-2xl p-6 md:p-8 border border-outline-variant shadow-sm space-y-6">
-            <h2 className="text-xl font-bold text-on-surface">Présentation du service d'accompagnement :</h2>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-secondary-container flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-on-surface">Vérification de la conformité de votre dossier</h3>
-                  <p className="text-on-surface-variant text-sm">Contrôle complet des pièces requises pour éviter les rejets immédiats en préfecture.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-secondary-container flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-on-surface">Identification des documents manquants</h3>
-                  <p className="text-on-surface-variant text-sm">Diagnostic précis des justificatifs manquants selon votre situation professionnelle et familiale.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-secondary-container flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-on-surface">Accompagnement selon votre type de démarche</h3>
-                  <p className="text-on-surface-variant text-sm">Suivi personnalisé que ce soit pour une première demande, un renouvellement ou une naturalisation.</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-secondary-container flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-on-surface">Conseil sur les cas de dispense possibles</h3>
-                  <p className="text-on-surface-variant text-sm">Analyse des dispenses de test de langue ou d'autres justificatifs légaux dont vous pourriez bénéficier.</p>
-                </div>
-              </li>
-            </ul>
-          </div>
+          {/* Interactive Checklist Rendering */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-lg font-black text-slate-800">1. Sélectionnez votre démarche</h2>
+              <p className="text-xs text-slate-500 font-semibold">
+                Découvrez les pièces requises en temps réel avant d'être recontacté(e).
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" htmlFor="demarche-select">
+                  Votre démarche :
+                </label>
+                <select
+                  id="demarche-select"
+                  value={requestType}
+                  onChange={(e) => setRequestType(e.target.value as DemarcheType)}
+                  className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white transition-all font-bold text-sm appearance-none cursor-pointer"
+                >
+                  <option value="pluriannuelle">Carte de séjour pluriannuelle / résident</option>
+                  <option value="resident_10ans">Carte de résident / 10 ans</option>
+                  <option value="naturalisation">Naturalisation par décret</option>
+                  <option value="je_ne_sais_pas">Je ne sais pas quelle démarche choisir</option>
+                  <option value="autre">Autre démarche administrative</option>
+                </select>
+              </div>
 
-          <div className="bg-surface-bright rounded-2xl p-6 border border-outline-variant shadow-sm space-y-4">
-            <h3 className="text-sm font-bold text-on-surface uppercase tracking-wider flex items-center gap-2">
-              📂 Public concerné
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-on-surface-variant">
-              <div className="flex items-center gap-2 bg-surface-container/40 p-3 rounded-lg border border-outline-variant/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Carte de séjour pluriannuelle
-              </div>
-              <div className="flex items-center gap-2 bg-surface-container/40 p-3 rounded-lg border border-outline-variant/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Carte de résident / 10 ans
-              </div>
-              <div className="flex items-center gap-2 bg-surface-container/40 p-3 rounded-lg border border-outline-variant/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Naturalisation par décret
-              </div>
-              <div className="flex items-center gap-2 bg-surface-container/40 p-3 rounded-lg border border-outline-variant/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                Autre démarche administrative
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2" htmlFor="situation-select">
+                  Votre situation pro :
+                </label>
+                <select
+                  id="situation-select"
+                  value={situationPro}
+                  onChange={(e) => setSituationPro(e.target.value as SituationPro)}
+                  className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white transition-all font-bold text-sm appearance-none cursor-pointer"
+                >
+                  <option value="salarie">Salarié(e) / CDI / CDD</option>
+                  <option value="demandeur">Demandeur d'emploi</option>
+                  <option value="independant">Indépendant / Auto-entrepreneur</option>
+                  <option value="sans_activite">Sans activité / Autre</option>
+                </select>
               </div>
             </div>
+
+            {requestType === "je_ne_sais_pas" && (
+              <div className="p-5 bg-blue-50 border-2 border-blue-100 rounded-2xl animate-fade-in my-4">
+                <p className="text-sm text-blue-800 leading-relaxed font-semibold">
+                  ℹ️ Pas de problème. Notre partenaire spécialisé identifie la démarche idéale selon votre profil et vous guide sur les justificatifs nécessaires.
+                </p>
+              </div>
+            )}
+
+            {requestType !== "je_ne_sais_pas" && requestType !== "autre" && (
+              <div className="animate-fade-in">
+                <ChecklistDocuments 
+                  type_demarche={requestType} 
+                  situation_pro={situationPro}
+                  onChange={handleChecklistChange}
+                  onDispenseClick={handleDispenseClick}
+                />
+              </div>
+            )}
+
+            {requestType === "autre" && (
+              <div className="p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl my-4">
+                <p className="text-sm text-slate-700 leading-relaxed font-semibold">
+                  Pour les autres types de démarches (regroupement familial, talent, étudiant...), notre partenaire effectue une étude personnalisée de vos pièces justificatives.
+                </p>
+              </div>
+            )}
+
+            {isAttestationMissing && requestType !== "je_ne_sais_pas" && requestType !== "autre" && (
+              <div className="animate-fade-in">
+                <AlerteAttestationManquante 
+                  tunnel="T1" 
+                  type_titre={requestType === "pluriannuelle" ? "A2" : "B1"}
+                  type_demarche={requestType}
+                  prenom={firstName}
+                  whatsapp={whatsapp}
+                  partenaire_consent={true}
+                  onDispenseClick={handleDispenseClick}
+                />
+              </div>
+            )}
           </div>
 
           {/* Legal Disclaimer */}
-          <div className="flex gap-3 p-4 bg-error-container/10 border border-error/20 rounded-xl">
-            <ShieldAlert className="text-error h-6 w-6 shrink-0 mt-0.5" />
-            <p className="text-on-surface-variant text-sm leading-relaxed italic">
-              <strong>Avis de non-responsabilité :</strong> Ce service est fourni par un cabinet d'accompagnement conseil externe indépendant. Il ne remplace ni les services de la préfecture, ni les conseils d'un avocat spécialisé. Les informations fournies sont indicatives et la décision finale d'octroi de titre ou de nationalité appartient exclusivement à l'administration française compétente.
+          <div className="flex gap-4 p-5 bg-amber-50/50 border-2 border-amber-100 rounded-3xl">
+            <ShieldAlert className="text-amber-600 h-6 w-6 shrink-0 mt-0.5" />
+            <p className="text-slate-600 text-xs leading-relaxed font-semibold">
+              <strong>Avis obligatoire de non-substitution :</strong> Ce site et notre partenaire spécialisé ne remplacent ni les services de la préfecture, ni un avocat, ni un organisme certificateur officiel. Les informations affichées sont fournies à titre indicatif. La décision finale dépend exclusivement de l'administration compétente au vu de la situation personnelle de l'usager.
             </p>
           </div>
         </div>
 
-        {/* Right Column: Form Card */}
-        <div className="lg:col-span-5">
+        {/* Right Column: Lead Form Card */}
+        <div className="lg:col-span-5" id="lead-form-container">
           {success ? (
-            <div className="bg-surface-bright rounded-2xl border-2 border-primary/30 bg-primary-container/10 p-8 md:p-10 text-center space-y-6 shadow-lg animate-in fade-in duration-300">
-              <CheckCircle2 className="mx-auto h-16 w-16 text-primary" />
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-on-surface">Demande enregistrée !</h3>
-                <p className="text-on-surface-variant leading-relaxed">
-                  Votre demande d'accompagnement a bien été enregistrée.<br />
-                  Un conseiller du cabinet partenaire expert vous recontactera très prochainement par email ou par téléphone pour faire le point sur votre dossier.
+            <div className="bg-white rounded-3xl border-2 border-[#ea580c]/30 bg-[#fff7ed]/20 p-8 md:p-10 text-center space-y-6 shadow-xl animate-in fade-in duration-300">
+              <CheckCircle2 className="mx-auto h-16 w-16 text-[#ea580c]" />
+              <div className="space-y-3">
+                <h3 className="text-2xl font-black text-slate-800">Demande validée !</h3>
+                <p className="text-slate-600 text-sm leading-relaxed font-semibold">
+                  Votre demande d'accompagnement a été enregistrée avec succès.<br />
+                  <span className="text-[#ea580c] font-bold">Notre partenaire spécialisé vous contacte directement sur WhatsApp sous 24h</span> pour analyser votre dossier complet et vérifier vos dispenses possibles.
                 </p>
               </div>
-              {error && (
-                <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  {error}
-                </p>
-              )}
               <div className="pt-4">
-                <Link to="/" className="inline-flex items-center justify-center px-6 h-12 bg-surface-container-highest text-on-surface font-bold rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
+                <Link to="/" className="inline-flex items-center justify-center px-6 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all text-sm">
                   Retour à l'accueil
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="bg-surface-bright rounded-2xl border border-outline-variant p-6 md:p-8 shadow-xl space-y-6">
+            <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-xl space-y-6">
               <div className="space-y-1">
-                <h2 className="text-xl md:text-2xl font-bold text-on-surface">Être recontacté(e)</h2>
-                <p className="text-on-surface-variant text-sm">
-                  Remplissez ce formulaire d'analyse initiale de dossier.
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fdf2f8] text-[#db2777] text-[10px] font-bold uppercase tracking-wider border border-[#fbcfe8]">
+                  <PhoneCall className="h-3.5 w-3.5 animate-bounce" />
+                  Rappel direct sous 24h
+                </span>
+                <h2 className="text-xl font-black text-slate-800 pt-2">2. Vos coordonnées de contact</h2>
+                <p className="text-xs text-slate-500 font-semibold">
+                  Laissez vos coordonnées pour que le cabinet partenaire expert procède à l'évaluation de votre cas.
                 </p>
               </div>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-firstname">
-                      Prénom <span className="text-secondary">*</span>
-                    </label>
-                    <input
-                      id="admin-firstname"
-                      type="text"
-                      required
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Amine"
-                      className="w-full h-11 px-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-lastname">
-                      Nom de famille
-                    </label>
-                    <input
-                      id="admin-lastname"
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Kadi"
-                      className="w-full h-11 px-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base"
-                    />
-                  </div>
-                </div>
-
                 <div>
-                  <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-email">
-                    Adresse e-mail <span className="text-secondary">*</span>
+                  <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-firstname">
+                    Votre prénom <span className="text-red-500">*</span>
                   </label>
                   <input
-                    id="admin-email"
-                    type="email"
+                    id="admin-firstname"
+                    type="text"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="amine.kadi@exemple.com"
-                    className="w-full h-11 px-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Amine"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-[#ea580c] focus:bg-white transition-all font-bold text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-whatsapp">
-                    Numéro WhatsApp <span className="text-on-surface-variant font-normal text-xs">(Optionnel)</span>
+                  <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-whatsapp">
+                    Numéro WhatsApp <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="admin-whatsapp"
                     type="tel"
+                    required
                     value={whatsapp}
                     onChange={(e) => setWhatsapp(e.target.value)}
                     placeholder="+33 6 12 34 56 78"
-                    className="w-full h-11 px-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-[#ea580c] focus:bg-white transition-all font-bold text-sm"
                   />
+                  <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase tracking-wider leading-relaxed">
+                    Format international requis (commençant par + ou 00)
+                  </p>
                 </div>
 
-                <div>
-                  <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-request-type">
-                    Type de démarche visée <span className="text-secondary">*</span>
-                  </label>
-                  <select
-                    id="admin-request-type"
-                    value={requestType}
-                    onChange={(e) => setRequestType(e.target.value)}
-                    className="w-full h-11 px-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base appearance-none"
-                  >
-                    <option value="carte_sejour">Carte de séjour pluriannuelle</option>
-                    <option value="resident">Carte de résident / 10 ans</option>
-                    <option value="naturalisation">Naturalisation par décret</option>
-                    <option value="je_ne_sais_pas">Je ne sais pas encore</option>
-                    <option value="autre">Autre démarche administrative</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-bold mb-1 text-on-surface text-sm" htmlFor="admin-message">
-                    Votre situation <span className="text-on-surface-variant font-normal text-xs">(Optionnel)</span>
-                  </label>
-                  <textarea
-                    id="admin-message"
-                    rows={3}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Décrivez brièvement votre situation (facultatif)"
-                    className="w-full p-3 rounded-lg border border-outline bg-surface focus:ring-2 focus:ring-primary focus:border-primary transition-all font-medium text-base"
-                  />
-                </div>
-
-                <div className="pt-2">
-                  <label className="flex items-start gap-3 cursor-pointer p-3 bg-surface-container rounded-xl border border-dashed border-outline-variant">
+                <div className="pt-2 space-y-3">
+                  <label className="flex items-start gap-3 cursor-pointer p-4 bg-slate-50 hover:bg-slate-100/50 rounded-2xl border-2 border-slate-100 transition-colors">
                     <input
                       type="checkbox"
                       required
                       checked={consentPartner}
                       onChange={(e) => setConsentPartner(e.target.checked)}
-                      className="mt-1 h-5 w-5 accent-primary shrink-0"
+                      className="mt-1 h-5 w-5 accent-[#ea580c] shrink-0 cursor-pointer"
                     />
-                    <span className="text-xs text-on-surface-variant leading-relaxed">
-                      J'accepte d'être recontacté(e) et accompagné(e) gratuitement par le cabinet conseil externe partenaire sélectionné pour l'analyse de mon dossier préfectoral. <span className="text-secondary font-bold">*</span>
+                    <span className="text-xs text-slate-600 font-semibold leading-relaxed">
+                      J'accepte que mes informations soient transmises au partenaire spécialisé en accompagnement administratif afin d'être recontacté pour l'analyse de mes pièces. <span className="text-red-500 font-bold">*</span>
+                    </span>
+                  </label>
+
+                  <label className="flex items-start gap-3 cursor-pointer p-4 bg-slate-50 hover:bg-slate-100/50 rounded-2xl border-2 border-slate-100 transition-colors">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={consentWhatsapp}
+                      onChange={(e) => setConsentWhatsapp(e.target.checked)}
+                      className="mt-1 h-5 w-5 accent-[#ea580c] shrink-0 cursor-pointer"
+                    />
+                    <span className="text-xs text-slate-600 font-semibold leading-relaxed">
+                      J'accepte d'être recontacté par WhatsApp au sujet de ma demande d'accompagnement. <span className="text-red-500 font-bold">*</span>
                     </span>
                   </label>
                 </div>
 
-                <div className="text-[11px] text-on-surface-variant text-center leading-normal">
-                  En demandant à être contacté, vous reconnaissez avoir lu et accepté notre{" "}
-                  <Link to="/confidentialite" className="underline text-primary font-bold hover:text-primary-variant transition-colors">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider text-center pt-2">
+                  En validant ce formulaire, vous acceptez notre{" "}
+                  <Link to="/confidentialite" className="underline text-[#ea580c] hover:text-[#c2410c]">
                     politique de confidentialité
                   </Link>
                   .
                 </div>
 
-                {error && !success && (
-                  <p className="text-sm text-error bg-error-container/20 border border-error/30 rounded-lg p-3">
-                    {error}
+                {error && (
+                  <p className="text-xs font-bold text-red-600 bg-red-50 border-2 border-red-100 rounded-xl p-4 animate-shake">
+                    ⚠️ {error}
                   </p>
                 )}
 
                 <button
                   type="submit"
-                  disabled={loading || !email || !firstName || !consentPartner}
-                  className="w-full h-[54px] rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-md
-                    bg-secondary text-on-secondary hover:opacity-95 active:scale-[0.98]
+                  disabled={loading || !firstName || !whatsapp || !consentPartner || !consentWhatsapp}
+                  className="w-full h-14 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md
+                    bg-[#ea580c] text-white hover:bg-[#c2410c] active:scale-[0.98]
                     disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: "#ea580c", color: "white" }}
                 >
                   {loading ? (
                     <>
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      Demande en cours...
+                      Transmission sécurisée...
                     </>
                   ) : (
                     <>
@@ -404,9 +371,9 @@ function AccompagnementAdministratifPage() {
                   )}
                 </button>
 
-                <p className="text-[10px] text-on-surface-variant/80 text-center leading-relaxed flex items-center justify-center gap-1">
-                  <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
-                  Vos données sont chiffrées et protégées conformément au RGPD.
+                <p className="text-[10px] text-slate-400 font-semibold text-center flex items-center justify-center gap-1.5 leading-relaxed pt-2">
+                  <ShieldCheck className="h-4 w-4 text-[#ea580c] shrink-0" />
+                  Données chiffrées de bout en bout et protégées selon le RGPD.
                 </p>
               </form>
             </div>

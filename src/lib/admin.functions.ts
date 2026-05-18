@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireRole } from "@/integrations/supabase/require-role";
 
 // Schema validations
 const getLeadsInputSchema = z.object({
@@ -41,6 +42,7 @@ const partnerSchema = z.object({
 });
 
 export const getLeadsAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire", "conseiller"])])
   .inputValidator((input) => getLeadsInputSchema.parse(input))
   .handler(async ({ data }) => {
     let query = supabaseAdmin
@@ -80,6 +82,7 @@ export const getLeadsAdminFn = createServerFn({ method: "POST" })
   });
 
 export const getLeadDetailAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire", "conseiller"])])
   .inputValidator((input) => leadIdSchema.parse(input))
   .handler(async ({ data }) => {
     const { data: lead, error } = await supabaseAdmin
@@ -120,6 +123,7 @@ export const getLeadDetailAdminFn = createServerFn({ method: "POST" })
   });
 
 export const updateLeadStatusAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire", "conseiller"])])
   .inputValidator((input) => updateLeadStatusSchema.parse(input))
   .handler(async ({ data }) => {
     const updatePayload: Record<string, any> = {
@@ -152,6 +156,7 @@ export const updateLeadStatusAdminFn = createServerFn({ method: "POST" })
   });
 
 export const getPartnersAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
   .handler(async () => {
     const { data: partners, error } = await supabaseAdmin
       .from("partners")
@@ -179,6 +184,7 @@ export const getPartnersAdminFn = createServerFn({ method: "POST" })
   });
 
 export const createPartnerAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin"])])
   .inputValidator((input) => partnerSchema.parse(input))
   .handler(async ({ data }) => {
     const payload = {
@@ -211,6 +217,7 @@ export const createPartnerAdminFn = createServerFn({ method: "POST" })
   });
 
 export const updatePartnerAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin"])])
   .inputValidator((input) => z.object({ id: z.string().uuid(), partner: partnerSchema }).parse(input))
   .handler(async ({ data }) => {
     const payload = {
@@ -242,6 +249,7 @@ export const updatePartnerAdminFn = createServerFn({ method: "POST" })
   });
 
 export const assignPartnerManualFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
   .inputValidator((input) => z.object({
     leadId: z.string().uuid(),
     partnerId: z.string().uuid(),
@@ -328,6 +336,7 @@ export const assignPartnerManualFn = createServerFn({ method: "POST" })
   });
 
 export const getReportingStatsFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
   .handler(async () => {
     const { data: leads, error } = await supabaseAdmin
       .from("leads")
@@ -382,6 +391,7 @@ export const getReportingStatsFn = createServerFn({ method: "POST" })
   });
 
 export const getAdvisorsWorkloadFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
   .handler(async () => {
     // 1. Fetch user roles to find advisors/admins
     const { data: userRoles, error: rolesError } = await supabaseAdmin
@@ -414,10 +424,32 @@ export const getAdvisorsWorkloadFn = createServerFn({ method: "POST" })
   });
 
 export const toggleUserRoleFn = createServerFn({ method: "POST" })
-  .inputValidator((input) => z.object({ userId: z.string().uuid(), currentRole: z.string() }).parse(input))
-  .handler(async ({ data }) => {
+  .middleware([requireRole(["admin"])])
+  .inputValidator((input) => z.object({
+    userId: z.string().uuid(),
+    currentRole: z.enum(["admin", "gestionnaire", "conseiller", "inscrit"])
+  }).parse(input))
+  .handler(async ({ data, context }) => {
+    const callerUserId = (context as { userId: string }).userId;
+
+    if (data.userId === callerUserId) {
+      throw new Error("Vous ne pouvez pas modifier votre propre rôle");
+    }
+
     const nextRole = data.currentRole === "admin" ? "conseiller" : "admin";
     
+    if (data.currentRole === "admin") {
+      const { count, error: countError } = await supabaseAdmin
+        .from("user_roles")
+        .select("id", { count: "exact", head: true })
+        .eq("role", "admin");
+
+      if (countError) throw new Error("Erreur de validation de la cohérence d'administration");
+      if ((count ?? 0) < 2) {
+        throw new Error("Il doit rester au moins un administrateur");
+      }
+    }
+
     // Check if role row exists
     const { data: existing } = await supabaseAdmin
       .from("user_roles")
@@ -435,6 +467,18 @@ export const toggleUserRoleFn = createServerFn({ method: "POST" })
         .from("user_roles")
         .insert({ user_id: data.userId, role: nextRole });
     }
+
+    // Log the event
+    await supabaseAdmin.from("lead_events").insert({
+      lead_id: null,
+      event_name: "user_role_changed",
+      properties: {
+        by: callerUserId,
+        target: data.userId,
+        from: data.currentRole,
+        to: nextRole
+      }
+    });
 
     return { ok: true };
   });

@@ -73,16 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signUp(email: string, password: string, firstName?: string, lastName?: string) {
-    if (configError) return { error: configError };
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/`,
-        data: { first_name: firstName, last_name: lastName },
-      },
-    });
-    return { error: error?.message ?? null };
+    return { error: "L'inscription publique est désactivée. Veuillez contacter un administrateur." };
   }
 
   async function signOut() {
