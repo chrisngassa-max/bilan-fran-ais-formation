@@ -7,12 +7,15 @@ import { track } from "@/utils/tracking-plausible";
 interface Props {
   attemptId?: string | null;
   estimatedLevel?: string | null;
+  flags?: string[] | null;
+  reliabilityByLevel?: any;
+  timeMetrics?: any;
 }
 
 const LS_KEY = "bff_lead_pending";
 const CONSENT_VERSION = "v1.0";
 
-export function LeadCaptureForm({ attemptId, estimatedLevel }: Props) {
+export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityByLevel, timeMetrics }: Props) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
@@ -88,6 +91,10 @@ export function LeadCaptureForm({ attemptId, estimatedLevel }: Props) {
       consent_training_text_version: CONSENT_VERSION,
       consent_partner_text_version: CONSENT_VERSION,
       consent_timestamp: new Date().toISOString(),
+      attempt_id: attemptId ?? undefined,
+      flags: flags ?? undefined,
+      reliability_by_level: reliabilityByLevel ?? undefined,
+      time_metrics: timeMetrics ?? undefined,
     };
 
     try {

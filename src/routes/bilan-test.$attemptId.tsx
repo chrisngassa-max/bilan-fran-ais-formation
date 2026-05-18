@@ -139,7 +139,13 @@ function BilanTestPage() {
                   Renseignez votre email ci-dessous : nous vous envoyons votre bilan détaillé avec une lecture
                   pédagogique affinée par notre équipe.
                 </p>
-                <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
+                <LeadCaptureForm 
+                  attemptId={attemptId} 
+                  estimatedLevel={level} 
+                  flags={result.flags} 
+                  reliabilityByLevel={result.reliability_by_level} 
+                  timeMetrics={result.time_metrics || result.time_spent_by_level} 
+                />
               </div>
             </div>
           </div>
@@ -156,7 +162,7 @@ function BilanTestPage() {
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Niveau</span>
                   <span className="text-5xl font-black text-primary flex items-baseline">
                     {level}
-                    {isFragile && <span className="text-xl ml-1 text-primary">*</span>}
+                    {isFragile && <span className="text-sm font-bold ml-1 text-amber-500"> (fragile)</span>}
                   </span>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">CECRL</span>
                 </div>
@@ -232,6 +238,21 @@ function BilanTestPage() {
               </p>
             </div>
 
+            {/* Profil Asymétrique Conseil */}
+            {result.flags?.includes('PROFIL_ASYMETRIQUE') && (
+              <div className="bg-amber-50/60 border border-amber-200 rounded-3xl p-8 shadow-sm space-y-3">
+                <h3 className="text-lg font-black text-amber-900 flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-amber-600 animate-pulse" />
+                  Conseil Pédagogique : Profil Asymétrique Détecté
+                </h3>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  Votre score révèle un écart prononcé entre vos compétences de compréhension écrite et orale. 
+                  Ce profil d'apprentissage asymétrique est très fréquent chez les personnes apprenant en immersion pratique quotidienne. Nous vous recommandons de 
+                  privilégier nos ateliers intensifs de conversation orale pour libérer votre parole tout en consolidant l'écrit.
+                </p>
+              </div>
+            )}
+
             {/* Checklist Section */}
             <ChecklistDocuments type_demarche={level as NiveauIndicatif} />
 
@@ -241,7 +262,13 @@ function BilanTestPage() {
                 <h3 className="text-xl font-black text-slate-900">Recevoir le rapport complet par email</h3>
                 <p className="text-xs text-slate-500">Un document PDF officiel récapitulant vos scores et votre plan de formation.</p>
               </div>
-              <LeadCaptureForm attemptId={attemptId} estimatedLevel={level} />
+              <LeadCaptureForm 
+                attemptId={attemptId} 
+                estimatedLevel={level} 
+                flags={result.flags} 
+                reliabilityByLevel={result.reliability_by_level} 
+                timeMetrics={result.time_metrics || result.time_spent_by_level} 
+              />
             </div>
 
           </div>

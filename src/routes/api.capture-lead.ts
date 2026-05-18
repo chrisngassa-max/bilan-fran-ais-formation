@@ -73,6 +73,7 @@ export const Route = createFileRoute("/api/capture-lead")({
             status: "new",
             partner_status: partnerStatus,
             partner_id: null,
+            attempt_id: payload.attempt_id || null,
             
             // New Sprint 3 Columns
             tunnel,
@@ -81,7 +82,14 @@ export const Route = createFileRoute("/api/capture-lead")({
             destination,
             demarche_inconnue: requestType === "je_ne_sais_pas" || !!payload.demarche_inconnue,
             financement_opt_in: !!payload.financement_opt_in,
-            partenaire_opt_in: partenaireConsent
+            partenaire_opt_in: partenaireConsent,
+            
+            // Capture V3 Flags and Diagnostics in metadata
+            metadata: {
+              flags: payload.flags || [],
+              reliability_by_level: payload.reliability_by_level || {},
+              time_metrics: payload.time_metrics || {}
+            }
           };
 
           // 4. Create Lead in Database (Bypasses RLS safely via Service Role client)

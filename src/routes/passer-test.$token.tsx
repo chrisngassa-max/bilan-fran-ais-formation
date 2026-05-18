@@ -4,6 +4,7 @@ import { Button } from '@/components/bff/Button';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { waHref, contactInfo } from '@/config/site';
 import { 
   ChevronRight, 
   Send, 
@@ -99,128 +100,32 @@ function PasserTestPage() {
     };
   }, [activeStartTime, currentStep]);
 
-  const { data: testPayload, isLoading, error } = useQuery({
+  const { data: testPayload, isLoading, error, refetch } = useQuery({
     queryKey: ['public-placement-test', token],
     queryFn: async () => {
-      try {
-        const response = await Promise.race([
-          supabase.functions.invoke('get-placement-test', {
-            method: 'GET',
-            headers: token === 'latest'
-              ? { 'Content-Type': 'application/json' }
-              : { 'Content-Type': 'application/json', 'x-placement-token': token },
-          }),
-          new Promise<{ data: null; error: Error }>((resolve) => {
-            window.setTimeout(
-              () => resolve({ data: null, error: new Error('Timeout get-placement-test') }),
-              PLACEMENT_TEST_TIMEOUT_MS,
-            );
-          }),
-        ]);
+      const response = await Promise.race([
+        supabase.functions.invoke('get-placement-test', {
+          method: 'GET',
+          headers: token === 'latest'
+            ? { 'Content-Type': 'application/json' }
+            : { 'Content-Type': 'application/json', 'x-placement-token': token },
+        }),
+        new Promise<{ data: null; error: Error }>((_, reject) => {
+          window.setTimeout(
+            () => reject(new Error('Le serveur de test ne répond pas dans le délai imparti.')),
+            PLACEMENT_TEST_TIMEOUT_MS,
+          );
+        }),
+      ]);
 
-        const { data, error } = response;
-        
-        if (error || !data || !Array.isArray(data.items)) {
-          console.warn("Supabase function error, using mock fallback:", error);
-          return getMockTestData();
-        }
-        return data;
-      } catch (err) {
-        console.warn("Supabase function exception, using mock fallback:", err);
-        return getMockTestData();
+      const { data, error } = response as any;
+      
+      if (error || !data || !Array.isArray(data.items)) {
+        throw new Error(error?.message || "Impossible de charger le contenu du test.");
       }
+      return data;
     },
   });
-
-  // Mock data for when Supabase functions are not yet deployed or return 404
-  function getMockTestData() {
-    return {
-      schema_version: "placement_test_v1",
-      test: {
-        id: "mock-test",
-        title: "Bilan Français - Test de positionnement",
-        target_exam: "TCF/IRN",
-        target_public: "Professionnel",
-        estimated_duration_minutes: 20,
-        disclaimer: "Mode démonstration : le serveur de test est momentanément indisponible."
-      },
-      configuration: {
-        levels_covered: ["A2", "B1", "B2"],
-        skills: ["CE", "CO", "EE", "EO"],
-        contexts: ["Vie quotidienne", "Travail"]
-      },
-      items: [
-        {
-          id: "mock-ce-1",
-          skill: "CE",
-          level_cecrl: "A2",
-          difficulty: 1,
-          context: "Email",
-          support_type: "text",
-          support: "Bonjour, j'aimerais réserver une table pour deux personnes ce soir à 20h. Cordialement, Jean.",
-          question: "Que veut faire Jean ?",
-          options: [
-            { id: "A", text: "Réserver un restaurant" },
-            { id: "B", text: "Acheter un billet de train" },
-            { id: "C", text: "Appeler un ami" }
-          ],
-          score: 1,
-          order_index: 0
-        },
-        {
-          id: "mock-co-1",
-          skill: "CO",
-          level_cecrl: "B1",
-          difficulty: 2,
-          context: "Annonce publique",
-          support_type: "text",
-          support: "Annonce simulée : le train pour Lyon partira voie 4 avec dix minutes de retard.",
-          audio_url: "",
-          question: "Quelle information est annoncée ?",
-          options: [
-            { id: "A", text: "Le train est annulé" },
-            { id: "B", text: "Le train a du retard" },
-            { id: "C", text: "Le train change de destination" }
-          ],
-          score: 2,
-          order_index: 1
-        },
-        {
-          id: "mock-ee-1",
-          skill: "EE",
-          level_cecrl: "B2",
-          difficulty: 3,
-          context: "Écrit professionnel",
-          support_type: "text",
-          support: "Votre responsable vous demande de justifier une absence à une réunion importante.",
-          question: "Rédigez un court message professionnel pour expliquer la situation et proposer une solution.",
-          score: 3,
-          order_index: 2
-        },
-        {
-          id: "mock-eo-1",
-          skill: "EO",
-          level_cecrl: "B1",
-          difficulty: 2,
-          context: "Présentation orale",
-          support_type: "text",
-          support: "Vous participez à un entretien de formation.",
-          question: "Présentez votre parcours et expliquez pourquoi vous souhaitez améliorer votre français.",
-          score: 2,
-          order_index: 3
-        }
-      ],
-      scoring_rules: {
-        difficulty_weights: { "1": 1, "2": 2, "3": 3, "4": 4 },
-        level_thresholds: [
-          { level: "A1", min_percent: 0, max_percent: 30 },
-          { level: "A2", min_percent: 31, max_percent: 60 },
-          { level: "B1", min_percent: 61, max_percent: 85 },
-          { level: "B2", min_percent: 86, max_percent: 100 }
-        ]
-      }
-    };
-  }
 
   const groupedItems = testPayload?.items ? {
     CE: testPayload.items.filter((i: any) => i.skill === 'CE'),
@@ -346,8 +251,49 @@ function PasserTestPage() {
     setActiveStartTime(Date.now());
   };
 
-  if (isLoading) return <div className="p-20 text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" /> Chargement du test expert...</div>;
-  if (error) return <div className="p-20 text-center text-red-500">Erreur: {(error as any).message}</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#fcfaf7] flex items-center justify-center p-6">
+        <div className="text-center space-y-4 max-w-sm">
+          <Loader2 className="h-12 w-12 animate-spin text-blue-900 mx-auto" />
+          <h3 className="text-xl font-bold text-slate-800">Chargement du test d'évaluation</h3>
+          <p className="text-slate-500 text-sm">Veuillez patienter, nous récupérons les supports pédagogiques interactifs...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#fcfaf7] py-20 px-4 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-10 text-center space-y-6">
+          <div className="h-20 w-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto text-amber-500">
+            <AlertTriangle className="h-10 w-10 animate-bounce" />
+          </div>
+          <h2 className="text-2xl font-black text-slate-800 leading-tight">Service de positionnement momentanément indisponible</h2>
+          <p className="text-slate-500 text-base leading-relaxed">
+            Notre moteur d'évaluation pédagogique subit actuellement une maintenance technique périodique. Nos équipes sont mobilisées pour le rétablir dans les plus brefs délais.
+          </p>
+          <div className="pt-4 flex flex-col gap-3">
+            <Button
+              onClick={() => refetch()}
+              className="w-full h-14 bg-blue-900 hover:bg-blue-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center"
+            >
+              Réessayer la connexion
+            </Button>
+            <a
+              href={waHref("Bonjour, je rencontre un problème de chargement avec le test de positionnement et je souhaite de l'aide.")}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full h-14 bg-[#25D366] hover:bg-[#20ba56] text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+            >
+              Contact direct WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#fcfaf7] py-12 px-4">
