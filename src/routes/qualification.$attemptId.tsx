@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { track } from '@/utils/tracking-plausible';
-import { getRecommendedJourney } from '@/data/pricing';
+import { useFormationOffers, getRecommendedJourneyFromList } from '@/hooks/useFormationOffers';
 import { Stepper } from '@/components/Stepper';
 import { Tooltip } from '@/components/Tooltip';
 
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/qualification/$attemptId')({
 function QualificationPage() {
   const { attemptId } = Route.useParams();
   const navigate = useNavigate();
+  const { data: journeys } = useFormationOffers();
 
   useEffect(() => {
     track("result_viewed");
@@ -60,8 +61,8 @@ function QualificationPage() {
   const simulation = useMemo(() => {
     const current: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || 'A2';
     
-    // Récupère le parcours de référence depuis pricing.ts
-    const journey = getRecommendedJourney(current);
+    // Récupère le parcours de référence depuis pricing.ts / formation_offers
+    const journey = getRecommendedJourneyFromList(journeys || [], current);
     
     const mobilizedCpf = Math.min(formData.soldeCpf || 0, journey.publicPrice);
     

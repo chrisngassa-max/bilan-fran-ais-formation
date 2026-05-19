@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { JOURNEYS } from "@/data/pricing";
+import { useFormationOffers } from "@/hooks/useFormationOffers";
 import { 
   ArrowRight, 
   Clock, 
@@ -17,6 +17,9 @@ export const Route = createFileRoute("/formations")({
 });
 
 function FormationsPage() {
+  const { data: journeys } = useFormationOffers();
+  const displayJourneys = journeys || [];
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-[1000px] mx-auto space-y-12">
@@ -57,7 +60,7 @@ function FormationsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {JOURNEYS.map((j) => (
+                {displayJourneys.map((j) => (
                   <tr key={j.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="p-6">
                       <div className="space-y-1">
@@ -120,7 +123,7 @@ function FormationsPage() {
           <div className="bg-slate-900 text-white p-4 rounded-t-2xl font-black text-center text-sm uppercase tracking-wider">
             Tableau des Parcours & Tarifs
           </div>
-          {JOURNEYS.map((j) => (
+          {displayJourneys.map((j) => (
             <div key={j.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 hover:-translate-y-1 transition-all duration-300">
               <div className="flex justify-between items-start">
                 <div>
@@ -203,7 +206,7 @@ function FormationsPage() {
         <div className="space-y-6">
           <h2 className="text-2xl font-black text-slate-900 text-center">Fiches détaillées des parcours</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {JOURNEYS.map((j) => (
+            {displayJourneys.map((j) => (
               <div 
                 key={j.id} 
                 className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-slate-300 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
@@ -259,7 +262,7 @@ function FormationsPage() {
         </div>
 
         {/* Bloc Juridique / Avertissement */}
-        <div className="bg-[#ffdbd0]/40 text-[#7e2c0d] p-6 rounded-2xl border border-[#ffdbd0] flex gap-3">
+        <div className="bg-amber-50/60 text-[#7e2c0d] p-6 rounded-2xl border border-amber-200 flex gap-3">
           <Info className="h-6 w-6 shrink-0 mt-0.5" />
           <p className="text-xs font-medium leading-relaxed">
             <strong>Information légale :</strong> Bilan Français Formation est un organisme de formation privé. Nos parcours préparent aux examens officiels mais ne constituent pas des dispenses automatiques. Les démarches de carte de séjour et de naturalisation relèvent de la compétence exclusive de la Préfecture.
@@ -270,3 +273,4 @@ function FormationsPage() {
     </div>
   );
 }
+

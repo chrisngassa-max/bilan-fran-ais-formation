@@ -19,7 +19,7 @@ import { useEffect } from 'react';
 import { ChecklistDocuments } from '@/components/ChecklistDocuments';
 import { type NiveauIndicatif } from '@/types/bilan';
 import { track } from '@/utils/tracking-plausible';
-import { getRecommendedJourney } from '@/data/pricing';
+import { useFormationOffers, getRecommendedJourneyFromList } from '@/hooks/useFormationOffers';
 import { Stepper } from '@/components/Stepper';
 
 export const Route = createFileRoute('/bilan-test/$attemptId')({
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/bilan-test/$attemptId')({
 
 function BilanTestPage() {
   const { attemptId } = Route.useParams();
+  const { data: journeys } = useFormationOffers();
   
   useEffect(() => {
     trackEvent('test_completed', { attempt_id: attemptId });
@@ -103,7 +104,7 @@ function BilanTestPage() {
   }
 
   const level = result.global_level || 'A2';
-  const journey = getRecommendedJourney(level as NiveauIndicatif);
+  const journey = getRecommendedJourneyFromList(journeys || [], level as NiveauIndicatif);
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
