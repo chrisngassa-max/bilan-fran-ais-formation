@@ -1,4 +1,4 @@
-import { getRecommendedJourney } from "@/data/pricing";
+import { getRecommendedJourneyServer } from "./formation-offers.server";
 import { NiveauIndicatif } from "@/types/bilan";
 
 /**
@@ -54,9 +54,9 @@ interface Lead {
 /**
  * Génère le corps de l'email HTML premium selon le jour de la relance.
  */
-export function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magicLink: string): string {
+export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magicLink: string): Promise<string> {
   const level = (lead.estimated_level as NiveauIndicatif) || "A2";
-  const journey = getRecommendedJourney(level);
+  const journey = await getRecommendedJourneyServer(level);
 
   let title = "";
   let intro = "";

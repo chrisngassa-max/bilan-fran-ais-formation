@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
@@ -37,11 +36,6 @@ import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.l
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
 import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
 
-const SimulateurRoute = SimulateurRouteImport.update({
-  id: '/simulateur',
-  path: '/simulateur',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PartenaireRoute = PartenaireRouteImport.update({
   id: '/partenaire',
   path: '/partenaire',
@@ -188,7 +182,6 @@ export interface FileRoutesByFullPath {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
-  '/simulateur': typeof SimulateurRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -216,7 +209,6 @@ export interface FileRoutesByTo {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
-  '/simulateur': typeof SimulateurRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -246,7 +238,6 @@ export interface FileRoutesById {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
-  '/simulateur': typeof SimulateurRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -277,7 +268,6 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
-    | '/simulateur'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -305,7 +295,6 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
-    | '/simulateur'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -334,7 +323,6 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
-    | '/simulateur'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -364,7 +352,6 @@ export interface RootRouteChildren {
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
-  SimulateurRoute: typeof SimulateurRoute
   ApiCaptureLeadRoute: typeof ApiCaptureLeadRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
@@ -373,13 +360,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/simulateur': {
-      id: '/simulateur'
-      path: '/simulateur'
-      fullPath: '/simulateur'
-      preLoaderRoute: typeof SimulateurRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/partenaire': {
       id: '/partenaire'
       path: '/partenaire'
@@ -644,7 +624,6 @@ const rootRouteChildren: RootRouteChildren = {
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
-  SimulateurRoute: SimulateurRoute,
   ApiCaptureLeadRoute: ApiCaptureLeadRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,

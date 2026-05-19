@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { getRecommendedJourney } from "@/data/pricing";
+import { getRecommendedJourneyServer } from "./formation-offers.server";
 import { NiveauIndicatif } from "@/types/bilan";
 
 // Utiliser RESEND_API_KEY depuis process.env
@@ -26,8 +26,8 @@ export interface Lead {
 /**
  * Génère le contenu dynamique du parcours recommandé pour l'email.
  */
-export function buildJourneyEmailContent(level: NiveauIndicatif, first_name: string, attemptId: string) {
-  const journey = getRecommendedJourney(level);
+export async function buildJourneyEmailContent(level: NiveauIndicatif, first_name: string, attemptId: string) {
+  const journey = await getRecommendedJourneyServer(level);
   
   const qualificationUrl = attemptId 
     ? `https://bilanfrancaisformation.fr/qualification/${attemptId}`
@@ -100,7 +100,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
 
   try {
     const level = (lead.estimated_level as NiveauIndicatif) || "A2";
-    const journeyContent = buildJourneyEmailContent(level, lead.first_name, lead.id);
+    const journeyContent = await buildJourneyEmailContent(level, lead.first_name, lead.id);
 
     const { data, error } = await resend.emails.send({
       from: "Bilan Français Formation <bilan@bilanfrancaisformation.fr>",
