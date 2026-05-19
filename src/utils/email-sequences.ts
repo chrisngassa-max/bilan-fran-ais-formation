@@ -151,7 +151,7 @@ export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magic
       <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0 20px 0;">
       <p style="font-size: 10px; color: #94a3b8; text-align: center;">
         Vous recevez cet email car vous avez effectué un test de positionnement en français. <br>
-        <a href="${magicLink}" style="color: #ea580c; text-decoration: underline;">Se désinscrire de cette liste</a>.
+        <a href="https://bilanfrancaisformation.fr/unsubscribe" style="color: #ea580c; text-decoration: underline;">Se désinscrire de cette liste</a>.
       </p>
     </div>
   `;

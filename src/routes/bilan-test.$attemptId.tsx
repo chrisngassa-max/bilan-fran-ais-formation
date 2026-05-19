@@ -61,7 +61,7 @@ function BilanTestPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">
         <Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" />
-        <span className="font-extrabold text-slate-800 text-lg">Analyse linguistique et calcul de votre profil expert...</span>
+        <span className="font-extrabold text-slate-800 text-lg">Analyse linguistique et estimation automatique de votre niveau...</span>
       </div>
     );
   }
@@ -170,7 +170,7 @@ function BilanTestPage() {
                 
                 <div className="flex-1 text-center md:text-left space-y-3">
                   <span className="text-xs font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                    PROFIL VALIDÉ PAR L'ALGORITHME
+                    ESTIMATION AUTOMATIQUE À CARACTÈRE INDICATIF
                   </span>
                   <h2 className="text-2xl font-black text-slate-900">Parcours Recommandé : {journey.name}</h2>
                   <p className="text-slate-600 text-sm leading-relaxed italic">

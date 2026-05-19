@@ -116,7 +116,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
           <h3 style="color: #0f172a; font-size: 18px; font-weight: 800;">Bonjour ${lead.first_name},</h3>
 
           <p style="font-size: 14px; color: #475569;">
-            Félicitations pour avoir complété votre évaluation de français. Nos algorithmes académiques ont analysé vos réponses et déterminé votre niveau indicatif.
+            Félicitations pour avoir complété votre évaluation de français. Notre système d'évaluation automatique a analysé vos réponses et déterminé votre niveau indicatif.
           </p>
 
           <div style="background-color: #f1f5f9; border-left: 4px solid #0f172a; padding: 15px 20px; border-radius: 8px; margin: 20px 0;">
@@ -140,7 +140,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
 
           <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0 20px 0;">
           <p style="font-size: 11px; color: #94a3b8; text-align: center;">
-            Organisme agréé. RGPD compliant. Vous pouvez demander la suppression de vos données à tout moment conformément à la loi informatique et libertés.
+            Organisme agréé. RGPD compliant. Vous pouvez demander la suppression de vos données ou <a href="https://bilanfrancaisformation.fr/unsubscribe" style="color: #ea580c; text-decoration: underline;">vous désinscrire</a> à tout moment.
           </p>
         </div>
       `
