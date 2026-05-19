@@ -17,19 +17,30 @@ import {
   Play
 } from 'lucide-react';
 
+import { z } from 'zod';
+
+const searchSchema = z.object({
+  prenom: z.string().optional(),
+  whatsapp: z.string().optional(),
+  type_demarche: z.string().optional(),
+  date_rdv: z.string().optional(),
+});
+
 export const Route = createFileRoute('/passer-test/$token')({
   component: PasserTestPage,
+  validateSearch: (search) => searchSchema.parse(search),
 });
 
 const PLACEMENT_TEST_TIMEOUT_MS = 6000;
 
 function PasserTestPage() {
   const { token } = Route.useParams();
+  const search = Route.useSearch();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0); 
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [answers, setAnswers] = useState<any[]>([]);
-  const [studentName, setStudentName] = useState('');
+  const [studentName, setStudentName] = useState(search.prenom || '');
   
   // Audio state
   const [audioPlayed, setAudioPlayed] = useState<Record<string, boolean>>({});

@@ -186,7 +186,8 @@ function MonEspacePage() {
             le test — un nouveau lien vous sera envoyé par email.
           </p>
           <Link
-            to="/test-complet"
+            to="/passer-test/$token"
+            params={{ token: "latest" }}
             className="inline-flex items-center justify-center px-5 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90"
           >
             Refaire le test →
@@ -244,7 +245,8 @@ function MonEspacePage() {
             </div>
             <div>
               <Link
-                to="/test-complet"
+                to="/passer-test/$token"
+                params={{ token: "latest" }}
                 className="text-sm font-semibold text-primary hover:underline"
               >
                 Refaire le test →
@@ -343,7 +345,8 @@ function MonEspacePage() {
           </h2>
           <div className="grid sm:grid-cols-3 gap-3">
             <Link
-              to="/test-complet"
+              to="/passer-test/$token"
+              params={{ token: "latest" }}
               className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
             >
               <p className="text-sm font-semibold text-gray-900">Refaire le test</p>

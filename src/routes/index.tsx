@@ -42,7 +42,8 @@ function IndexPage() {
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <Link
-              to="/test-rapide"
+              to="/passer-test/$token"
+              params={{ token: "latest" }}
               onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
               className="w-full md:w-auto"
             >
@@ -230,13 +231,13 @@ function IndexPage() {
               <div className="bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Clock className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">Test rapide 2 minutes</h3>
+              <h3 className="text-2xl font-bold mb-2">Évaluation en ligne</h3>
               <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
-                10 questions ciblées pour obtenir une estimation immédiate et découvrir la formule adaptée à votre délai.
+                Estimez votre niveau de français avec notre test rapide de positionnement et découvrez la formule adaptée.
               </p>
-              <Link to="/test-rapide">
+              <Link to="/passer-test/$token" params={{ token: "latest" }}>
                 <button className="w-full h-14 bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
-                  Lancer le test rapide
+                  Lancer l'évaluation
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </Link>
@@ -248,14 +249,15 @@ function IndexPage() {
               </div>
               <h3 className="text-2xl font-bold mb-2">Diagnostic complet</h3>
               <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
-                30 minutes d'évaluation approfondie sur les 4 compétences (oral, écrit, grammaire) pour un programme sur-mesure.
+                Test officiel de positionnement approfondi sur les compétences clés (écrit, oral, production).
               </p>
               <Link 
-                to="/test-complet" 
+                to="/passer-test/$token" 
+                params={{ token: "latest" }}
                 onClick={() => trackEvent("home_diagnostic_click")}
               >
                 <button className="w-full h-14 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
-                  Passer le test de positionnement complet
+                  Passer le diagnostic complet
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </Link>

@@ -9,8 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestRapideRouteImport } from './routes/test-rapide'
-import { Route as TestCompletRouteImport } from './routes/test-complet'
 import { Route as SimulateurRouteImport } from './routes/simulateur'
 import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
@@ -39,16 +37,6 @@ import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.l
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
 import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
 
-const TestRapideRoute = TestRapideRouteImport.update({
-  id: '/test-rapide',
-  path: '/test-rapide',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TestCompletRoute = TestCompletRouteImport.update({
-  id: '/test-complet',
-  path: '/test-complet',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SimulateurRoute = SimulateurRouteImport.update({
   id: '/simulateur',
   path: '/simulateur',
@@ -201,8 +189,6 @@ export interface FileRoutesByFullPath {
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
-  '/test-complet': typeof TestCompletRoute
-  '/test-rapide': typeof TestRapideRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -231,8 +217,6 @@ export interface FileRoutesByTo {
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
-  '/test-complet': typeof TestCompletRoute
-  '/test-rapide': typeof TestRapideRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -263,8 +247,6 @@ export interface FileRoutesById {
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/simulateur': typeof SimulateurRoute
-  '/test-complet': typeof TestCompletRoute
-  '/test-rapide': typeof TestRapideRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -296,8 +278,6 @@ export interface FileRouteTypes {
     | '/niveaux'
     | '/partenaire'
     | '/simulateur'
-    | '/test-complet'
-    | '/test-rapide'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -326,8 +306,6 @@ export interface FileRouteTypes {
     | '/niveaux'
     | '/partenaire'
     | '/simulateur'
-    | '/test-complet'
-    | '/test-rapide'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -357,8 +335,6 @@ export interface FileRouteTypes {
     | '/niveaux'
     | '/partenaire'
     | '/simulateur'
-    | '/test-complet'
-    | '/test-rapide'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -389,8 +365,6 @@ export interface RootRouteChildren {
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
   SimulateurRoute: typeof SimulateurRoute
-  TestCompletRoute: typeof TestCompletRoute
-  TestRapideRoute: typeof TestRapideRoute
   ApiCaptureLeadRoute: typeof ApiCaptureLeadRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
   PasserTestTokenRoute: typeof PasserTestTokenRoute
@@ -399,20 +373,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/test-rapide': {
-      id: '/test-rapide'
-      path: '/test-rapide'
-      fullPath: '/test-rapide'
-      preLoaderRoute: typeof TestRapideRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/test-complet': {
-      id: '/test-complet'
-      path: '/test-complet'
-      fullPath: '/test-complet'
-      preLoaderRoute: typeof TestCompletRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/simulateur': {
       id: '/simulateur'
       path: '/simulateur'
@@ -685,8 +645,6 @@ const rootRouteChildren: RootRouteChildren = {
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
   SimulateurRoute: SimulateurRoute,
-  TestCompletRoute: TestCompletRoute,
-  TestRapideRoute: TestRapideRoute,
   ApiCaptureLeadRoute: ApiCaptureLeadRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
   PasserTestTokenRoute: PasserTestTokenRoute,

@@ -177,7 +177,8 @@ function FormationsPage() {
         {/* Call to Actions Principaux */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link 
-            to="/test-rapide"
+            to="/passer-test/$token"
+            params={{ token: "latest" }}
             onClick={() => trackEvent("formations_cta_click", { action: "start_test" })}
             className="flex-1 max-w-sm"
           >

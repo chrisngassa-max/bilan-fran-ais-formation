@@ -60,7 +60,14 @@ export function AlerteAttestationManquante({
         return (
           <Link 
             key="A"
-            to={`/test-rapide${prefillQuery}`}
+            to="/passer-test/$token"
+            params={{ token: "latest" }}
+            search={{
+              prenom: prenom || undefined,
+              whatsapp: whatsapp || undefined,
+              type_demarche: type_demarche || undefined,
+              date_rdv: date_rdv || undefined,
+            }}
             id="card-alerte-action-a"
             onClick={() => handleBlocClic("A")}
             className="flex items-center p-5 bg-[#eff6ff] border-2 border-blue-100 hover:border-blue-300 rounded-2xl hover:bg-blue-50/50 transition-all duration-200 group select-none"
@@ -70,10 +77,10 @@ export function AlerteAttestationManquante({
             </div>
             <div className="flex-1">
               <h4 className="font-extrabold text-blue-900 text-sm flex items-center gap-2">
-                ⚡ Je veux estimer mon niveau rapidement
+                ⚡ Je veux évaluer mon niveau en ligne
               </h4>
               <p className="text-xs text-blue-700 leading-normal font-semibold mt-1">
-                Test rapide en 2 minutes · Première estimation instantanée + formule adaptée à votre délai de rendez-vous en préfecture.
+                Test de positionnement gratuit · Première estimation instantanée + formule adaptée à votre délai de rendez-vous en préfecture.
               </p>
             </div>
             <ChevronRight className="h-5 w-5 text-blue-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
@@ -83,7 +90,14 @@ export function AlerteAttestationManquante({
         return (
           <Link 
             key="B"
-            to={`/test-complet${prefillQuery}`}
+            to="/passer-test/$token"
+            params={{ token: "latest" }}
+            search={{
+              prenom: prenom || undefined,
+              whatsapp: whatsapp || undefined,
+              type_demarche: type_demarche || undefined,
+              date_rdv: date_rdv || undefined,
+            }}
             id="card-alerte-action-b"
             onClick={() => handleBlocClic("B")}
             className="flex items-center p-5 bg-[#faf5ff] border-2 border-purple-100 hover:border-purple-300 rounded-2xl hover:bg-purple-50/50 transition-all duration-200 group select-none"
@@ -93,10 +107,10 @@ export function AlerteAttestationManquante({
             </div>
             <div className="flex-1">
               <h4 className="font-extrabold text-purple-900 text-sm flex items-center gap-2">
-                🎯 Je veux un diagnostic précis
+                🎯 Diagnostic Pédagogique Complet
               </h4>
               <p className="text-xs text-purple-700 leading-normal font-semibold mt-1">
-                Test de positionnement complet en 30 minutes · Analyse détaillée de 4 compétences (écrit, oral, production, grammaire) pour un programme sur-mesure.
+                Test officiel de positionnement · Analyse détaillée de vos compétences (écrit, oral, production) pour un programme sur-mesure.
               </p>
             </div>
             <ChevronRight className="h-5 w-5 text-purple-400 group-hover:translate-x-1 transition-transform shrink-0 ml-2" />
