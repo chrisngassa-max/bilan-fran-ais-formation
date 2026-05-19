@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
-import { type NiveauIndicatif } from "@/types/bilan";
-import { type Journey } from "@/data/pricing";
+import { type NiveauIndicatif, type Journey } from "@/types/bilan";
 
 export const FALLBACK_JOURNEYS: Journey[] = [
   {

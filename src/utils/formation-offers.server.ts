@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { type NiveauIndicatif } from "@/types/bilan";
-import { type Journey } from "@/data/pricing";
+import { type NiveauIndicatif, type Journey } from "@/types/bilan";
 import { FALLBACK_JOURNEYS, mapDbOfferToJourney, getRecommendedJourneyFromList } from "../hooks/useFormationOffers";
 
 export async function getFormationOffersServer(): Promise<Journey[]> {
