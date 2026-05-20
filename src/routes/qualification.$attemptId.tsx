@@ -28,7 +28,7 @@ export const Route = createFileRoute('/qualification/$attemptId')({
 function QualificationPage() {
   const { attemptId } = Route.useParams();
   const navigate = useNavigate();
-  const { data: journeys } = useFormationOffers();
+  const { data: journeys, isError: journeysError, isLoading: journeysLoading } = useFormationOffers();
 
   useEffect(() => {
     track("result_viewed");
@@ -59,10 +59,18 @@ function QualificationPage() {
 
   // Calcul du Parcours et du Financement dynamique depuis pricing.ts
   const simulation = useMemo(() => {
+    if (!journeys) return null;
+
     const current: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || 'A2';
+    const recommendedOfferCode = testResult?.recommended_pathway || testResult?.raw_analysis?.recommended_offer_code;
     
-    // Récupère le parcours de référence depuis pricing.ts / formation_offers
-    const journey = getRecommendedJourneyFromList(journeys || [], current);
+    let journey = null;
+    if (recommendedOfferCode) {
+      journey = journeys.find((j: any) => j.id === recommendedOfferCode);
+    }
+    if (!journey) {
+      journey = getRecommendedJourneyFromList(journeys, current);
+    }
     
     const mobilizedCpf = Math.min(formData.soldeCpf || 0, journey.publicPrice);
     
@@ -79,7 +87,7 @@ function QualificationPage() {
     else if (rac === 0 || formData.hasMainDocs) priority = 'haute';
 
     return { journey, mobilizedCpf, opcoEst, totalAides, rac, priority };
-  }, [testResult, formData]);
+  }, [testResult, formData, journeys]);
 
   const submitMutation = useMutation({
     onSuccess: () => {
@@ -87,6 +95,7 @@ function QualificationPage() {
       navigate({ to: '/' });
     },
     mutationFn: async () => {
+      if (!simulation) throw new Error("Simulation indisponible");
       const { data, error } = await supabase
         .from('dossiers')
         .insert({
@@ -129,11 +138,20 @@ function QualificationPage() {
     }
   });
 
-  if (loadingTest) {
+  if (loadingTest || journeysLoading) {
     return (
       <div className="p-20 text-center">
         <Loader2 className="animate-spin h-8 w-8 mx-auto mb-4 text-primary" />
         <span className="font-extrabold text-slate-800">Chargement de votre profil et initialisation du simulateur...</span>
+      </div>
+    );
+  }
+
+  if (journeysError || !simulation) {
+    return (
+      <div className="p-20 text-center">
+        <AlertTriangle className="h-10 w-10 mx-auto mb-4 text-red-500" />
+        <span className="font-extrabold text-slate-800 text-lg">Erreur de chargement des offres de formation.</span>
       </div>
     );
   }
@@ -282,7 +300,7 @@ function QualificationPage() {
                 </div>
 
                 <Button 
-                  disabled={!formData.status || submitMutation.isPending}
+                  disabled={!formData.status || submitMutation.isPending || !simulation}
                   onClick={() => submitMutation.mutate()}
                   className="w-full h-16 bg-primary hover:bg-primary/95 text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-3 shadow-xl transition-all active:scale-95 disabled:opacity-50"
                 >

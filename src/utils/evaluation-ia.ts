@@ -11,6 +11,7 @@
  */
 
 import type { NiveauIndicatif } from "@/types/bilan";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export interface EvaluationIAInput {
   consigne: string;
@@ -143,84 +144,31 @@ export async function evaluerProductionIA(
 ): Promise<EvaluationIAOutput> {
   assertServeurUniquement();
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    console.warn("[evaluation-ia] ANTHROPIC_API_KEY manquant — fallback déterministe.");
-    return scoringFallback(input.texte_candidat, input.niveau_cible);
-  }
-
-  const systemPrompt =
-    "Tu es un examinateur expert FLE (Français Langue Étrangère) formé au CECRL. " +
-    "Tu évalues une production écrite de manière bienveillante mais rigoureuse. " +
-    "Tu ne délivres JAMAIS de certification : tu donnes un NIVEAU ESTIMÉ indicatif. " +
-    "Tu réponds STRICTEMENT en JSON valide, sans texte autour, conforme au schéma demandé.";
-
-  const userPrompt = `Consigne donnée au candidat :
-"""${input.consigne}"""
-
-Niveau CECRL visé : ${input.niveau_cible}
-
-Production écrite du candidat :
-"""${input.texte_candidat}"""
-
-Évalue cette production. Réponds UNIQUEMENT avec un JSON de cette forme :
-{
-  "score": <entier 0-100>,
-  "niveau_estime": "A1"|"A2"|"B1"|"B1_nat"|"B2"|"a_verifier",
-  "points_forts": [string, ...],   // 2 à 4 points concrets
-  "points_ameliorer": [string, ...], // 2 à 4 points concrets et actionnables
-  "commentaire": string             // 2-4 phrases, ton bienveillant, parle de "niveau estimé"
-}`;
-
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1024,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }],
-      }),
+    const { data, error } = await supabaseAdmin.functions.invoke('evaluate-written-production', {
+      body: {
+        consigne: input.consigne,
+        texte_candidat: input.texte_candidat,
+        niveau_cible: input.niveau_cible,
+      }
     });
 
-    if (!res.ok) {
-      console.warn(
-        `[evaluation-ia] Anthropic HTTP ${res.status} — fallback déterministe.`,
-      );
+    if (error || !data) {
+      console.warn("[evaluation-ia] Edge Function a échoué — fallback déterministe.", error);
       return scoringFallback(input.texte_candidat, input.niveau_cible);
     }
 
-    const data = (await res.json()) as {
-      content?: Array<{ type?: string; text?: string }>;
-    };
-    let raw = data.content?.find((c) => c.type === "text")?.text ?? "";
-    // Claude peut entourer le JSON de ```json ... ``` — on extrait le bloc.
-    const match = raw.match(/\{[\s\S]*\}/);
-    if (match) raw = match[0];
-    const parsed = JSON.parse(raw) as Partial<EvaluationIAOutput>;
-
-    const score = Math.max(0, Math.min(100, Math.round(Number(parsed.score ?? 0))));
-    const points_forts = Array.isArray(parsed.points_forts)
-      ? parsed.points_forts.filter((s) => typeof s === "string").slice(0, 6)
-      : [];
-    const points_ameliorer = Array.isArray(parsed.points_ameliorer)
-      ? parsed.points_ameliorer.filter((s) => typeof s === "string").slice(0, 6)
-      : [];
+    if (data.error) {
+      console.warn(`[evaluation-ia] Erreur de l'API IA: ${data.error} — fallback déterministe.`);
+      return scoringFallback(input.texte_candidat, input.niveau_cible);
+    }
 
     return {
-      score,
-      niveau_estime: normaliserNiveau(parsed.niveau_estime, input.niveau_cible),
-      points_forts,
-      points_ameliorer,
-      commentaire:
-        typeof parsed.commentaire === "string" && parsed.commentaire.trim().length > 0
-          ? parsed.commentaire
-          : "Niveau estimé indicatif basé sur l'analyse de votre production.",
+      score: data.score,
+      niveau_estime: normaliserNiveau(data.niveau_estime, input.niveau_cible),
+      points_forts: data.points_forts || [],
+      points_ameliorer: data.points_ameliorer || [],
+      commentaire: data.commentaire || "Niveau estimé indicatif basé sur l'analyse de votre production.",
       evaluated_by: "ia",
     };
   } catch (err) {

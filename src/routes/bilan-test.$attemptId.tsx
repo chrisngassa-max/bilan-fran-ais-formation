@@ -15,7 +15,7 @@ import {
 import { trackEvent } from '@/lib/analytics';
 import { waHref } from '@/config/site';
 import { LeadCaptureForm } from '@/components/LeadCaptureForm';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChecklistDocuments } from '@/components/ChecklistDocuments';
 import { type NiveauIndicatif } from '@/types/bilan';
 import { track } from '@/utils/tracking-plausible';
@@ -28,7 +28,8 @@ export const Route = createFileRoute('/bilan-test/$attemptId')({
 
 function BilanTestPage() {
   const { attemptId } = Route.useParams();
-  const { data: journeys } = useFormationOffers();
+  const { data: journeys, isError: journeysError } = useFormationOffers();
+  const [bypassFatigue, setBypassFatigue] = useState(false);
   
   useEffect(() => {
     trackEvent('test_completed', { attempt_id: attemptId });
@@ -80,7 +81,7 @@ function BilanTestPage() {
   const isFragile = result.flags?.some((f: string) => f.startsWith('FIABILITE_FAIBLE'));
 
   // Modale bloquante de fatigue
-  if (hasFatigue) {
+  if (hasFatigue && !bypassFatigue) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="bg-white p-10 rounded-3xl border border-slate-200 max-w-lg w-full text-center space-y-6 shadow-sm">
@@ -93,18 +94,50 @@ function BilanTestPage() {
           <p className="text-primary font-bold bg-primary/5 p-4 rounded-xl border border-primary/20">
             Nous vous invitons à vous reposer et à repasser l'évaluation dans de meilleures conditions.
           </p>
-          <Link to="/passer-test/$token" params={{ token: "latest" }} className="block w-full">
-            <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-xl hover:opacity-90 transition-all">
-              Recommencer plus tard
+          <div className="space-y-3 w-full">
+            <Link to="/passer-test/$token" params={{ token: "latest" }} className="block w-full">
+              <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-xl hover:opacity-90 transition-all">
+                Recommencer plus tard
+              </button>
+            </Link>
+            <button 
+              onClick={() => setBypassFatigue(true)}
+              className="w-full h-14 bg-transparent text-slate-500 font-bold rounded-xl hover:bg-slate-100 transition-all"
+            >
+              Continuer vers mon bilan
             </button>
-          </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   const level = result.global_level || 'A2';
-  const journey = getRecommendedJourneyFromList(journeys || [], level as NiveauIndicatif);
+  const recommendedOfferCode = result.recommended_pathway || result.raw_analysis?.recommended_offer_code;
+  
+  let journey = null;
+  if (journeys && recommendedOfferCode) {
+    journey = journeys.find((j: any) => j.id === recommendedOfferCode);
+  }
+  if (!journey && journeys) {
+    journey = getRecommendedJourneyFromList(journeys, level as NiveauIndicatif);
+  }
+
+  // Retrieve candidate details from session storage
+  const getSavedCandidateInfo = () => {
+    if (typeof window === 'undefined') return null;
+    const saved = sessionStorage.getItem('bff_candidate_info');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return null;
+  };
+  const savedInfo = getSavedCandidateInfo();
+  const typeDemarche = savedInfo?.type_demarche || "je_ne_sais_pas";
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
@@ -123,6 +156,12 @@ function BilanTestPage() {
             <p className="text-slate-500 font-semibold text-base">Candidat : {result.placement_test_attempts.student_name}</p>
           )}
         </div>
+
+        {journeysError && (
+          <div className="bg-red-50 p-4 rounded-xl border border-red-200 text-red-700 text-sm font-bold text-center">
+            Erreur lors du chargement des offres de formation. Veuillez réessayer plus tard.
+          </div>
+        )}
 
         {isIncoherent ? (
           <div className="rounded-3xl border-2 border-red-200 shadow-sm bg-red-50/50 overflow-hidden">
@@ -150,7 +189,7 @@ function BilanTestPage() {
               </div>
             </div>
           </div>
-        ) : (
+        ) : ( journey ? (
           <div className="space-y-8">
             
             {/* BLOC PRINCIPAL — Score et Recommandation Unifiée */}
@@ -239,6 +278,20 @@ function BilanTestPage() {
               </p>
             </div>
 
+            {/* Proof Validation Badges */}
+            {result.flags?.some((f: string) => f.startsWith('SOCLE_VALIDE_PAR_PREUVE')) && (
+              <div className="bg-emerald-50/60 border border-emerald-200 rounded-3xl p-8 shadow-sm space-y-3">
+                <h3 className="text-lg font-black text-emerald-900 flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                  Socle Validé par Preuve
+                </h3>
+                <p className="text-slate-700 text-sm leading-relaxed">
+                  Votre niveau actuel a été validé formellement par notre système automatisé à l'aide de preuves mathématiques solides. 
+                  Vous êtes parfaitement capable de vous inscrire à l'offre recommandée ci-dessus.
+                </p>
+              </div>
+            )}
+
             {/* Profil Asymétrique Conseil */}
             {result.flags?.includes('PROFIL_ASYMETRIQUE') && (
               <div className="bg-amber-50/60 border border-amber-200 rounded-3xl p-8 shadow-sm space-y-3">
@@ -255,7 +308,7 @@ function BilanTestPage() {
             )}
 
             {/* Checklist Section */}
-            <ChecklistDocuments type_demarche={level as NiveauIndicatif} />
+            <ChecklistDocuments type_demarche={typeDemarche} />
 
             {/* Lead Capture */}
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
@@ -273,7 +326,7 @@ function BilanTestPage() {
             </div>
 
           </div>
-        )}
+        ) : null )}
 
         {/* Action Grid - canaux secondaires */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

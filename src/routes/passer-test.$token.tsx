@@ -37,11 +37,34 @@ function PasserTestPage() {
   const { token } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(0); 
-  const [currentItemIndex, setCurrentItemIndex] = useState(0);
-  const [answers, setAnswers] = useState<any[]>([]);
-  const [studentName, setStudentName] = useState(search.prenom || '');
+  const SESSION_KEY = `test_session_${token}`;
+
+  // Helper to load session synchronously
+  const getInitialSession = () => {
+    if (typeof window === 'undefined') return null;
+    const saved = sessionStorage.getItem(SESSION_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved session", e);
+      }
+    }
+    return null;
+  };
+
+  const initialSession = getInitialSession();
+
+  const [currentStep, setCurrentStep] = useState(initialSession?.step ?? 0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(initialSession?.index ?? 0);
+  const [answers, setAnswers] = useState<any[]>(initialSession?.savedAnswers ?? []);
   
+  // Persisted search params state
+  const [studentName, setStudentName] = useState(initialSession?.name ?? search.prenom ?? '');
+  const [whatsapp, setWhatsapp] = useState(initialSession?.whatsapp ?? search.whatsapp ?? '');
+  const [typeDemarche, setTypeDemarche] = useState(initialSession?.typeDemarche ?? search.type_demarche ?? '');
+  const [dateRdv, setDateRdv] = useState(initialSession?.dateRdv ?? search.date_rdv ?? '');
+
   // Audio state
   const [audioPlayed, setAudioPlayed] = useState<Record<string, boolean>>({});
   const [isRecording, setIsRecording] = useState(false);
@@ -49,39 +72,32 @@ function PasserTestPage() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   
-  // Timer and Persistence state
+  // Timer state
   const [activeStartTime, setActiveStartTime] = useState<number>(Date.now());
   const accumulatedTimeRef = useRef<number>(0);
-  const SESSION_KEY = `test_session_${token}`;
 
-  // Load persistence on mount
+  // Synchronize with sessionStorage whenever state changes
   useEffect(() => {
-    const saved = sessionStorage.getItem(SESSION_KEY);
-    if (saved) {
-      try {
-        const { step, index, savedAnswers, name } = JSON.parse(saved);
-        setCurrentStep(step);
-        setCurrentItemIndex(index);
-        setAnswers(savedAnswers);
-        setStudentName(name);
-        toast.info("Session restaurée. Vous pouvez reprendre votre test.");
-      } catch (e) {
-        console.error("Failed to restore session", e);
-      }
-    }
-  }, [SESSION_KEY]);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+      step: currentStep,
+      index: currentItemIndex,
+      savedAnswers: answers,
+      name: studentName,
+      whatsapp,
+      typeDemarche,
+      dateRdv
+    }));
+  }, [currentStep, currentItemIndex, answers, studentName, whatsapp, typeDemarche, dateRdv, SESSION_KEY]);
 
-  // Save persistence on change
+  // Synchronize candidate details globally for LeadCaptureForm & Bilan page
   useEffect(() => {
-    if (currentStep > 0) {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
-        step: currentStep,
-        index: currentItemIndex,
-        savedAnswers: answers,
-        name: studentName
-      }));
-    }
-  }, [currentStep, currentItemIndex, answers, studentName, SESSION_KEY]);
+    sessionStorage.setItem('bff_candidate_info', JSON.stringify({
+      prenom: studentName,
+      whatsapp,
+      type_demarche: typeDemarche,
+      date_rdv: dateRdv
+    }));
+  }, [studentName, whatsapp, typeDemarche, dateRdv]);
 
   // Active Timer Logic (only count time when tab is visible)
   useEffect(() => {

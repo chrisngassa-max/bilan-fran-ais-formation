@@ -16,9 +16,25 @@ const LS_KEY = "bff_lead_pending";
 const CONSENT_VERSION = "v1.0";
 
 export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityByLevel, timeMetrics }: Props) {
-  const [firstName, setFirstName] = useState("");
+  // Read persisted candidate details from sessionStorage
+  const getSavedCandidateInfo = () => {
+    if (typeof window === 'undefined') return null;
+    const saved = sessionStorage.getItem('bff_candidate_info');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse bff_candidate_info", e);
+      }
+    }
+    return null;
+  };
+
+  const savedInfo = getSavedCandidateInfo();
+
+  const [firstName, setFirstName] = useState(savedInfo?.prenom || "");
   const [email, setEmail] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
+  const [whatsapp, setWhatsapp] = useState(savedInfo?.whatsapp || "");
   const [consentTraining, setConsentTraining] = useState(false);
   const [consentPartner, setConsentPartner] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -95,6 +111,8 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
       flags: flags ?? undefined,
       reliability_by_level: reliabilityByLevel ?? undefined,
       time_metrics: timeMetrics ?? undefined,
+      type_demarche: savedInfo?.type_demarche || undefined,
+      date_rdv: savedInfo?.date_rdv || undefined,
     };
 
     try {

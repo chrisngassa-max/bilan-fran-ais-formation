@@ -7,7 +7,9 @@ import {
   ShieldCheck, 
   GraduationCap, 
   Check, 
-  Info 
+  Info,
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { Tooltip } from "@/components/Tooltip";
@@ -17,7 +19,7 @@ export const Route = createFileRoute("/formations")({
 });
 
 function FormationsPage() {
-  const { data: journeys } = useFormationOffers();
+  const { data: journeys, isError: journeysError, isLoading: journeysLoading } = useFormationOffers();
   const displayJourneys = journeys || [];
 
   return (
@@ -43,8 +45,27 @@ function FormationsPage() {
           </div>
         </div>
 
-        {/* Tableau Comparatif - Desktop uniquement */}
-        <div className="hidden md:block bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+        </div>
+
+        {journeysLoading && (
+          <div className="flex flex-col items-center justify-center p-20 text-center">
+            <Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" />
+            <span className="font-extrabold text-slate-800 text-lg">Chargement des offres...</span>
+          </div>
+        )}
+
+        {journeysError && (
+          <div className="bg-red-50 p-6 rounded-2xl border border-red-200 text-center space-y-3">
+            <AlertCircle className="h-10 w-10 text-red-500 mx-auto" />
+            <h2 className="font-black text-red-900 text-xl">Catalogue indisponible</h2>
+            <p className="text-red-700 font-semibold">Une erreur est survenue lors de la récupération des offres.</p>
+          </div>
+        )}
+
+        {!journeysLoading && !journeysError && (
+          <div className="space-y-12">
+            {/* Tableau Comparatif - Desktop uniquement */}
+            <div className="hidden md:block bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -268,6 +289,7 @@ function FormationsPage() {
             <strong>Information légale :</strong> Bilan Français Formation est un organisme de formation privé. Nos parcours préparent aux examens officiels mais ne constituent pas des dispenses automatiques. Les démarches de carte de séjour et de naturalisation relèvent de la compétence exclusive de la Préfecture.
           </p>
         </div>
+        )}
 
       </div>
     </div>

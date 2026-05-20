@@ -83,6 +83,9 @@ export const Route = createFileRoute("/api/capture-lead")({
             demarche_inconnue: requestType === "je_ne_sais_pas" || !!payload.demarche_inconnue,
             financement_opt_in: !!payload.financement_opt_in,
             partenaire_opt_in: partenaireConsent,
+            type_demarche: requestType,
+            situation_pro: payload.situation_pro || null,
+            date_rdv_prefecture: payload.date_rdv || payload.date_rdv_prefecture || null,
             
             // Capture V3 Flags and Diagnostics in metadata
             metadata: {

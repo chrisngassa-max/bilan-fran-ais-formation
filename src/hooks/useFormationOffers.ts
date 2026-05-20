@@ -122,7 +122,6 @@ export function useFormationOffers() {
       }
       return (data || []).map(mapDbOfferToJourney);
     },
-    initialData: FALLBACK_JOURNEYS,
     staleTime: 1000 * 60 * 10, // 10 minutes cache
   });
 }
