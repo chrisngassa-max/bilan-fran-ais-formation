@@ -23,6 +23,7 @@ import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccompagnementAdministratifRouteImport } from './routes/accompagnement-administratif'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FinancementIndexRouteImport } from './routes/financement.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
@@ -107,6 +108,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const FinancementIndexRoute = FinancementIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FinancementRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/financement/': typeof FinancementIndexRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -209,7 +216,6 @@ export interface FileRoutesByTo {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/financement': typeof FinancementRouteWithChildren
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -227,6 +233,7 @@ export interface FileRoutesByTo {
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin': typeof AdminIndexRoute
+  '/financement': typeof FinancementIndexRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -257,6 +264,7 @@ export interface FileRoutesById {
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/financement/': typeof FinancementIndexRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -288,6 +296,7 @@ export interface FileRouteTypes {
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/admin/'
+    | '/financement/'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -298,7 +307,6 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/dashboard'
-    | '/financement'
     | '/formations'
     | '/login'
     | '/mentions-legales'
@@ -316,6 +324,7 @@ export interface FileRouteTypes {
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/admin'
+    | '/financement'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/admin/'
+    | '/financement/'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -470,6 +480,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/financement/': {
+      id: '/financement/'
+      path: '/'
+      fullPath: '/financement/'
+      preLoaderRoute: typeof FinancementIndexRouteImport
+      parentRoute: typeof FinancementRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -608,10 +625,12 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface FinancementRouteChildren {
   FinancementCpfRoute: typeof FinancementCpfRoute
+  FinancementIndexRoute: typeof FinancementIndexRoute
 }
 
 const FinancementRouteChildren: FinancementRouteChildren = {
   FinancementCpfRoute: FinancementCpfRoute,
+  FinancementIndexRoute: FinancementIndexRoute,
 }
 
 const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
@@ -653,13 +672,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
