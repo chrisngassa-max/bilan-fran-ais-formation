@@ -288,6 +288,7 @@ function FormationsPage() {
           <p className="text-xs font-medium leading-relaxed">
             <strong>Information légale :</strong> Bilan Français Formation est un organisme de formation privé. Nos parcours préparent aux examens officiels mais ne constituent pas des dispenses automatiques. Les démarches de carte de séjour et de naturalisation relèvent de la compétence exclusive de la Préfecture.
           </p>
+          </div>
         </div>
         )}
 
