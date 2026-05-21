@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as TestRapideRouteImport } from './routes/test-rapide'
 import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
@@ -41,6 +42,11 @@ import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$lead
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestRapideRoute = TestRapideRouteImport.update({
+  id: '/test-rapide',
+  path: '/test-rapide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartenaireRoute = PartenaireRouteImport.update({
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -222,6 +229,7 @@ export interface FileRoutesByTo {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/test-rapide'
     | '/unsubscribe'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/test-rapide'
     | '/unsubscribe'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/test-rapide'
     | '/unsubscribe'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -374,6 +386,7 @@ export interface RootRouteChildren {
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
+  TestRapideRoute: typeof TestRapideRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   ApiCaptureLeadRoute: typeof ApiCaptureLeadRoute
   BilanTestAttemptIdRoute: typeof BilanTestAttemptIdRoute
@@ -388,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/unsubscribe'
       fullPath: '/unsubscribe'
       preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-rapide': {
+      id: '/test-rapide'
+      path: '/test-rapide'
+      fullPath: '/test-rapide'
+      preLoaderRoute: typeof TestRapideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partenaire': {
@@ -663,6 +683,7 @@ const rootRouteChildren: RootRouteChildren = {
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
+  TestRapideRoute: TestRapideRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   ApiCaptureLeadRoute: ApiCaptureLeadRoute,
   BilanTestAttemptIdRoute: BilanTestAttemptIdRoute,
@@ -672,13 +693,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
