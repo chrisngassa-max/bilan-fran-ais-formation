@@ -135,7 +135,7 @@ function Dashboard({ nom, email, onLogout }: { nom: string; email: string; onLog
     setLoading(true)
     try {
       const [s, l] = await Promise.all([
-        statsFn({ data: {} }),
+        (statsFn as any)({ data: {} }),
         leadsFn({ data: { statut_filtre: filtre, page: 1, par_page: 50 } }),
       ])
       setStats(s)
