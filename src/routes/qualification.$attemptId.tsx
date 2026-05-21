@@ -64,13 +64,14 @@ function QualificationPage() {
     const current: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || 'A2';
     const recommendedOfferCode = testResult?.recommended_pathway || testResult?.raw_analysis?.recommended_offer_code;
     
-    let journey = null;
+    let journey: any = null;
     if (recommendedOfferCode) {
-      journey = journeys.find((j: any) => j.id === recommendedOfferCode);
+      journey = journeys.find((j: any) => j.id === recommendedOfferCode) ?? null;
     }
     if (!journey) {
-      journey = getRecommendedJourneyFromList(journeys, current);
+      journey = getRecommendedJourneyFromList(journeys, current) ?? null;
     }
+    if (!journey) return null;
     
     const mobilizedCpf = Math.min(formData.soldeCpf || 0, journey.publicPrice);
     
