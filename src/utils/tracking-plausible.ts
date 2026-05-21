@@ -15,6 +15,7 @@ type PlausibleEvent =
   | "whatsapp_clicked"
   | "cpf_link_clicked"
   | "export_downloaded"
+  | "dispense_verifiee"
 
 declare global {
   interface Window {
