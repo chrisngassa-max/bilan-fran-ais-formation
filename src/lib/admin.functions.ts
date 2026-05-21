@@ -180,7 +180,7 @@ export const getPartnersAdminFn = createServerFn({ method: "POST" })
       }
     }
 
-    return (partners ?? []).map((p) => ({
+    return (partners ?? []).map((p: any) => ({
       ...p,
       transmissions_count: counts[p.id] || 0
     }));
