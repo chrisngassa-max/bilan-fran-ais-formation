@@ -110,18 +110,24 @@ export function useFormationOffers() {
   return useQuery({
     queryKey: ["formation-offers"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("formation_offers")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true });
+      try {
+        const { data, error } = await supabase
+          .from("formation_offers" as any)
+          .select("*")
+          .eq("is_active", true)
+          .order("sort_order", { ascending: true });
 
-      if (error) {
-        console.error("Error loading formation offers, using fallback:", error);
-        throw error;
+        if (error || !data || (data as any[]).length === 0) {
+          if (error) console.warn("[useFormationOffers] table missing or error, using fallback:", error.message);
+          return FALLBACK_JOURNEYS;
+        }
+        return (data as any[]).map(mapDbOfferToJourney);
+      } catch (e) {
+        console.warn("[useFormationOffers] exception, using fallback:", e);
+        return FALLBACK_JOURNEYS;
       }
-      return (data || []).map(mapDbOfferToJourney);
     },
-    staleTime: 1000 * 60 * 10, // 10 minutes cache
+    staleTime: 1000 * 60 * 10,
+    retry: false,
   });
 }
