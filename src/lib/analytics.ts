@@ -21,7 +21,17 @@ export type AnalyticsEvent =
   | "simulator_step_completed"
   | "simulator_completed"
   | "result_viewed"
-  | "contact_form_submitted";
+  | "contact_form_submitted"
+  | "admin_lead_capture_submitted"
+  | "admin_lead_capture_succeeded"
+  | "admin_lead_capture_failed"
+  | "formations_cta_click"
+  | "home_t1_click"
+  | "home_t2_click"
+  | "home_t3_click"
+  | "test_rapide_started"
+  | "test_rapide_completed"
+  | "test_rapide_contact_submitted";
 
 export function trackEvent(name: AnalyticsEvent, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabaseAdmin as _supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireRole } from "@/integrations/supabase/require-role";
+
+// Cast to any to bypass strict typing for tables not yet present in generated types
+const supabaseAdmin: any = _supabaseAdmin;
 
 // Schema validations
 const getLeadsInputSchema = z.object({
@@ -177,7 +180,7 @@ export const getPartnersAdminFn = createServerFn({ method: "POST" })
       }
     }
 
-    return (partners ?? []).map((p) => ({
+    return (partners ?? []).map((p: any) => ({
       ...p,
       transmissions_count: counts[p.id] || 0
     }));

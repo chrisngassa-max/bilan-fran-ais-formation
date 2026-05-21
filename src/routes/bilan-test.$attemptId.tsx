@@ -115,12 +115,12 @@ function BilanTestPage() {
   const level = result.global_level || 'A2';
   const recommendedOfferCode = result.recommended_pathway || result.raw_analysis?.recommended_offer_code;
   
-  let journey = null;
+  let journey: any = null;
   if (journeys && recommendedOfferCode) {
-    journey = journeys.find((j: any) => j.id === recommendedOfferCode);
+    journey = journeys.find((j: any) => j.id === recommendedOfferCode) ?? null;
   }
   if (!journey && journeys) {
-    journey = getRecommendedJourneyFromList(journeys, level as NiveauIndicatif);
+    journey = getRecommendedJourneyFromList(journeys, level as NiveauIndicatif) ?? null;
   }
 
   // Retrieve candidate details from session storage

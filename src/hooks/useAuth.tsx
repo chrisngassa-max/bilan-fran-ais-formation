@@ -59,8 +59,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function loadRoles(userId: string) {
     try {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-      setRoles((data ?? []).map((r) => r.role as Role));
+      const { data } = await (supabase as any).from("user_roles").select("role").eq("user_id", userId);
+      setRoles(((data ?? []) as any[]).map((r) => r.role as Role));
     } catch (error) {
       console.error("Error loading user roles:", error);
     }

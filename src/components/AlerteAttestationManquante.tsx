@@ -42,7 +42,7 @@ export function AlerteAttestationManquante({
   const handleDispenseClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    track("dispense_verifiee", { tunnel, type_titre })
+    track("dispense_verifiee", { tunnel: tunnel ?? "", type_titre: type_titre ?? "" })
     onDispenseClick?.()
   }
 
