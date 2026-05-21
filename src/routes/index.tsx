@@ -42,8 +42,7 @@ function IndexPage() {
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <Link
-              to="/passer-test/$token"
-              params={{ token: "latest" }}
+              to="/test-rapide"
               onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
               className="w-full md:w-auto"
             >
@@ -51,7 +50,7 @@ function IndexPage() {
                 className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md text-white"
                 style={{ backgroundColor: "#f97316" }}
               >
-                Estimer mon niveau gratuitement
+                Estimer mon niveau en 2 min
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
@@ -226,39 +225,54 @@ function IndexPage() {
             <p className="text-on-surface-variant max-w-2xl mx-auto">Choisissez le format qui vous convient pour obtenir un bilan précis et des conseils personnalisés.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* T2 — Test rapide */}
             <div className="bg-surface-bright p-8 rounded-3xl border-2 border-primary/20 shadow-sm hover:border-primary transition-all group">
               <div className="bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Clock className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">Évaluation en ligne</h3>
-              <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
-                Estimez votre niveau de français avec notre test rapide de positionnement et découvrez la formule adaptée.
+              <div className="text-xs font-bold text-primary uppercase tracking-wider mb-2">⚡ 2 minutes</div>
+              <h3 className="text-xl font-bold mb-2">Test rapide</h3>
+              <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
+                10 questions ciblées. Estimation de niveau + formule adaptée à votre délai.
               </p>
-              <Link to="/passer-test/$token" params={{ token: "latest" }}>
-                <button className="w-full h-14 bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
-                  Lancer l'évaluation
-                  <ArrowRight className="w-5 h-5" />
+              <Link to="/test-rapide" onClick={() => trackEvent("home_t2_click")}>
+                <button className="w-full h-12 bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+                  Commencer <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
             </div>
 
+            {/* T3 — Test complet */}
             <div className="bg-surface-bright p-8 rounded-3xl border-2 border-secondary/20 shadow-sm hover:border-secondary transition-all group">
               <div className="bg-secondary/10 text-secondary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-white transition-colors">
                 <Sparkles className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">Diagnostic complet</h3>
-              <p className="text-on-surface-variant mb-8 text-sm leading-relaxed">
-                Test officiel de positionnement approfondi sur les compétences clés (écrit, oral, production).
+              <div className="text-xs font-bold text-secondary uppercase tracking-wider mb-2">🎯 30 minutes</div>
+              <h3 className="text-xl font-bold mb-2">Diagnostic complet</h3>
+              <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
+                4 compétences évaluées : oral, écrit, grammaire, production. Programme sur-mesure.
               </p>
-              <Link 
-                to="/passer-test/$token" 
-                params={{ token: "latest" }}
-                onClick={() => trackEvent("home_diagnostic_click")}
-              >
-                <button className="w-full h-14 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all">
-                  Passer le diagnostic complet
-                  <ArrowRight className="w-5 h-5" />
+              <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => trackEvent("home_t3_click")}>
+                <button className="w-full h-12 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+                  Passer le test <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+            </div>
+
+            {/* T1 — Accompagnement admin */}
+            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-outline-variant shadow-sm hover:border-slate-400 transition-all group">
+              <div className="bg-slate-100 text-slate-700 w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+                <FileText className="w-8 h-8" />
+              </div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📋 Sans test</div>
+              <h3 className="text-xl font-bold mb-2">Dossier préfecture</h3>
+              <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
+                Besoin d'aide pour vos papiers ? Notre partenaire analyse votre dossier sous 24h.
+              </p>
+              <Link to="/accompagnement-administratif" onClick={() => trackEvent("home_t1_click")}>
+                <button className="w-full h-12 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+                  Être contacté <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
             </div>
