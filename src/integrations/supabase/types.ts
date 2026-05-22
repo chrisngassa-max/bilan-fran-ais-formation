@@ -52,19 +52,36 @@ export type Database = {
       }
       leads: {
         Row: {
+          address_line1: string | null
           attempt_id: string | null
+          birth_date: string | null
           checklist_states: Json | null
+          city: string | null
           consent_marketing: boolean
+          cpf_balance_declared: number | null
+          cpf_status: string | null
           created_at: string
           date_rdv_prefecture: string | null
           dispense_demandee: boolean | null
           email: string
+          employer_support: boolean | null
           estimated_level: string | null
+          france_travail_registered: boolean | null
+          funding_followup_at: string | null
+          funding_internal_notes: string | null
+          funding_next_action: string | null
+          funding_status: string
+          funding_target_date: string | null
           id: string
+          lead_intent: string
           metadata: Json
+          nationality: string | null
           partenaire_consent: boolean
           partenaire_consent_at: string | null
+          postal_code: string | null
           prenom: string | null
+          professional_status: string | null
+          sector_activity: string | null
           situation_pro: string | null
           source: string
           status: string
@@ -72,19 +89,36 @@ export type Database = {
           whatsapp_phone: string | null
         }
         Insert: {
+          address_line1?: string | null
           attempt_id?: string | null
+          birth_date?: string | null
           checklist_states?: Json | null
+          city?: string | null
           consent_marketing?: boolean
+          cpf_balance_declared?: number | null
+          cpf_status?: string | null
           created_at?: string
           date_rdv_prefecture?: string | null
           dispense_demandee?: boolean | null
           email: string
+          employer_support?: boolean | null
           estimated_level?: string | null
+          france_travail_registered?: boolean | null
+          funding_followup_at?: string | null
+          funding_internal_notes?: string | null
+          funding_next_action?: string | null
+          funding_status?: string
+          funding_target_date?: string | null
           id?: string
+          lead_intent?: string
           metadata?: Json
+          nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          postal_code?: string | null
           prenom?: string | null
+          professional_status?: string | null
+          sector_activity?: string | null
           situation_pro?: string | null
           source?: string
           status?: string
@@ -92,19 +126,36 @@ export type Database = {
           whatsapp_phone?: string | null
         }
         Update: {
+          address_line1?: string | null
           attempt_id?: string | null
+          birth_date?: string | null
           checklist_states?: Json | null
+          city?: string | null
           consent_marketing?: boolean
+          cpf_balance_declared?: number | null
+          cpf_status?: string | null
           created_at?: string
           date_rdv_prefecture?: string | null
           dispense_demandee?: boolean | null
           email?: string
+          employer_support?: boolean | null
           estimated_level?: string | null
+          france_travail_registered?: boolean | null
+          funding_followup_at?: string | null
+          funding_internal_notes?: string | null
+          funding_next_action?: string | null
+          funding_status?: string
+          funding_target_date?: string | null
           id?: string
+          lead_intent?: string
           metadata?: Json
+          nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          postal_code?: string | null
           prenom?: string | null
+          professional_status?: string | null
+          sector_activity?: string | null
           situation_pro?: string | null
           source?: string
           status?: string
