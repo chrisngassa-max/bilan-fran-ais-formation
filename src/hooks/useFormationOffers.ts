@@ -110,7 +110,7 @@ export function useFormationOffers() {
     queryFn: async () => {
       try {
         const { data, error } = await supabase
-          .from("formation_offers" as any)
+          .from("formation_journeys" as any)
           .select("*")
           .eq("is_active", true)
           .order("sort_order", { ascending: true });

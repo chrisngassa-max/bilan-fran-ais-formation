@@ -5,7 +5,7 @@ import { FALLBACK_JOURNEYS, mapDbOfferToJourney, getRecommendedJourneyFromList }
 export async function getFormationOffersServer(): Promise<Journey[]> {
   try {
     const { data, error } = await supabase
-      .from("formation_offers")
+      .from("formation_journeys")
       .select("*")
       .eq("is_active", true)
       .order("sort_order", { ascending: true });
