@@ -355,6 +355,26 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
       });
       if (enrollErr) throw enrollErr;
 
+      // 4) Créer les entrées d'émargement pour chaque séance
+      const { data: sessions } = await supabase
+        .from("cohort_sessions")
+        .select("id")
+        .eq("cohort_id", cohortId);
+
+      if (sessions && sessions.length > 0) {
+        const attendanceRows = sessions.map((s) => ({
+          session_id: s.id,
+          lead_id: leadId,
+          status: "pending",
+        }));
+        const { error: attendErr } = await supabase
+          .from("attendance")
+          .insert(attendanceRows);
+        if (attendErr) {
+          console.error("Attendance insert error (non bloquant):", attendErr);
+        }
+      }
+
       // Fire-and-forget confirmation email (non-blocking)
       sendConfirmation({
         data: {
