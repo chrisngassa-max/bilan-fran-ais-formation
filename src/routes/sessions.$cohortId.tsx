@@ -311,14 +311,13 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
           .from("leads")
           .insert({
             email: emailLower,
-            prenom: fullName,
+            first_name: fullName,
             whatsapp_phone: whatsapp || null,
             source: "session_directe",
             tunnel: "T0_inscription_directe",
             lead_intent: "training",
-            consent_marketing: consentTraining,
-            partenaire_consent: consentPartner,
-            partenaire_consent_at: consentPartner ? new Date().toISOString() : null,
+            consent_training: consentTraining,
+            consent_partner: consentPartner,
             consent_at: new Date().toISOString(),
             whatsapp_consent: !!whatsapp,
             status: "new",
