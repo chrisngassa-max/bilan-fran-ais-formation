@@ -355,6 +355,16 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
       });
       if (enrollErr) throw enrollErr;
 
+      // Fire-and-forget confirmation email (non-blocking)
+      sendConfirmation({
+        data: {
+          cohort_id: cohortId,
+          lead_id: leadId,
+          is_waiting_list: isFull,
+          payment_mode: paymentMode,
+        },
+      }).catch((err) => console.error("[sendConfirmation] failed", err));
+
       setSuccess(isFull ? "waiting" : "ok");
     } catch (e: any) {
       setFormError(
