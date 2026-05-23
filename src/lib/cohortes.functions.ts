@@ -31,11 +31,18 @@ export const listCohortsFn = createServerFn({ method: "POST" })
       intensity: z.string().optional(),
     }).parse(input ?? {}),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const userId = (context as any).userId as string;
+    const userRoles = ((context as any).userRoles ?? []) as string[];
+    const isAdmin = userRoles.includes("admin");
+
     let q = supabaseAdmin
       .from("cohorts")
       .select("*, formation_journeys(id,title,level)")
       .order("start_date", { ascending: false });
+
+    // Gestionnaire (non-admin) ne voit que ses propres cohortes
+    if (!isAdmin) q = q.eq("formateur_id", userId);
 
     if (data.status && data.status !== "all") q = q.eq("status", data.status);
     if (data.intensity && data.intensity !== "all") q = q.eq("intensity", data.intensity);
@@ -73,13 +80,22 @@ export const listJourneysFn = createServerFn({ method: "GET" })
 export const getCohortFn = createServerFn({ method: "POST" })
   .middleware([requireRole(["admin", "gestionnaire"])])
   .inputValidator((input) => z.object({ cohortId: z.string().uuid() }).parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const userId = (context as any).userId as string;
+    const userRoles = ((context as any).userRoles ?? []) as string[];
+    const isAdmin = userRoles.includes("admin");
+
     const { data: cohort, error } = await supabaseAdmin
       .from("cohorts")
       .select("*, formation_journeys(id,title,level,duration_weeks,price_euros)")
       .eq("id", data.cohortId)
       .single();
     if (error) throw new Error(error.message);
+
+    // Gestionnaire (non-admin) ne peut accéder qu'à ses propres cohortes
+    if (!isAdmin && cohort.formateur_id !== userId) {
+      throw new Error("Accès refusé à cette cohorte");
+    }
 
     const { data: sessions } = await supabaseAdmin
       .from("cohort_sessions")
