@@ -41,6 +41,7 @@ import { Route as AdminReportingRouteImport } from './routes/admin.reporting'
 import { Route as AdminPartenairesRouteImport } from './routes/admin.partenaires'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminCohortesRouteImport } from './routes/admin.cohortes'
+import { Route as AdminApprenantsRouteImport } from './routes/admin.apprenants'
 import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
 import { Route as MonEspaceEmargementSessionIdRouteImport } from './routes/mon-espace.emargement.$sessionId'
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
@@ -209,6 +210,11 @@ const AdminCohortesRoute = AdminCohortesRouteImport.update({
   path: '/cohortes',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminApprenantsRoute = AdminApprenantsRouteImport.update({
+  id: '/apprenants',
+  path: '/apprenants',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PartenaireLeadsLeadIdRoute = PartenaireLeadsLeadIdRouteImport.update({
   id: '/leads/$leadId',
   path: '/leads/$leadId',
@@ -258,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/apprenants'
     | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/apprenants'
     | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/apprenants'
     | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
@@ -730,6 +742,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCohortesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/apprenants': {
+      id: '/admin/apprenants'
+      path: '/apprenants'
+      fullPath: '/admin/apprenants'
+      preLoaderRoute: typeof AdminApprenantsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/partenaire/leads/$leadId': {
       id: '/partenaire/leads/$leadId'
       path: '/leads/$leadId'
@@ -813,6 +832,7 @@ const AdminPartenairesRouteWithChildren =
   AdminPartenairesRoute._addFileChildren(AdminPartenairesRouteChildren)
 
 interface AdminRouteChildren {
+  AdminApprenantsRoute: typeof AdminApprenantsRoute
   AdminCohortesRoute: typeof AdminCohortesRouteWithChildren
   AdminLeadsRoute: typeof AdminLeadsRouteWithChildren
   AdminPartenairesRoute: typeof AdminPartenairesRouteWithChildren
@@ -822,6 +842,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminApprenantsRoute: AdminApprenantsRoute,
   AdminCohortesRoute: AdminCohortesRouteWithChildren,
   AdminLeadsRoute: AdminLeadsRouteWithChildren,
   AdminPartenairesRoute: AdminPartenairesRouteWithChildren,

@@ -46,7 +46,9 @@ function AdminLayout() {
   }
 
   const menuItems = [
+    { label: "Dashboard", to: "/admin", icon: BarChart3 },
     { label: "Prospects & Dossiers", to: "/admin/leads", icon: Users },
+    { label: "Apprenants", to: "/admin/apprenants", icon: GraduationCap },
     { label: "Cohortes & Sessions", to: "/admin/cohortes", icon: GraduationCap },
     { label: "Partenaires Agréés", to: "/admin/partenaires", icon: Handshake },
     { label: "Pilotage & KPI", to: "/admin/reporting", icon: BarChart3 },

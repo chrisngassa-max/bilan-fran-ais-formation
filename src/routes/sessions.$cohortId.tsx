@@ -11,6 +11,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useServerFn } from "@tanstack/react-start";
+import { sendEnrollmentConfirmationFn } from "@/lib/dashboard.functions";
 
 export const Route = createFileRoute("/sessions/$cohortId")({
   head: () => ({
@@ -280,6 +282,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<null | "ok" | "waiting">(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const sendConfirmation = useServerFn(sendEnrollmentConfirmationFn);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -351,6 +354,16 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
         reserved_at: new Date().toISOString(),
       });
       if (enrollErr) throw enrollErr;
+
+      // Fire-and-forget confirmation email (non-blocking)
+      sendConfirmation({
+        data: {
+          cohort_id: cohortId,
+          lead_id: leadId,
+          is_waiting_list: isFull,
+          payment_mode: paymentMode,
+        },
+      }).catch((err) => console.error("[sendConfirmation] failed", err));
 
       setSuccess(isFull ? "waiting" : "ok");
     } catch (e: any) {
