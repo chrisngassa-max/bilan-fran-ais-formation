@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { siteName } from "@/config/site";
-import { Home, Sparkles, GraduationCap } from "lucide-react";
+
 
 export const Route = createFileRoute("/niveaux")({
   head: () => ({
