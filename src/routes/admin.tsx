@@ -52,6 +52,7 @@ function AdminLayout() {
     { label: "Cohortes & Sessions", to: "/admin/cohortes", icon: GraduationCap },
     { label: "Partenaires Agréés", to: "/admin/partenaires", icon: Handshake },
     { label: "Pilotage & KPI", to: "/admin/reporting", icon: BarChart3 },
+    { label: "Formateurs", to: "/admin/formateurs", icon: GraduationCap },
     { label: "Équipe Conseillers", to: "/admin/users", icon: ShieldAlert },
   ];
 
