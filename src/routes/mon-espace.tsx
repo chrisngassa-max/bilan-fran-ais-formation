@@ -369,6 +369,39 @@ function MonEspacePage() {
           </div>
         </section>
 
+        {/* Accès Espace apprenant */}
+        <section className="bg-white rounded-2xl p-6 shadow-sm">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+            Espace apprenant
+          </h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Vous êtes inscrit(e) à une formation ? Suivez votre cohorte, vos séances et vos documents.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-3">
+            <Link
+              to="/mon-espace/ma-cohorte"
+              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+            >
+              <p className="text-sm font-semibold text-gray-900">Ma cohorte</p>
+              <p className="text-xs text-gray-500 mt-1">Formation, créneaux, financement</p>
+            </Link>
+            <Link
+              to="/mon-espace/mes-seances"
+              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+            >
+              <p className="text-sm font-semibold text-gray-900">Mes séances</p>
+              <p className="text-xs text-gray-500 mt-1">Planning et émargement</p>
+            </Link>
+            <Link
+              to="/mon-espace/mes-documents"
+              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+            >
+              <p className="text-sm font-semibold text-gray-900">Mes documents</p>
+              <p className="text-xs text-gray-500 mt-1">Supports et attestations</p>
+            </Link>
+          </div>
+        </section>
+
         <p className="text-center text-xs text-gray-500 pt-2">
           🔒 Vos données sont protégées. Aucun autre utilisateur ne peut accéder
           à cet espace.
