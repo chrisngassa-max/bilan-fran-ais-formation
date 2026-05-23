@@ -30,6 +30,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SessionsCohortIdRouteImport } from './routes/sessions.$cohortId'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
+import { Route as MonEspaceMaCohorteRouteImport } from './routes/mon-espace.ma-cohorte'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 import { Route as ApiCaptureLeadRouteImport } from './routes/api.capture-lead'
@@ -150,6 +151,11 @@ const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
   path: '/passer-test/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MonEspaceMaCohorteRoute = MonEspaceMaCohorteRouteImport.update({
+  id: '/ma-cohorte',
+  path: '/ma-cohorte',
+  getParentRoute: () => MonEspaceRoute,
+} as any)
 const FinancementCpfRoute = FinancementCpfRouteImport.update({
   id: '/cpf',
   path: '/cpf',
@@ -227,7 +233,7 @@ export interface FileRoutesByFullPath {
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/mon-espace': typeof MonEspaceRoute
+  '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/sessions': typeof SessionsRouteWithChildren
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -261,7 +268,7 @@ export interface FileRoutesByTo {
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/mon-espace': typeof MonEspaceRoute
+  '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/sessions': typeof SessionsRouteWithChildren
@@ -275,6 +282,7 @@ export interface FileRoutesByTo {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -298,7 +306,7 @@ export interface FileRoutesById {
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/mon-espace': typeof MonEspaceRoute
+  '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
   '/sessions': typeof SessionsRouteWithChildren
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/mon-espace/ma-cohorte'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -384,6 +394,7 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/mon-espace/ma-cohorte'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -420,6 +431,7 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/mon-espace/ma-cohorte'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -443,7 +455,7 @@ export interface RootRouteChildren {
   FormationsRoute: typeof FormationsRoute
   LoginRoute: typeof LoginRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
-  MonEspaceRoute: typeof MonEspaceRoute
+  MonEspaceRoute: typeof MonEspaceRouteWithChildren
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
   SessionsRoute: typeof SessionsRouteWithChildren
@@ -603,6 +615,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/passer-test/$token'
       preLoaderRoute: typeof PasserTestTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/mon-espace/ma-cohorte': {
+      id: '/mon-espace/ma-cohorte'
+      path: '/ma-cohorte'
+      fullPath: '/mon-espace/ma-cohorte'
+      preLoaderRoute: typeof MonEspaceMaCohorteRouteImport
+      parentRoute: typeof MonEspaceRoute
     }
     '/financement/cpf': {
       id: '/financement/cpf'
@@ -769,6 +788,18 @@ const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
   FinancementRouteChildren,
 )
 
+interface MonEspaceRouteChildren {
+  MonEspaceMaCohorteRoute: typeof MonEspaceMaCohorteRoute
+}
+
+const MonEspaceRouteChildren: MonEspaceRouteChildren = {
+  MonEspaceMaCohorteRoute: MonEspaceMaCohorteRoute,
+}
+
+const MonEspaceRouteWithChildren = MonEspaceRoute._addFileChildren(
+  MonEspaceRouteChildren,
+)
+
 interface PartenaireRouteChildren {
   PartenaireLeadsLeadIdRoute: typeof PartenaireLeadsLeadIdRoute
 }
@@ -804,7 +835,7 @@ const rootRouteChildren: RootRouteChildren = {
   FormationsRoute: FormationsRoute,
   LoginRoute: LoginRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
-  MonEspaceRoute: MonEspaceRoute,
+  MonEspaceRoute: MonEspaceRouteWithChildren,
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
   SessionsRoute: SessionsRouteWithChildren,
