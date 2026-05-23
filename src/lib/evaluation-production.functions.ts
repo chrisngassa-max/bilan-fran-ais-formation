@@ -7,7 +7,7 @@ import type { NiveauIndicatif } from "@/types/bilan";
 const InputSchema = z.object({
   consigne: z.string().min(1).max(1000),
   texte_candidat: z.string().min(1).max(5000),
-  niveau_cible: z.enum(["A1", "A2", "B1", "B1_nat", "B2", "a_verifier"]),
+  niveau_cible: z.enum(["A1", "A2", "B1", "B2", "a_verifier"]),
   ia_consent: z.literal(true),
   session_id: z.string().uuid().optional(),
 });

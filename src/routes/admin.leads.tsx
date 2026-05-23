@@ -179,8 +179,8 @@ export function AdminLeads() {
               <option value="A1">Niveau A1</option>
               <option value="A2">Niveau A2</option>
               <option value="B1">Niveau B1</option>
-              <option value="B1_nat">B1 Naturalisation</option>
-              <option value="B2">Niveau B2</option>
+              <option value="B2">B2 — Naturalisation</option>
+              <option value="B2">Niveau B2 (avancé)</option>
               <option value="a_verifier">À vérifier</option>
             </select>
           </div>

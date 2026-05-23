@@ -89,9 +89,7 @@ export function mapDbOfferToJourney(offer: any): Journey {
 }
 
 export function getRecommendedJourneyFromList(journeys: Journey[], level: NiveauIndicatif): Journey {
-  const cleanLevel = level === "B1_nat" ? "B1" : level;
-
-  switch (cleanLevel) {
+  switch (level) {
     case "A1":
       return journeys.find(j => j.id === "Objectif-Sejour-A1-A2") || journeys[1] || journeys[0];
     case "A2":

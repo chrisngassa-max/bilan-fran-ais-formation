@@ -72,8 +72,7 @@ function ciblesMots(niveau: NiveauIndicatif): { min: number; ideal: number } {
   switch (niveau) {
     case "A1": return { min: 30, ideal: 60 };
     case "A2": return { min: 60, ideal: 100 };
-    case "B1":
-    case "B1_nat": return { min: 100, ideal: 160 };
+    case "B1": return { min: 100, ideal: 160 };
     case "B2": return { min: 160, ideal: 240 };
     default: return { min: 80, ideal: 140 };
   }
@@ -126,7 +125,7 @@ export function scoringFallback(
 
 // --- Évaluation IA via Lovable AI Gateway ----------------------------------
 
-const NIVEAUX_VALIDES: NiveauIndicatif[] = ["A1", "A2", "B1", "B1_nat", "B2", "a_verifier"];
+const NIVEAUX_VALIDES: NiveauIndicatif[] = ["A1", "A2", "B1", "B2", "a_verifier"];
 
 function normaliserNiveau(v: unknown, defaut: NiveauIndicatif): NiveauIndicatif {
   if (typeof v === "string" && (NIVEAUX_VALIDES as string[]).includes(v)) {
