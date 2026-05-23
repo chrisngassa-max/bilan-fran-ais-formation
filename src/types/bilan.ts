@@ -1,4 +1,4 @@
-export type NiveauIndicatif = "A1" | "A2" | "B1" | "B1_nat" | "B2" | "a_verifier";
+export type NiveauIndicatif = "A1" | "A2" | "B1" | "B2" | "a_verifier";
 
 export interface Journey {
   id: string;

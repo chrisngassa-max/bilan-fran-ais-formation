@@ -40,14 +40,14 @@ export const FALLBACK_JOURNEYS: Journey[] = [
     fromLevel: "A2",
     toLevel: "B1",
     name: "Objectif Résidence",
-    objective: "Atteindre le niveau B1 exigé pour la carte de résident de 10 ans et la naturalisation.",
+    objective: "Atteindre le niveau B1 exigé pour la carte de résident de 10 ans.",
     hours: 100,
     sessions: 50,
     publicPrice: 3500,
     financedReferencePrice: 2200,
     monthlyInstallment: 1166,
     isMostRequested: true,
-    description: "Le parcours de franchissement de seuil le plus demandé pour valider votre intégration.",
+    description: "Le parcours de franchissement de seuil le plus demandé pour valider votre carte de résident.",
     examTarget: "TCF IRN / DELF B1",
     reassurance: "1 formateur référent · 6 élèves max · Paiement x3"
   },
@@ -55,16 +55,16 @@ export const FALLBACK_JOURNEYS: Journey[] = [
     id: "Objectif-Citoyennete-B1-B2",
     fromLevel: "B1",
     toLevel: "B2",
-    name: "Objectif Citoyenneté",
-    objective: "Assurer une expression fluide et une aisance parfaite pour sécuriser votre projet.",
+    name: "Naturalisation — Niveau B2",
+    objective: "Atteindre le niveau B2 requis pour la demande de nationalité française (obligatoire depuis 2026).",
     hours: 120,
     sessions: 60,
     publicPrice: 4800,
     financedReferencePrice: 2900,
     monthlyInstallment: 1600,
     isMostRequested: false,
-    description: "Une préparation avancée pour une intégration professionnelle et citoyenne totale.",
-    examTarget: "DELF B2 / TCF Tout Public",
+    description: "Préparation complète au niveau B2 désormais exigé pour la naturalisation française.",
+    examTarget: "TCF ou DELF B2",
     reassurance: "1 formateur référent · 6 élèves max · Paiement x3"
   }
 ];
@@ -89,9 +89,7 @@ export function mapDbOfferToJourney(offer: any): Journey {
 }
 
 export function getRecommendedJourneyFromList(journeys: Journey[], level: NiveauIndicatif): Journey {
-  const cleanLevel = level === "B1_nat" ? "B1" : level;
-
-  switch (cleanLevel) {
+  switch (level) {
     case "A1":
       return journeys.find(j => j.id === "Objectif-Sejour-A1-A2") || journeys[1] || journeys[0];
     case "A2":

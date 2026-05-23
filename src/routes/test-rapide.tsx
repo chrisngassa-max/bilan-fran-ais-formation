@@ -258,7 +258,7 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
                 className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary font-bold text-sm transition-all appearance-none">
                 <option value="A2">Carte de séjour pluriannuelle (indicatif A2 — à vérifier)</option>
                 <option value="B1">Carte de résident / 10 ans (indicatif B1)</option>
-                <option value="B1_nat">Naturalisation par décret (indicatif B1 oral et écrit — selon SP F34708)</option>
+                <option value="B2">Nationalité française (B2)</option>
                 <option value="je_ne_sais_pas">Je ne sais pas encore</option>
               </select>
             </div>
@@ -278,7 +278,7 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
           <details className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <summary className="px-8 py-5 font-black text-slate-900 cursor-pointer hover:bg-slate-50">📋 Voir ma checklist de documents</summary>
             <div className="px-8 pb-8">
-              <ChecklistDocuments type_demarche={typeTitre === "B1_nat" ? "naturalisation" : typeTitre === "A2" ? "pluriannuelle" : "resident_10ans"} onChange={setChecklistData} />
+              <ChecklistDocuments type_demarche={typeTitre === "B2" ? "naturalisation" : typeTitre === "A2" ? "pluriannuelle" : "resident_10ans"} onChange={setChecklistData} />
             </div>
           </details>
         )}
