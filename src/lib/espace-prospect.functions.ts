@@ -17,7 +17,7 @@ export const getEspaceProspectFn = createServerFn({ method: "POST" })
     const { data: lead, error: leadErr } = await supabaseAdmin
       .from("leads")
       .select(
-        "id,prenom,type_demarche,estimated_level,checklist_states,situation_pro,created_at,status,date_rdv_prefecture,dispense_demandee",
+        "id,first_name,type_demarche,estimated_level,checklist_states,situation_pro,created_at,status,date_rdv_prefecture,dispense_demandee",
       )
       .eq("id", data.lead_id)
       .maybeSingle();

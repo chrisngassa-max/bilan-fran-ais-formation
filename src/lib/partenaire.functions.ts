@@ -11,10 +11,10 @@ import { setResponseHeader } from "@tanstack/react-start/server"
 // JAMAIS retourner le champ `email` aux partenaires.
 
 const SELECT_LEAD_LISTE =
-  "id,prenom,whatsapp_phone,type_demarche,estimated_level,date_rdv_prefecture,partenaire_consent,created_at,source"
+  "id,first_name,whatsapp_phone,type_demarche,estimated_level,date_rdv_prefecture,partenaire_consent,created_at,source"
 
 const SELECT_LEAD_DETAIL =
-  "id,prenom,whatsapp_phone,type_demarche,estimated_level,date_rdv_prefecture,dispense_demandee,checklist_states,partenaire_consent,partenaire_consent_at,source,created_at,situation_pro"
+  "id,first_name,whatsapp_phone,type_demarche,estimated_level,date_rdv_prefecture,dispense_demandee,checklist_states,partenaire_consent,partenaire_consent_at,source,created_at,situation_pro"
 
 function joursRestants(date_rdv: string | null): number | null {
   if (!date_rdv) return null

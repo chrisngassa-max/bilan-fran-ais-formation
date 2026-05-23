@@ -8,7 +8,7 @@ const supabaseAdmin: any = _supabaseAdmin;
 async function getLeadByEmail(email: string) {
   const { data, error } = await supabaseAdmin
     .from("leads")
-    .select("id, prenom, email")
+    .select("id, first_name, email")
     .eq("email", email)
     .maybeSingle();
   if (error) throw new Error(error.message);

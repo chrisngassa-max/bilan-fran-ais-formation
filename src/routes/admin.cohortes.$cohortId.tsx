@@ -246,7 +246,7 @@ function CohortDetail() {
                   {data.enrollments.map((e: any) => (
                     <tr key={e.id} className="hover:bg-surface/30">
                       <td className="px-6 py-3">
-                        <div className="font-bold text-on-surface">{e.leads?.prenom || "—"}</div>
+                        <div className="font-bold text-on-surface">{e.leads?.first_name || "—"}</div>
                         <div className="text-xs text-on-surface-variant">{e.leads?.email}</div>
                       </td>
                       <td className="px-6 py-3 text-on-surface-variant font-semibold">{e.payment_mode || "—"}</td>
