@@ -154,6 +154,8 @@ export const marquerPresenceFn = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const userId = (context as any).userId as string;
+    const userRoles = (context as any).userRoles as string[];
+    const isAdmin = userRoles?.includes("admin");
 
     // Verify session belongs to formateur (admin sera vérifié par RLS aussi)
     const { data: session } = await supabaseAdmin
@@ -162,6 +164,16 @@ export const marquerPresenceFn = createServerFn({ method: "POST" })
       .eq("id", data.sessionId)
       .single();
     if (!session) throw new Error("Séance introuvable");
+
+    const { data: coh } = await supabaseAdmin
+      .from("cohorts")
+      .select("formateur_id")
+      .eq("id", session.cohort_id)
+      .single();
+    if (!isAdmin && coh?.formateur_id !== userId) {
+      throw new Error("Accès refusé");
+    }
+
 
     const { data: existing } = await supabaseAdmin
       .from("attendance")
