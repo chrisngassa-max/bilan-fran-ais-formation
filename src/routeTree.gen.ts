@@ -35,9 +35,12 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportingRouteImport } from './routes/admin.reporting'
 import { Route as AdminPartenairesRouteImport } from './routes/admin.partenaires'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminCohortesRouteImport } from './routes/admin.cohortes'
 import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
 import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
+import { Route as AdminCohortesNouveauRouteImport } from './routes/admin.cohortes.nouveau'
+import { Route as AdminCohortesCohortIdRouteImport } from './routes/admin.cohortes.$cohortId'
 
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
@@ -170,6 +173,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCohortesRoute = AdminCohortesRouteImport.update({
+  id: '/cohortes',
+  path: '/cohortes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PartenaireLeadsLeadIdRoute = PartenaireLeadsLeadIdRouteImport.update({
   id: '/leads/$leadId',
   path: '/leads/$leadId',
@@ -184,6 +192,16 @@ const AdminLeadsLeadIdRoute = AdminLeadsLeadIdRouteImport.update({
   id: '/$leadId',
   path: '/$leadId',
   getParentRoute: () => AdminLeadsRoute,
+} as any)
+const AdminCohortesNouveauRoute = AdminCohortesNouveauRouteImport.update({
+  id: '/nouveau',
+  path: '/nouveau',
+  getParentRoute: () => AdminCohortesRoute,
+} as any)
+const AdminCohortesCohortIdRoute = AdminCohortesCohortIdRouteImport.update({
+  id: '/$cohortId',
+  path: '/$cohortId',
+  getParentRoute: () => AdminCohortesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -202,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/partenaire': typeof PartenaireRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -213,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin/': typeof AdminIndexRoute
   '/financement/': typeof FinancementIndexRoute
+  '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
+  '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -231,6 +252,7 @@ export interface FileRoutesByTo {
   '/partenaire': typeof PartenaireRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -242,6 +264,8 @@ export interface FileRoutesByTo {
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin': typeof AdminIndexRoute
   '/financement': typeof FinancementIndexRoute
+  '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
+  '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -263,6 +287,7 @@ export interface FileRoutesById {
   '/partenaire': typeof PartenaireRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/admin/cohortes': typeof AdminCohortesRouteWithChildren
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -274,6 +299,8 @@ export interface FileRoutesById {
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/admin/': typeof AdminIndexRoute
   '/financement/': typeof FinancementIndexRoute
+  '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
+  '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
@@ -296,6 +323,7 @@ export interface FileRouteTypes {
     | '/partenaire'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -307,6 +335,8 @@ export interface FileRouteTypes {
     | '/qualification/$attemptId'
     | '/admin/'
     | '/financement/'
+    | '/admin/cohortes/$cohortId'
+    | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -325,6 +355,7 @@ export interface FileRouteTypes {
     | '/partenaire'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -336,6 +367,8 @@ export interface FileRouteTypes {
     | '/qualification/$attemptId'
     | '/admin'
     | '/financement'
+    | '/admin/cohortes/$cohortId'
+    | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -356,6 +389,7 @@ export interface FileRouteTypes {
     | '/partenaire'
     | '/test-rapide'
     | '/unsubscribe'
+    | '/admin/cohortes'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -367,6 +401,8 @@ export interface FileRouteTypes {
     | '/qualification/$attemptId'
     | '/admin/'
     | '/financement/'
+    | '/admin/cohortes/$cohortId'
+    | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
     | '/partenaire/leads/$leadId'
@@ -578,6 +614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/cohortes': {
+      id: '/admin/cohortes'
+      path: '/cohortes'
+      fullPath: '/admin/cohortes'
+      preLoaderRoute: typeof AdminCohortesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/partenaire/leads/$leadId': {
       id: '/partenaire/leads/$leadId'
       path: '/leads/$leadId'
@@ -599,8 +642,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsLeadIdRouteImport
       parentRoute: typeof AdminLeadsRoute
     }
+    '/admin/cohortes/nouveau': {
+      id: '/admin/cohortes/nouveau'
+      path: '/nouveau'
+      fullPath: '/admin/cohortes/nouveau'
+      preLoaderRoute: typeof AdminCohortesNouveauRouteImport
+      parentRoute: typeof AdminCohortesRoute
+    }
+    '/admin/cohortes/$cohortId': {
+      id: '/admin/cohortes/$cohortId'
+      path: '/$cohortId'
+      fullPath: '/admin/cohortes/$cohortId'
+      preLoaderRoute: typeof AdminCohortesCohortIdRouteImport
+      parentRoute: typeof AdminCohortesRoute
+    }
   }
 }
+
+interface AdminCohortesRouteChildren {
+  AdminCohortesCohortIdRoute: typeof AdminCohortesCohortIdRoute
+  AdminCohortesNouveauRoute: typeof AdminCohortesNouveauRoute
+}
+
+const AdminCohortesRouteChildren: AdminCohortesRouteChildren = {
+  AdminCohortesCohortIdRoute: AdminCohortesCohortIdRoute,
+  AdminCohortesNouveauRoute: AdminCohortesNouveauRoute,
+}
+
+const AdminCohortesRouteWithChildren = AdminCohortesRoute._addFileChildren(
+  AdminCohortesRouteChildren,
+)
 
 interface AdminLeadsRouteChildren {
   AdminLeadsLeadIdRoute: typeof AdminLeadsLeadIdRoute
@@ -626,6 +697,7 @@ const AdminPartenairesRouteWithChildren =
   AdminPartenairesRoute._addFileChildren(AdminPartenairesRouteChildren)
 
 interface AdminRouteChildren {
+  AdminCohortesRoute: typeof AdminCohortesRouteWithChildren
   AdminLeadsRoute: typeof AdminLeadsRouteWithChildren
   AdminPartenairesRoute: typeof AdminPartenairesRouteWithChildren
   AdminReportingRoute: typeof AdminReportingRoute
@@ -634,6 +706,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCohortesRoute: AdminCohortesRouteWithChildren,
   AdminLeadsRoute: AdminLeadsRouteWithChildren,
   AdminPartenairesRoute: AdminPartenairesRouteWithChildren,
   AdminReportingRoute: AdminReportingRoute,
