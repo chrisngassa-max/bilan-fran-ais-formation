@@ -143,6 +143,7 @@ export type Database = {
           nationality: string | null
           partenaire_consent: boolean
           partenaire_consent_at: string | null
+          partner_id: string | null
           postal_code: string | null
           prenom: string | null
           professional_status: string | null
@@ -180,6 +181,7 @@ export type Database = {
           nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          partner_id?: string | null
           postal_code?: string | null
           prenom?: string | null
           professional_status?: string | null
@@ -217,6 +219,7 @@ export type Database = {
           nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          partner_id?: string | null
           postal_code?: string | null
           prenom?: string | null
           professional_status?: string | null
@@ -227,7 +230,15 @@ export type Database = {
           type_demarche?: string | null
           whatsapp_phone?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_leads_partner_id"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads_partenaire_status: {
         Row: {
@@ -336,6 +347,135 @@ export type Database = {
           id?: string
           nom?: string | null
           password_hash?: string
+        }
+        Relationships: []
+      }
+      partner_transmissions: {
+        Row: {
+          consent_snapshot: Json
+          created_at: string | null
+          error_message: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          partner_id: string | null
+          payload_snapshot: Json
+          status: string | null
+          transmission_mode: string
+          transmitted_at: string | null
+          transmitted_by: string | null
+        }
+        Insert: {
+          consent_snapshot: Json
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          partner_id?: string | null
+          payload_snapshot: Json
+          status?: string | null
+          transmission_mode: string
+          transmitted_at?: string | null
+          transmitted_by?: string | null
+        }
+        Update: {
+          consent_snapshot?: Json
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          partner_id?: string | null
+          payload_snapshot?: Json
+          status?: string | null
+          transmission_mode?: string
+          transmitted_at?: string | null
+          transmitted_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_transmissions_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_transmissions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partners: {
+        Row: {
+          consent_text_override: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_whatsapp: string | null
+          contract_signed: boolean | null
+          contract_signed_at: string | null
+          created_at: string | null
+          id: string
+          insurance_verified: boolean | null
+          kbis_verified: boolean | null
+          legal_notes: string | null
+          name: string
+          reception_email: string | null
+          requires_manual_export: boolean | null
+          service_types: string[] | null
+          slug: string
+          status: string | null
+          transmission_mode: string | null
+          updated_at: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          consent_text_override?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_whatsapp?: string | null
+          contract_signed?: boolean | null
+          contract_signed_at?: string | null
+          created_at?: string | null
+          id?: string
+          insurance_verified?: boolean | null
+          kbis_verified?: boolean | null
+          legal_notes?: string | null
+          name: string
+          reception_email?: string | null
+          requires_manual_export?: boolean | null
+          service_types?: string[] | null
+          slug: string
+          status?: string | null
+          transmission_mode?: string | null
+          updated_at?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          consent_text_override?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_whatsapp?: string | null
+          contract_signed?: boolean | null
+          contract_signed_at?: string | null
+          created_at?: string | null
+          id?: string
+          insurance_verified?: boolean | null
+          kbis_verified?: boolean | null
+          legal_notes?: string | null
+          name?: string
+          reception_email?: string | null
+          requires_manual_export?: boolean | null
+          service_types?: string[] | null
+          slug?: string
+          status?: string | null
+          transmission_mode?: string | null
+          updated_at?: string | null
+          webhook_url?: string | null
         }
         Relationships: []
       }
