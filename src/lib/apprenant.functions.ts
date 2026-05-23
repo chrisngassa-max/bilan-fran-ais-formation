@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin as _supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getRequest } from "@tanstack/react-start/server";
 
 const supabaseAdmin: any = _supabaseAdmin;
 
@@ -176,6 +177,18 @@ export const submitEmargementFn = createServerFn({ method: "POST" })
     if (!attendance) throw new Error("Vous n'êtes pas attendu(e) à cette séance");
     if (attendance.signed_at) throw new Error("Vous avez déjà émargé cette séance");
 
+    // Note : le code 4 chiffres est un confort UI non bloquant.
+    // La vérification réelle est l'appartenance de l'apprenant à la cohorte.
+    // Implémentation de la vérification cryptographique différée à Phase G.
+
+    let ip_address: string | null = null;
+    try {
+      const req = getRequest();
+      ip_address = req?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim()
+        || req?.headers?.get("cf-connecting-ip")
+        || null;
+    } catch {}
+
     const patch: any = {
       signed_at: new Date().toISOString(),
     };
@@ -187,6 +200,8 @@ export const submitEmargementFn = createServerFn({ method: "POST" })
       patch.status = "present";
       patch.signature_method = data.mode === "code" ? "code_4_digits" : "click_validation";
     }
+
+    if (ip_address) patch.ip_address = ip_address;
 
     const { error } = await supabaseAdmin
       .from("attendance")
