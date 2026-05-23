@@ -30,6 +30,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SessionsCohortIdRouteImport } from './routes/sessions.$cohortId'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
+import { Route as MonEspaceMesSeancesRouteImport } from './routes/mon-espace.mes-seances'
 import { Route as MonEspaceMaCohorteRouteImport } from './routes/mon-espace.ma-cohorte'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
@@ -40,6 +41,7 @@ import { Route as AdminPartenairesRouteImport } from './routes/admin.partenaires
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminCohortesRouteImport } from './routes/admin.cohortes'
 import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
+import { Route as MonEspaceEmargementSessionIdRouteImport } from './routes/mon-espace.emargement.$sessionId'
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
 import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
 import { Route as AdminCohortesNouveauRouteImport } from './routes/admin.cohortes.nouveau'
@@ -151,6 +153,11 @@ const PasserTestTokenRoute = PasserTestTokenRouteImport.update({
   path: '/passer-test/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MonEspaceMesSeancesRoute = MonEspaceMesSeancesRouteImport.update({
+  id: '/mes-seances',
+  path: '/mes-seances',
+  getParentRoute: () => MonEspaceRoute,
+} as any)
 const MonEspaceMaCohorteRoute = MonEspaceMaCohorteRouteImport.update({
   id: '/ma-cohorte',
   path: '/ma-cohorte',
@@ -201,6 +208,12 @@ const PartenaireLeadsLeadIdRoute = PartenaireLeadsLeadIdRouteImport.update({
   path: '/leads/$leadId',
   getParentRoute: () => PartenaireRoute,
 } as any)
+const MonEspaceEmargementSessionIdRoute =
+  MonEspaceEmargementSessionIdRouteImport.update({
+    id: '/emargement/$sessionId',
+    path: '/emargement/$sessionId',
+    getParentRoute: () => MonEspaceRoute,
+  } as any)
 const AdminPartenairesNewRoute = AdminPartenairesNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -248,6 +261,7 @@ export interface FileRoutesByFullPath {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -257,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesByTo {
@@ -283,6 +298,7 @@ export interface FileRoutesByTo {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -292,6 +308,7 @@ export interface FileRoutesByTo {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRoutesById {
@@ -321,6 +338,7 @@ export interface FileRoutesById {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
   '/sessions/$cohortId': typeof SessionsCohortIdRoute
@@ -330,6 +348,7 @@ export interface FileRoutesById {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
 export interface FileRouteTypes {
@@ -360,6 +379,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -369,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -395,6 +416,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -404,6 +426,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   id:
     | '__root__'
@@ -432,6 +455,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
     | '/sessions/$cohortId'
@@ -441,6 +465,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   fileRoutesById: FileRoutesById
 }
@@ -616,6 +641,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasserTestTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mon-espace/mes-seances': {
+      id: '/mon-espace/mes-seances'
+      path: '/mes-seances'
+      fullPath: '/mon-espace/mes-seances'
+      preLoaderRoute: typeof MonEspaceMesSeancesRouteImport
+      parentRoute: typeof MonEspaceRoute
+    }
     '/mon-espace/ma-cohorte': {
       id: '/mon-espace/ma-cohorte'
       path: '/ma-cohorte'
@@ -685,6 +717,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/partenaire/leads/$leadId'
       preLoaderRoute: typeof PartenaireLeadsLeadIdRouteImport
       parentRoute: typeof PartenaireRoute
+    }
+    '/mon-espace/emargement/$sessionId': {
+      id: '/mon-espace/emargement/$sessionId'
+      path: '/emargement/$sessionId'
+      fullPath: '/mon-espace/emargement/$sessionId'
+      preLoaderRoute: typeof MonEspaceEmargementSessionIdRouteImport
+      parentRoute: typeof MonEspaceRoute
     }
     '/admin/partenaires/new': {
       id: '/admin/partenaires/new'
@@ -790,10 +829,14 @@ const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
 
 interface MonEspaceRouteChildren {
   MonEspaceMaCohorteRoute: typeof MonEspaceMaCohorteRoute
+  MonEspaceMesSeancesRoute: typeof MonEspaceMesSeancesRoute
+  MonEspaceEmargementSessionIdRoute: typeof MonEspaceEmargementSessionIdRoute
 }
 
 const MonEspaceRouteChildren: MonEspaceRouteChildren = {
   MonEspaceMaCohorteRoute: MonEspaceMaCohorteRoute,
+  MonEspaceMesSeancesRoute: MonEspaceMesSeancesRoute,
+  MonEspaceEmargementSessionIdRoute: MonEspaceEmargementSessionIdRoute,
 }
 
 const MonEspaceRouteWithChildren = MonEspaceRoute._addFileChildren(
@@ -849,3 +892,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
