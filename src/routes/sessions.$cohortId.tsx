@@ -11,6 +11,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useServerFn } from "@tanstack/react-start";
+import { sendEnrollmentConfirmationFn } from "@/lib/dashboard.functions";
 
 export const Route = createFileRoute("/sessions/$cohortId")({
   head: () => ({
