@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      dossiers: {
+        Row: {
+          attempt_id: string | null
+          cpf_mobilise: number | null
+          created_at: string
+          has_employer_agreement: boolean | null
+          has_main_docs: boolean | null
+          has_siret: boolean | null
+          id: string
+          lead_id: string | null
+          opco_estime: number | null
+          partner_id: string | null
+          partner_status: string | null
+          reste_a_charge: number | null
+          solde_cpf: number | null
+          status: string | null
+          status_emploi: string | null
+          updated_at: string
+        }
+        Insert: {
+          attempt_id?: string | null
+          cpf_mobilise?: number | null
+          created_at?: string
+          has_employer_agreement?: boolean | null
+          has_main_docs?: boolean | null
+          has_siret?: boolean | null
+          id?: string
+          lead_id?: string | null
+          opco_estime?: number | null
+          partner_id?: string | null
+          partner_status?: string | null
+          reste_a_charge?: number | null
+          solde_cpf?: number | null
+          status?: string | null
+          status_emploi?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attempt_id?: string | null
+          cpf_mobilise?: number | null
+          created_at?: string
+          has_employer_agreement?: boolean | null
+          has_main_docs?: boolean | null
+          has_siret?: boolean | null
+          id?: string
+          lead_id?: string | null
+          opco_estime?: number | null
+          partner_id?: string | null
+          partner_status?: string | null
+          reste_a_charge?: number | null
+          solde_cpf?: number | null
+          status?: string | null
+          status_emploi?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dossiers_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_partenaire_assignments: {
         Row: {
           created_at: string
