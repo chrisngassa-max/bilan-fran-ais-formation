@@ -117,11 +117,21 @@ export const getLeadDetailAdminFn = createServerFn({ method: "POST" })
       .eq("lead_id", data.leadId)
       .order("created_at", { ascending: false });
 
-    return { 
-      lead, 
-      sessions: sessions ?? [], 
+    // Fetch latest related dossier (qualification financement)
+    const { data: dossier } = await supabaseAdmin
+      .from("dossiers")
+      .select("solde_cpf, reste_a_charge, status_emploi, has_main_docs")
+      .eq("lead_id", data.leadId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    return {
+      lead,
+      sessions: sessions ?? [],
       events: events ?? [],
-      transmissions: transmissions ?? []
+      transmissions: transmissions ?? [],
+      dossier: dossier ?? null,
     };
   });
 

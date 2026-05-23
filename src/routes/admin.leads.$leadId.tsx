@@ -56,6 +56,7 @@ export function LeadDetailAdmin() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
   const [transmissions, setTransmissions] = useState<any[]>([]);
+  const [dossier, setDossier] = useState<any>(null);
   const [partners, setPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,6 +76,7 @@ export function LeadDetailAdmin() {
       setSessions(res.sessions);
       setEvents(res.events);
       setTransmissions(res.transmissions);
+      setDossier((res as any).dossier ?? null);
       setStatusVal(res.lead.status);
 
       // Load active partners
@@ -402,16 +404,16 @@ export function LeadDetailAdmin() {
                     <div className="bg-surface p-4 rounded-2xl border border-outline-variant/30 text-center">
                       <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Solde CPF déclaré</span>
                       <p className="text-2xl font-black text-emerald-600 mt-1">
-                        {lead.context?.administration?.declarative_info?.soldeCpf !== undefined 
-                          ? `${lead.context.administration.declarative_info.soldeCpf} €` 
+                        {dossier?.solde_cpf !== undefined && dossier?.solde_cpf !== null
+                          ? `${dossier.solde_cpf} €`
                           : "Non renseigné"}
                       </p>
                     </div>
                     <div className="bg-surface p-4 rounded-2xl border border-outline-variant/30 text-center">
                       <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Reste à charge estimé</span>
                       <p className="text-2xl font-black text-on-surface mt-1">
-                        {lead.context?.finances?.rac !== undefined 
-                          ? `${lead.context.finances.rac} €` 
+                        {dossier?.reste_a_charge !== undefined && dossier?.reste_a_charge !== null
+                          ? `${dossier.reste_a_charge} €`
                           : "À définir"}
                       </p>
                     </div>
