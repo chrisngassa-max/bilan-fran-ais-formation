@@ -105,7 +105,7 @@ export const getCohortFn = createServerFn({ method: "POST" })
 
     const { data: enrollments } = await supabaseAdmin
       .from("cohort_enrollments")
-      .select("*, leads(id,prenom,email)")
+      .select("*, leads(id,first_name,email)")
       .eq("cohort_id", data.cohortId)
       .order("created_at", { ascending: false });
 

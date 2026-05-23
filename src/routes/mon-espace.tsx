@@ -215,7 +215,7 @@ function MonEspacePage() {
         {/* Header */}
         <div className="bg-primary text-primary-foreground rounded-2xl p-6 shadow-sm">
           <h1 className="text-2xl font-bold mb-1">
-            Bonjour {lead.prenom ?? "👋"} 👋
+            Bonjour {(lead as any).first_name ?? "👋"} 👋
           </h1>
           <p className="text-primary-foreground/85 text-sm">
             Votre espace personnel de suivi

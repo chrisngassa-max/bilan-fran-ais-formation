@@ -109,7 +109,7 @@ export const getSessionDetailFn = createServerFn({ method: "POST" })
     const { data: leads } = leadIds.length
       ? await supabaseAdmin
           .from("leads")
-          .select("id, prenom, email")
+          .select("id, first_name, email")
           .in("id", leadIds)
       : { data: [] };
 
@@ -121,7 +121,7 @@ export const getSessionDetailFn = createServerFn({ method: "POST" })
       const att: any = attMap.get(lid);
       return {
         lead_id: lid,
-        prenom: lead?.prenom ?? "",
+        prenom: lead?.first_name ?? "",
         email: lead?.email ?? "",
         attendance_id: att?.id ?? null,
         status: att?.status ?? "pending",
@@ -229,7 +229,7 @@ export const getMesApprenantsFn = createServerFn({ method: "POST" })
     const leadIds = enrollments.map((e: any) => e.lead_id);
     const { data: leads } = await supabaseAdmin
       .from("leads")
-      .select("id, prenom, email, whatsapp_phone, estimated_level")
+      .select("id, first_name, email, whatsapp_phone, estimated_level")
       .in("id", leadIds);
 
     const cohortMap = new Map((cohorts ?? []).map((c: any) => [c.id, c]));
@@ -269,7 +269,7 @@ export const getMesApprenantsFn = createServerFn({ method: "POST" })
           enrollment_id: e.id,
           status: e.status,
           payment_mode: e.payment_mode,
-          prenom: lead?.prenom ?? "",
+          prenom: lead?.first_name ?? "",
           email: lead?.email ?? "",
           whatsapp_phone: lead?.whatsapp_phone ?? "",
           estimated_level: lead?.estimated_level ?? "",
