@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          arrival_time: string | null
+          created_at: string
+          duration_minutes: number | null
+          id: string
+          ip_address: string | null
+          lead_id: string
+          marked_by: string | null
+          notes: string | null
+          session_id: string
+          signature_method: string | null
+          signed_at: string | null
+          status: string
+        }
+        Insert: {
+          arrival_time?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          ip_address?: string | null
+          lead_id: string
+          marked_by?: string | null
+          notes?: string | null
+          session_id: string
+          signature_method?: string | null
+          signed_at?: string | null
+          status?: string
+        }
+        Update: {
+          arrival_time?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          ip_address?: string | null
+          lead_id?: string
+          marked_by?: string | null
+          notes?: string | null
+          session_id?: string
+          signature_method?: string | null
+          signed_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "cohort_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checklist_states: {
         Row: {
           attestation_ok: boolean
@@ -54,6 +114,238 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohort_enrollments: {
+        Row: {
+          acompte_amount: number | null
+          acompte_paid: boolean | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cohort_id: string
+          confirmed_at: string | null
+          created_at: string
+          id: string
+          lead_id: string
+          payment_mode: string | null
+          reserved_at: string | null
+          solde_due: number | null
+          stafy_dossier_id: string | null
+          stafy_status: string | null
+          stafy_transmitted_at: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          total_paid: number | null
+          updated_at: string
+        }
+        Insert: {
+          acompte_amount?: number | null
+          acompte_paid?: boolean | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cohort_id: string
+          confirmed_at?: string | null
+          created_at?: string
+          id?: string
+          lead_id: string
+          payment_mode?: string | null
+          reserved_at?: string | null
+          solde_due?: number | null
+          stafy_dossier_id?: string | null
+          stafy_status?: string | null
+          stafy_transmitted_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          total_paid?: number | null
+          updated_at?: string
+        }
+        Update: {
+          acompte_amount?: number | null
+          acompte_paid?: boolean | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cohort_id?: string
+          confirmed_at?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string
+          payment_mode?: string | null
+          reserved_at?: string | null
+          solde_due?: number | null
+          stafy_dossier_id?: string | null
+          stafy_status?: string | null
+          stafy_transmitted_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          total_paid?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_enrollments_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cohort_enrollments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohort_sessions: {
+        Row: {
+          cohort_id: string
+          created_at: string
+          documents: Json | null
+          duration_minutes: number
+          end_time: string
+          format: string
+          formateur_id: string | null
+          id: string
+          location: string | null
+          meeting_url: string | null
+          notes_formateur: string | null
+          objectives: string | null
+          session_date: string
+          session_number: number
+          session_type: string
+          start_time: string
+          status: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          cohort_id: string
+          created_at?: string
+          documents?: Json | null
+          duration_minutes?: number
+          end_time: string
+          format?: string
+          formateur_id?: string | null
+          id?: string
+          location?: string | null
+          meeting_url?: string | null
+          notes_formateur?: string | null
+          objectives?: string | null
+          session_date: string
+          session_number: number
+          session_type?: string
+          start_time: string
+          status?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cohort_id?: string
+          created_at?: string
+          documents?: Json | null
+          duration_minutes?: number
+          end_time?: string
+          format?: string
+          formateur_id?: string | null
+          id?: string
+          location?: string | null
+          meeting_url?: string | null
+          notes_formateur?: string | null
+          objectives?: string | null
+          session_date?: string
+          session_number?: number
+          session_type?: string
+          start_time?: string
+          status?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_sessions_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohorts: {
+        Row: {
+          code: string | null
+          created_at: string
+          estimated_end_date: string | null
+          exam_blank_1_session: number | null
+          exam_blank_2_session: number | null
+          exam_blank_3_session: number | null
+          formateur_id: string | null
+          formation_journey_id: string | null
+          id: string
+          intensity: string
+          max_students: number
+          meeting_url: string | null
+          min_students_to_confirm: number
+          notes_internes: string | null
+          start_date: string
+          status: string
+          total_sessions: number | null
+          updated_at: string
+          visibility: string
+          weekly_schedule: Json
+        }
+        Insert: {
+          code?: string | null
+          created_at?: string
+          estimated_end_date?: string | null
+          exam_blank_1_session?: number | null
+          exam_blank_2_session?: number | null
+          exam_blank_3_session?: number | null
+          formateur_id?: string | null
+          formation_journey_id?: string | null
+          id?: string
+          intensity?: string
+          max_students?: number
+          meeting_url?: string | null
+          min_students_to_confirm?: number
+          notes_internes?: string | null
+          start_date: string
+          status?: string
+          total_sessions?: number | null
+          updated_at?: string
+          visibility?: string
+          weekly_schedule?: Json
+        }
+        Update: {
+          code?: string | null
+          created_at?: string
+          estimated_end_date?: string | null
+          exam_blank_1_session?: number | null
+          exam_blank_2_session?: number | null
+          exam_blank_3_session?: number | null
+          formateur_id?: string | null
+          formation_journey_id?: string | null
+          id?: string
+          intensity?: string
+          max_students?: number
+          meeting_url?: string | null
+          min_students_to_confirm?: number
+          notes_internes?: string | null
+          start_date?: string
+          status?: string
+          total_sessions?: number | null
+          updated_at?: string
+          visibility?: string
+          weekly_schedule?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohorts_formation_journey_id_fkey"
+            columns: ["formation_journey_id"]
+            isOneToOne: false
+            referencedRelation: "formation_journeys"
             referencedColumns: ["id"]
           },
         ]
@@ -122,6 +414,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      formation_journeys: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_weeks: number | null
+          id: string
+          level: string | null
+          price_euros: number | null
+          slug: string | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          level?: string | null
+          price_euros?: number | null
+          slug?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          level?: string | null
+          price_euros?: number | null
+          slug?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       lead_events: {
         Row: {
@@ -661,6 +992,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_cohort_enrolled_count: {
+        Args: { p_cohort_id: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           target_role: Database["public"]["Enums"]["app_role"]
