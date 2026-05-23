@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      checklist_states: {
+        Row: {
+          attestation_ok: boolean
+          created_at: string | null
+          dispense_demandee: boolean | null
+          docs_checklist: Json
+          docs_manquants: number
+          id: string
+          lead_id: string
+          situation_pro: string | null
+          type_demarche: string
+        }
+        Insert: {
+          attestation_ok?: boolean
+          created_at?: string | null
+          dispense_demandee?: boolean | null
+          docs_checklist?: Json
+          docs_manquants?: number
+          id?: string
+          lead_id: string
+          situation_pro?: string | null
+          type_demarche: string
+        }
+        Update: {
+          attestation_ok?: boolean
+          created_at?: string | null
+          dispense_demandee?: boolean | null
+          docs_checklist?: Json
+          docs_manquants?: number
+          id?: string
+          lead_id?: string
+          situation_pro?: string | null
+          type_demarche?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_states_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dossiers: {
         Row: {
           attempt_id: string | null
@@ -79,6 +123,38 @@ export type Database = {
           },
         ]
       }
+      lead_events: {
+        Row: {
+          created_at: string | null
+          event_name: string
+          id: string
+          lead_id: string | null
+          properties: Json
+        }
+        Insert: {
+          created_at?: string | null
+          event_name: string
+          id?: string
+          lead_id?: string | null
+          properties?: Json
+        }
+        Update: {
+          created_at?: string | null
+          event_name?: string
+          id?: string
+          lead_id?: string | null
+          properties?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_events_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_partenaire_assignments: {
         Row: {
           created_at: string
@@ -122,15 +198,21 @@ export type Database = {
           birth_date: string | null
           checklist_states: Json | null
           city: string | null
+          consent_at: string | null
           consent_marketing: boolean
+          contacte: boolean | null
+          contacte_at: string | null
           cpf_balance_declared: number | null
           cpf_status: string | null
           created_at: string
           date_rdv_prefecture: string | null
+          demarche_inconnue: boolean | null
+          destination: string | null
           dispense_demandee: boolean | null
           email: string
           employer_support: boolean | null
           estimated_level: string | null
+          financement_opt_in: boolean | null
           france_travail_registered: boolean | null
           funding_followup_at: string | null
           funding_internal_notes: string | null
@@ -143,7 +225,9 @@ export type Database = {
           nationality: string | null
           partenaire_consent: boolean
           partenaire_consent_at: string | null
+          partenaire_opt_in: boolean | null
           partner_id: string | null
+          partner_status: string | null
           postal_code: string | null
           prenom: string | null
           professional_status: string | null
@@ -151,7 +235,9 @@ export type Database = {
           situation_pro: string | null
           source: string
           status: string
+          tunnel: string | null
           type_demarche: string | null
+          whatsapp_consent: boolean
           whatsapp_phone: string | null
         }
         Insert: {
@@ -160,15 +246,21 @@ export type Database = {
           birth_date?: string | null
           checklist_states?: Json | null
           city?: string | null
+          consent_at?: string | null
           consent_marketing?: boolean
+          contacte?: boolean | null
+          contacte_at?: string | null
           cpf_balance_declared?: number | null
           cpf_status?: string | null
           created_at?: string
           date_rdv_prefecture?: string | null
+          demarche_inconnue?: boolean | null
+          destination?: string | null
           dispense_demandee?: boolean | null
           email: string
           employer_support?: boolean | null
           estimated_level?: string | null
+          financement_opt_in?: boolean | null
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
@@ -181,7 +273,9 @@ export type Database = {
           nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          partenaire_opt_in?: boolean | null
           partner_id?: string | null
+          partner_status?: string | null
           postal_code?: string | null
           prenom?: string | null
           professional_status?: string | null
@@ -189,7 +283,9 @@ export type Database = {
           situation_pro?: string | null
           source?: string
           status?: string
+          tunnel?: string | null
           type_demarche?: string | null
+          whatsapp_consent?: boolean
           whatsapp_phone?: string | null
         }
         Update: {
@@ -198,15 +294,21 @@ export type Database = {
           birth_date?: string | null
           checklist_states?: Json | null
           city?: string | null
+          consent_at?: string | null
           consent_marketing?: boolean
+          contacte?: boolean | null
+          contacte_at?: string | null
           cpf_balance_declared?: number | null
           cpf_status?: string | null
           created_at?: string
           date_rdv_prefecture?: string | null
+          demarche_inconnue?: boolean | null
+          destination?: string | null
           dispense_demandee?: boolean | null
           email?: string
           employer_support?: boolean | null
           estimated_level?: string | null
+          financement_opt_in?: boolean | null
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
@@ -219,7 +321,9 @@ export type Database = {
           nationality?: string | null
           partenaire_consent?: boolean
           partenaire_consent_at?: string | null
+          partenaire_opt_in?: boolean | null
           partner_id?: string | null
+          partner_status?: string | null
           postal_code?: string | null
           prenom?: string | null
           professional_status?: string | null
@@ -227,7 +331,9 @@ export type Database = {
           situation_pro?: string | null
           source?: string
           status?: string
+          tunnel?: string | null
           type_demarche?: string | null
+          whatsapp_consent?: boolean
           whatsapp_phone?: string | null
         }
         Relationships: [
@@ -529,15 +635,47 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          target_role: Database["public"]["Enums"]["app_role"]
+          uid: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "admin"
+        | "conseiller"
+        | "gestionnaire"
+        | "partenaire"
+        | "inscrit"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -664,6 +802,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "admin",
+        "conseiller",
+        "gestionnaire",
+        "partenaire",
+        "inscrit",
+      ],
+    },
   },
 } as const
