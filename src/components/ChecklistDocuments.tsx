@@ -26,7 +26,7 @@ export const DOCUMENTS_BY_DEMARCHE = {
       { id: "acte_nais", label: "Acte de naissance + traduction assermentée", desc: "Traduit en français par un traducteur agréé auprès d'une cour d'appel", statut: "obligatoire" },
       { id: "timbre", label: "Timbre fiscal (montant variable)", desc: "Achetable en ligne sur le site officiel de l'administration", statut: "obligatoire" },
       { id: "cerfa", label: "Formulaire CERFA adapté", desc: "Dossier de demande officiel dûment rempli et signé", statut: "obligatoire" },
-      { id: "attestation", label: "Justificatif de niveau de langue (niveau indicatif : A2 — à vérifier selon situation)", desc: "Attestation officielle TCF/DELF de moins de 2 ans. Niveau A2 requis dans la plupart des cas.", statut: "obligatoire", highlight: true },
+      { id: "attestation", label: "Attestation officielle TCF ou DELF niveau A2", desc: "Attestation officielle TCF/DELF niveau A2 de moins de 2 ans. Requis pour la carte de séjour pluriannuelle (2-4 ans).", statut: "obligatoire", highlight: true },
     ],
     selon_situation: {
       salarie: [
@@ -53,12 +53,12 @@ export const DOCUMENTS_BY_DEMARCHE = {
       { id: "timbre", label: "Timbre fiscal", desc: "Preuve d'achat du droit de visa administratif", statut: "obligatoire" },
       { id: "bulletins", label: "3 derniers bulletins de salaire", desc: "Preuve de ressources stables et régulières", statut: "obligatoire" },
       { id: "impots", label: "Dernier avis d'imposition", desc: "Avis d'impôt sur le revenu reçu des Finances Publiques", statut: "obligatoire" },
-      { id: "attestation", label: "Justificatif de niveau de langue (niveau indicatif : B1 — à vérifier selon situation)", desc: "TCF ou DELF officiel validant le niveau B1 oral et écrit. Souvent obligatoire.", statut: "obligatoire", highlight: true },
+      { id: "attestation", label: "Attestation officielle TCF ou DELF niveau B1", desc: "TCF ou DELF officiel validant le niveau B1 (oral et écrit). Requis pour la carte de résident 10 ans.", statut: "obligatoire", highlight: true },
     ],
     selon_situation: {}
   },
   naturalisation: {
-    label: "Naturalisation par décret — objectif B1 oral et écrit (selon Service-Public F34708)",
+    label: "Naturalisation française — niveau B2 obligatoire depuis 2026",
     socle_commun: [
       { id: "passeport", label: "Passeport valide", desc: "Passeport de votre nationalité d'origine valide", statut: "obligatoire" },
       { id: "acte_nais", label: "Acte de naissance traduit + légalisé", desc: "Copie intégrale de naissance avec traduction officielle et cachet de légalisation/apostille", statut: "obligatoire" },
@@ -68,7 +68,7 @@ export const DOCUMENTS_BY_DEMARCHE = {
       { id: "casier", label: "Casier judiciaire pays d'origine", desc: "Extrait de casier judiciaire étranger datant de moins de 6 mois", statut: "obligatoire" },
       { id: "cerfa", label: "Formulaire CERFA 12753*01", desc: "Formulaire officiel de demande d'acquisition de la nationalité française", statut: "obligatoire" },
       { id: "photos", label: "2 photos d'identité récentes", desc: "Identiques et parfaitement conformes", statut: "obligatoire" },
-      { id: "attestation", label: "Justificatif de niveau de langue (objectif B1 oral et écrit selon SP F34708 — à vérifier)", desc: "Diplôme officiel DELF B1 ou attestation TCF ANF de moins de 2 ans validant les 4 compétences.", statut: "obligatoire", highlight: true },
+      { id: "attestation", label: "Attestation officielle TCF ou DELF niveau B2 (obligatoire depuis 2026)", desc: "Diplôme officiel DELF B2 ou attestation TCF de moins de 2 ans validant les 4 compétences au niveau B2. Depuis 2026, B2 est exigé pour la naturalisation (au lieu de B1).", statut: "obligatoire", highlight: true },
     ],
     selon_situation: {}
   }

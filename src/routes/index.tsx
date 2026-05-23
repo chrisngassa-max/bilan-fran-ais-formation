@@ -120,8 +120,8 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B1</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Objectif résidence & naturalisation (B1)</h3>
-                <p className="text-on-surface-variant">Le niveau désormais requis pour la naturalisation par décret (oral/écrit) et la plupart des cartes de résident.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif résidence (B1)</h3>
+                <p className="text-on-surface-variant">Le niveau requis pour la carte de résident de 10 ans.</p>
               </div>
               <Badge className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
@@ -131,12 +131,15 @@ function IndexPage() {
                 <span className="text-2xl font-bold">B2</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">Objectif confort & expertise (B2)</h3>
-                <p className="text-on-surface-variant">Une expression plus fluide et nuancée pour sécuriser votre projet citoyen et professionnel.</p>
+                <h3 className="text-xl font-bold mb-1">Objectif nationalité française (B2)</h3>
+                <p className="text-on-surface-variant">Le niveau désormais requis pour la naturalisation française (au lieu de B1 auparavant).</p>
               </div>
               <Flag className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
           </div>
+
+          <div className="mt-6 p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
+            <strong>⚠️ Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source : diplomatie.gouv.fr
         </div>
       </section>
 
