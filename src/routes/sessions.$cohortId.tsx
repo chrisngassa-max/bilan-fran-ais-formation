@@ -282,6 +282,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<null | "ok" | "waiting">(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const sendConfirmation = useServerFn(sendEnrollmentConfirmationFn);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
