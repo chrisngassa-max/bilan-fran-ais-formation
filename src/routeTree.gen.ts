@@ -31,6 +31,7 @@ import { Route as SessionsCohortIdRouteImport } from './routes/sessions.$cohortI
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as MonEspaceMesSeancesRouteImport } from './routes/mon-espace.mes-seances'
+import { Route as MonEspaceMesDocumentsRouteImport } from './routes/mon-espace.mes-documents'
 import { Route as MonEspaceMaCohorteRouteImport } from './routes/mon-espace.ma-cohorte'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
@@ -158,6 +159,11 @@ const MonEspaceMesSeancesRoute = MonEspaceMesSeancesRouteImport.update({
   path: '/mes-seances',
   getParentRoute: () => MonEspaceRoute,
 } as any)
+const MonEspaceMesDocumentsRoute = MonEspaceMesDocumentsRouteImport.update({
+  id: '/mes-documents',
+  path: '/mes-documents',
+  getParentRoute: () => MonEspaceRoute,
+} as any)
 const MonEspaceMaCohorteRoute = MonEspaceMaCohorteRouteImport.update({
   id: '/ma-cohorte',
   path: '/ma-cohorte',
@@ -261,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -298,6 +305,7 @@ export interface FileRoutesByTo {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -338,6 +346,7 @@ export interface FileRoutesById {
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
+  '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -455,6 +466,7 @@ export interface FileRouteTypes {
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
     | '/mon-espace/ma-cohorte'
+    | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
@@ -648,6 +660,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MonEspaceMesSeancesRouteImport
       parentRoute: typeof MonEspaceRoute
     }
+    '/mon-espace/mes-documents': {
+      id: '/mon-espace/mes-documents'
+      path: '/mes-documents'
+      fullPath: '/mon-espace/mes-documents'
+      preLoaderRoute: typeof MonEspaceMesDocumentsRouteImport
+      parentRoute: typeof MonEspaceRoute
+    }
     '/mon-espace/ma-cohorte': {
       id: '/mon-espace/ma-cohorte'
       path: '/ma-cohorte'
@@ -829,12 +848,14 @@ const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
 
 interface MonEspaceRouteChildren {
   MonEspaceMaCohorteRoute: typeof MonEspaceMaCohorteRoute
+  MonEspaceMesDocumentsRoute: typeof MonEspaceMesDocumentsRoute
   MonEspaceMesSeancesRoute: typeof MonEspaceMesSeancesRoute
   MonEspaceEmargementSessionIdRoute: typeof MonEspaceEmargementSessionIdRoute
 }
 
 const MonEspaceRouteChildren: MonEspaceRouteChildren = {
   MonEspaceMaCohorteRoute: MonEspaceMaCohorteRoute,
+  MonEspaceMesDocumentsRoute: MonEspaceMesDocumentsRoute,
   MonEspaceMesSeancesRoute: MonEspaceMesSeancesRoute,
   MonEspaceEmargementSessionIdRoute: MonEspaceEmargementSessionIdRoute,
 }
