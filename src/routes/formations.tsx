@@ -199,7 +199,7 @@ function FormationsPage() {
         </div>
 
         {/* Call to Actions Principaux */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
           <Link 
             to="/passer-test/$token"
             params={{ token: "latest" }}
@@ -208,6 +208,16 @@ function FormationsPage() {
           >
             <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all">
               Faire le test de positionnement gratuit
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </Link>
+          <Link
+            to="/sessions"
+            onClick={() => trackEvent("formations_cta_click", { action: "view_sessions" })}
+            className="flex-1 max-w-sm"
+          >
+            <button className="w-full h-16 bg-secondary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all">
+              Voir les prochaines sessions
               <ArrowRight className="h-5 w-5" />
             </button>
           </Link>
