@@ -161,7 +161,7 @@ export function AlerteAttestationManquante({
               ⚠️ Justificatif de niveau de langue obligatoire
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed font-semibold">
-              Pour la plupart des demandes en préfecture (séjour pluriannuel, carte de résident, naturalisation par décret), un justificatif officiel de niveau de français (A2 ou B1 minimum) doit être joint à votre dossier.
+              Pour la plupart des demandes en préfecture (séjour pluriannuel A2, carte de résident B1, naturalisation B2 depuis 2026), un justificatif officiel de niveau de français doit être joint à votre dossier.
             </p>
             <p className="text-xs text-red-700 font-bold leading-relaxed mt-2">
               Sans ce justificatif valable, votre dossier peut être retardé, bloqué ou faire l'objet d'une demande de pièce complémentaire.
