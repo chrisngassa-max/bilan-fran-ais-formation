@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Menu, X, GraduationCap, Banknote, Calculator } from "lucide-react";
+import { Menu, X, GraduationCap, Banknote, Calculator, Calendar } from "lucide-react";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -33,6 +33,12 @@ export function Header() {
               className="hover:text-primary transition-colors flex items-center gap-1"
             >
               <GraduationCap className="h-4 w-4" /> Niveaux
+            </Link>
+            <Link
+              to="/sessions"
+              className="hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <Calendar className="h-4 w-4" /> Sessions
             </Link>
             <Link
               to="/financement"
@@ -90,6 +96,16 @@ export function Header() {
             }}
           >
             <GraduationCap className="h-5 w-5" /> Niveaux
+          </Link>
+          <Link
+            to="/sessions"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-variant rounded-lg"
+            activeProps={{
+              className: "bg-secondary-container text-on-secondary-container font-bold",
+            }}
+          >
+            <Calendar className="h-5 w-5" /> Sessions
           </Link>
           <Link
             to="/financement"

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TestRapideRouteImport } from './routes/test-rapide'
+import { Route as SessionsRouteImport } from './routes/sessions'
 import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
@@ -26,6 +27,7 @@ import { Route as AccompagnementAdministratifRouteImport } from './routes/accomp
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FinancementIndexRouteImport } from './routes/financement.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as SessionsCohortIdRouteImport } from './routes/sessions.$cohortId'
 import { Route as QualificationAttemptIdRouteImport } from './routes/qualification.$attemptId'
 import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
@@ -50,6 +52,11 @@ const UnsubscribeRoute = UnsubscribeRouteImport.update({
 const TestRapideRoute = TestRapideRouteImport.update({
   id: '/test-rapide',
   path: '/test-rapide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsRoute = SessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartenaireRoute = PartenaireRouteImport.update({
@@ -127,6 +134,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const SessionsCohortIdRoute = SessionsCohortIdRouteImport.update({
+  id: '/$cohortId',
+  path: '/$cohortId',
+  getParentRoute: () => SessionsRoute,
 } as any)
 const QualificationAttemptIdRoute = QualificationAttemptIdRouteImport.update({
   id: '/qualification/$attemptId',
@@ -218,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
@@ -230,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/sessions/$cohortId': typeof SessionsCohortIdRoute
   '/admin/': typeof AdminIndexRoute
   '/financement/': typeof FinancementIndexRoute
   '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
@@ -250,6 +264,7 @@ export interface FileRoutesByTo {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
@@ -262,6 +277,7 @@ export interface FileRoutesByTo {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/sessions/$cohortId': typeof SessionsCohortIdRoute
   '/admin': typeof AdminIndexRoute
   '/financement': typeof FinancementIndexRoute
   '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
@@ -285,6 +301,7 @@ export interface FileRoutesById {
   '/mon-espace': typeof MonEspaceRoute
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
@@ -297,6 +314,7 @@ export interface FileRoutesById {
   '/financement/cpf': typeof FinancementCpfRoute
   '/passer-test/$token': typeof PasserTestTokenRoute
   '/qualification/$attemptId': typeof QualificationAttemptIdRoute
+  '/sessions/$cohortId': typeof SessionsCohortIdRoute
   '/admin/': typeof AdminIndexRoute
   '/financement/': typeof FinancementIndexRoute
   '/admin/cohortes/$cohortId': typeof AdminCohortesCohortIdRoute
@@ -321,6 +339,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
     | '/admin/cohortes'
@@ -333,6 +352,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/sessions/$cohortId'
     | '/admin/'
     | '/financement/'
     | '/admin/cohortes/$cohortId'
@@ -353,6 +373,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
     | '/admin/cohortes'
@@ -365,6 +386,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/sessions/$cohortId'
     | '/admin'
     | '/financement'
     | '/admin/cohortes/$cohortId'
@@ -387,6 +409,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
     | '/admin/cohortes'
@@ -399,6 +422,7 @@ export interface FileRouteTypes {
     | '/financement/cpf'
     | '/passer-test/$token'
     | '/qualification/$attemptId'
+    | '/sessions/$cohortId'
     | '/admin/'
     | '/financement/'
     | '/admin/cohortes/$cohortId'
@@ -422,6 +446,7 @@ export interface RootRouteChildren {
   MonEspaceRoute: typeof MonEspaceRoute
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
+  SessionsRoute: typeof SessionsRouteWithChildren
   TestRapideRoute: typeof TestRapideRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   ApiCaptureLeadRoute: typeof ApiCaptureLeadRoute
@@ -444,6 +469,13 @@ declare module '@tanstack/react-router' {
       path: '/test-rapide'
       fullPath: '/test-rapide'
       preLoaderRoute: typeof TestRapideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions': {
+      id: '/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof SessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partenaire': {
@@ -550,6 +582,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/sessions/$cohortId': {
+      id: '/sessions/$cohortId'
+      path: '/$cohortId'
+      fullPath: '/sessions/$cohortId'
+      preLoaderRoute: typeof SessionsCohortIdRouteImport
+      parentRoute: typeof SessionsRoute
     }
     '/qualification/$attemptId': {
       id: '/qualification/$attemptId'
@@ -742,6 +781,18 @@ const PartenaireRouteWithChildren = PartenaireRoute._addFileChildren(
   PartenaireRouteChildren,
 )
 
+interface SessionsRouteChildren {
+  SessionsCohortIdRoute: typeof SessionsCohortIdRoute
+}
+
+const SessionsRouteChildren: SessionsRouteChildren = {
+  SessionsCohortIdRoute: SessionsCohortIdRoute,
+}
+
+const SessionsRouteWithChildren = SessionsRoute._addFileChildren(
+  SessionsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccompagnementAdministratifRoute: AccompagnementAdministratifRoute,
@@ -756,6 +807,7 @@ const rootRouteChildren: RootRouteChildren = {
   MonEspaceRoute: MonEspaceRoute,
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
+  SessionsRoute: SessionsRouteWithChildren,
   TestRapideRoute: TestRapideRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   ApiCaptureLeadRoute: ApiCaptureLeadRoute,
