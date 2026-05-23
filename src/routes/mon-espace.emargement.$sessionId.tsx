@@ -197,6 +197,10 @@ function EmargementForm({
             className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-center text-2xl font-mono tracking-widest"
             placeholder="••••"
           />
+          <p className="text-xs text-gray-500 mt-2">
+            Le code vous est communiqué par votre formateur.
+            Il simplifie l'identification mais n'est pas cryptographiquement vérifié.
+          </p>
         </div>
       )}
 

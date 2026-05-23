@@ -369,7 +369,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
         }));
         const { error: attendErr } = await supabase
           .from("attendance")
-          .insert(attendanceRows);
+          .upsert(attendanceRows, { onConflict: "session_id,lead_id", ignoreDuplicates: true });
         if (attendErr) {
           console.error("Attendance insert error (non bloquant):", attendErr);
         }
