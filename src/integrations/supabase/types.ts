@@ -544,6 +544,7 @@ export type Database = {
           employer_support: boolean | null
           estimated_level: string | null
           financement_opt_in: boolean | null
+          first_name: string | null
           france_travail_registered: boolean | null
           funding_followup_at: string | null
           funding_internal_notes: string | null
@@ -560,7 +561,6 @@ export type Database = {
           partner_id: string | null
           partner_status: string | null
           postal_code: string | null
-          prenom: string | null
           professional_status: string | null
           sector_activity: string | null
           situation_pro: string | null
@@ -592,6 +592,7 @@ export type Database = {
           employer_support?: boolean | null
           estimated_level?: string | null
           financement_opt_in?: boolean | null
+          first_name?: string | null
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
@@ -608,7 +609,6 @@ export type Database = {
           partner_id?: string | null
           partner_status?: string | null
           postal_code?: string | null
-          prenom?: string | null
           professional_status?: string | null
           sector_activity?: string | null
           situation_pro?: string | null
@@ -640,6 +640,7 @@ export type Database = {
           employer_support?: boolean | null
           estimated_level?: string | null
           financement_opt_in?: boolean | null
+          first_name?: string | null
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
@@ -656,7 +657,6 @@ export type Database = {
           partner_id?: string | null
           partner_status?: string | null
           postal_code?: string | null
-          prenom?: string | null
           professional_status?: string | null
           sector_activity?: string | null
           situation_pro?: string | null
