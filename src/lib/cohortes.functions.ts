@@ -31,11 +31,18 @@ export const listCohortsFn = createServerFn({ method: "POST" })
       intensity: z.string().optional(),
     }).parse(input ?? {}),
   )
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const userId = (context as any).userId as string;
+    const userRoles = ((context as any).userRoles ?? []) as string[];
+    const isAdmin = userRoles.includes("admin");
+
     let q = supabaseAdmin
       .from("cohorts")
       .select("*, formation_journeys(id,title,level)")
       .order("start_date", { ascending: false });
+
+    // Gestionnaire (non-admin) ne voit que ses propres cohortes
+    if (!isAdmin) q = q.eq("formateur_id", userId);
 
     if (data.status && data.status !== "all") q = q.eq("status", data.status);
     if (data.intensity && data.intensity !== "all") q = q.eq("intensity", data.intensity);
