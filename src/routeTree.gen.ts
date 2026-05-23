@@ -18,6 +18,7 @@ import { Route as MonEspaceRouteImport } from './routes/mon-espace'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FormationsRouteImport } from './routes/formations'
+import { Route as FormateurRouteImport } from './routes/formateur'
 import { Route as FinancementRouteImport } from './routes/financement'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -33,6 +34,9 @@ import { Route as PasserTestTokenRouteImport } from './routes/passer-test.$token
 import { Route as MonEspaceMesSeancesRouteImport } from './routes/mon-espace.mes-seances'
 import { Route as MonEspaceMesDocumentsRouteImport } from './routes/mon-espace.mes-documents'
 import { Route as MonEspaceMaCohorteRouteImport } from './routes/mon-espace.ma-cohorte'
+import { Route as FormateurMonPlanningRouteImport } from './routes/formateur.mon-planning'
+import { Route as FormateurMesCohortesRouteImport } from './routes/formateur.mes-cohortes'
+import { Route as FormateurMesApprenantsRouteImport } from './routes/formateur.mes-apprenants'
 import { Route as FinancementCpfRouteImport } from './routes/financement.cpf'
 import { Route as BilanTestAttemptIdRouteImport } from './routes/bilan-test.$attemptId'
 import { Route as ApiCaptureLeadRouteImport } from './routes/api.capture-lead'
@@ -40,10 +44,12 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminReportingRouteImport } from './routes/admin.reporting'
 import { Route as AdminPartenairesRouteImport } from './routes/admin.partenaires'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminFormateursRouteImport } from './routes/admin.formateurs'
 import { Route as AdminCohortesRouteImport } from './routes/admin.cohortes'
 import { Route as AdminApprenantsRouteImport } from './routes/admin.apprenants'
 import { Route as PartenaireLeadsLeadIdRouteImport } from './routes/partenaire.leads.$leadId'
 import { Route as MonEspaceEmargementSessionIdRouteImport } from './routes/mon-espace.emargement.$sessionId'
+import { Route as FormateurEmargementSessionIdRouteImport } from './routes/formateur.emargement.$sessionId'
 import { Route as AdminPartenairesNewRouteImport } from './routes/admin.partenaires.new'
 import { Route as AdminLeadsLeadIdRouteImport } from './routes/admin.leads.$leadId'
 import { Route as AdminCohortesNouveauRouteImport } from './routes/admin.cohortes.nouveau'
@@ -92,6 +98,11 @@ const LoginRoute = LoginRouteImport.update({
 const FormationsRoute = FormationsRouteImport.update({
   id: '/formations',
   path: '/formations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormateurRoute = FormateurRouteImport.update({
+  id: '/formateur',
+  path: '/formateur',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinancementRoute = FinancementRouteImport.update({
@@ -170,6 +181,21 @@ const MonEspaceMaCohorteRoute = MonEspaceMaCohorteRouteImport.update({
   path: '/ma-cohorte',
   getParentRoute: () => MonEspaceRoute,
 } as any)
+const FormateurMonPlanningRoute = FormateurMonPlanningRouteImport.update({
+  id: '/mon-planning',
+  path: '/mon-planning',
+  getParentRoute: () => FormateurRoute,
+} as any)
+const FormateurMesCohortesRoute = FormateurMesCohortesRouteImport.update({
+  id: '/mes-cohortes',
+  path: '/mes-cohortes',
+  getParentRoute: () => FormateurRoute,
+} as any)
+const FormateurMesApprenantsRoute = FormateurMesApprenantsRouteImport.update({
+  id: '/mes-apprenants',
+  path: '/mes-apprenants',
+  getParentRoute: () => FormateurRoute,
+} as any)
 const FinancementCpfRoute = FinancementCpfRouteImport.update({
   id: '/cpf',
   path: '/cpf',
@@ -205,6 +231,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
   path: '/leads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFormateursRoute = AdminFormateursRouteImport.update({
+  id: '/formateurs',
+  path: '/formateurs',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCohortesRoute = AdminCohortesRouteImport.update({
   id: '/cohortes',
   path: '/cohortes',
@@ -225,6 +256,12 @@ const MonEspaceEmargementSessionIdRoute =
     id: '/emargement/$sessionId',
     path: '/emargement/$sessionId',
     getParentRoute: () => MonEspaceRoute,
+  } as any)
+const FormateurEmargementSessionIdRoute =
+  FormateurEmargementSessionIdRouteImport.update({
+    id: '/emargement/$sessionId',
+    path: '/emargement/$sessionId',
+    getParentRoute: () => FormateurRoute,
   } as any)
 const AdminPartenairesNewRoute = AdminPartenairesNewRouteImport.update({
   id: '/new',
@@ -255,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/formateur': typeof FormateurRouteWithChildren
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -266,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
+  '/admin/formateurs': typeof AdminFormateursRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -273,6 +312,9 @@ export interface FileRoutesByFullPath {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/formateur/mes-apprenants': typeof FormateurMesApprenantsRoute
+  '/formateur/mes-cohortes': typeof FormateurMesCohortesRoute
+  '/formateur/mon-planning': typeof FormateurMonPlanningRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
@@ -285,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/formateur/emargement/$sessionId': typeof FormateurEmargementSessionIdRoute
   '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
@@ -294,6 +337,7 @@ export interface FileRoutesByTo {
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/formateur': typeof FormateurRouteWithChildren
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -305,6 +349,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
+  '/admin/formateurs': typeof AdminFormateursRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -312,6 +357,9 @@ export interface FileRoutesByTo {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/formateur/mes-apprenants': typeof FormateurMesApprenantsRoute
+  '/formateur/mes-cohortes': typeof FormateurMesCohortesRoute
+  '/formateur/mon-planning': typeof FormateurMonPlanningRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
@@ -324,6 +372,7 @@ export interface FileRoutesByTo {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/formateur/emargement/$sessionId': typeof FormateurEmargementSessionIdRoute
   '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
@@ -336,6 +385,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/financement': typeof FinancementRouteWithChildren
+  '/formateur': typeof FormateurRouteWithChildren
   '/formations': typeof FormationsRoute
   '/login': typeof LoginRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -347,6 +397,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/apprenants': typeof AdminApprenantsRoute
   '/admin/cohortes': typeof AdminCohortesRouteWithChildren
+  '/admin/formateurs': typeof AdminFormateursRoute
   '/admin/leads': typeof AdminLeadsRouteWithChildren
   '/admin/partenaires': typeof AdminPartenairesRouteWithChildren
   '/admin/reporting': typeof AdminReportingRoute
@@ -354,6 +405,9 @@ export interface FileRoutesById {
   '/api/capture-lead': typeof ApiCaptureLeadRoute
   '/bilan-test/$attemptId': typeof BilanTestAttemptIdRoute
   '/financement/cpf': typeof FinancementCpfRoute
+  '/formateur/mes-apprenants': typeof FormateurMesApprenantsRoute
+  '/formateur/mes-cohortes': typeof FormateurMesCohortesRoute
+  '/formateur/mon-planning': typeof FormateurMonPlanningRoute
   '/mon-espace/ma-cohorte': typeof MonEspaceMaCohorteRoute
   '/mon-espace/mes-documents': typeof MonEspaceMesDocumentsRoute
   '/mon-espace/mes-seances': typeof MonEspaceMesSeancesRoute
@@ -366,6 +420,7 @@ export interface FileRoutesById {
   '/admin/cohortes/nouveau': typeof AdminCohortesNouveauRoute
   '/admin/leads/$leadId': typeof AdminLeadsLeadIdRoute
   '/admin/partenaires/new': typeof AdminPartenairesNewRoute
+  '/formateur/emargement/$sessionId': typeof FormateurEmargementSessionIdRoute
   '/mon-espace/emargement/$sessionId': typeof MonEspaceEmargementSessionIdRoute
   '/partenaire/leads/$leadId': typeof PartenaireLeadsLeadIdRoute
 }
@@ -379,6 +434,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/formateur'
     | '/formations'
     | '/login'
     | '/mentions-legales'
@@ -390,6 +446,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/admin/apprenants'
     | '/admin/cohortes'
+    | '/admin/formateurs'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -397,6 +454,9 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/formateur/mes-apprenants'
+    | '/formateur/mes-cohortes'
+    | '/formateur/mon-planning'
     | '/mon-espace/ma-cohorte'
     | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
@@ -409,6 +469,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/formateur/emargement/$sessionId'
     | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   fileRoutesByTo: FileRoutesByTo
@@ -418,6 +479,7 @@ export interface FileRouteTypes {
     | '/confidentialite'
     | '/contact'
     | '/dashboard'
+    | '/formateur'
     | '/formations'
     | '/login'
     | '/mentions-legales'
@@ -429,6 +491,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/admin/apprenants'
     | '/admin/cohortes'
+    | '/admin/formateurs'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -436,6 +499,9 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/formateur/mes-apprenants'
+    | '/formateur/mes-cohortes'
+    | '/formateur/mon-planning'
     | '/mon-espace/ma-cohorte'
     | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
@@ -448,6 +514,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/formateur/emargement/$sessionId'
     | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   id:
@@ -459,6 +526,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/financement'
+    | '/formateur'
     | '/formations'
     | '/login'
     | '/mentions-legales'
@@ -470,6 +538,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/admin/apprenants'
     | '/admin/cohortes'
+    | '/admin/formateurs'
     | '/admin/leads'
     | '/admin/partenaires'
     | '/admin/reporting'
@@ -477,6 +546,9 @@ export interface FileRouteTypes {
     | '/api/capture-lead'
     | '/bilan-test/$attemptId'
     | '/financement/cpf'
+    | '/formateur/mes-apprenants'
+    | '/formateur/mes-cohortes'
+    | '/formateur/mon-planning'
     | '/mon-espace/ma-cohorte'
     | '/mon-espace/mes-documents'
     | '/mon-espace/mes-seances'
@@ -489,6 +561,7 @@ export interface FileRouteTypes {
     | '/admin/cohortes/nouveau'
     | '/admin/leads/$leadId'
     | '/admin/partenaires/new'
+    | '/formateur/emargement/$sessionId'
     | '/mon-espace/emargement/$sessionId'
     | '/partenaire/leads/$leadId'
   fileRoutesById: FileRoutesById
@@ -501,6 +574,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   FinancementRoute: typeof FinancementRouteWithChildren
+  FormateurRoute: typeof FormateurRouteWithChildren
   FormationsRoute: typeof FormationsRoute
   LoginRoute: typeof LoginRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
@@ -579,6 +653,13 @@ declare module '@tanstack/react-router' {
       path: '/formations'
       fullPath: '/formations'
       preLoaderRoute: typeof FormationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/formateur': {
+      id: '/formateur'
+      path: '/formateur'
+      fullPath: '/formateur'
+      preLoaderRoute: typeof FormateurRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/financement': {
@@ -686,6 +767,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MonEspaceMaCohorteRouteImport
       parentRoute: typeof MonEspaceRoute
     }
+    '/formateur/mon-planning': {
+      id: '/formateur/mon-planning'
+      path: '/mon-planning'
+      fullPath: '/formateur/mon-planning'
+      preLoaderRoute: typeof FormateurMonPlanningRouteImport
+      parentRoute: typeof FormateurRoute
+    }
+    '/formateur/mes-cohortes': {
+      id: '/formateur/mes-cohortes'
+      path: '/mes-cohortes'
+      fullPath: '/formateur/mes-cohortes'
+      preLoaderRoute: typeof FormateurMesCohortesRouteImport
+      parentRoute: typeof FormateurRoute
+    }
+    '/formateur/mes-apprenants': {
+      id: '/formateur/mes-apprenants'
+      path: '/mes-apprenants'
+      fullPath: '/formateur/mes-apprenants'
+      preLoaderRoute: typeof FormateurMesApprenantsRouteImport
+      parentRoute: typeof FormateurRoute
+    }
     '/financement/cpf': {
       id: '/financement/cpf'
       path: '/cpf'
@@ -735,6 +837,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLeadsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/formateurs': {
+      id: '/admin/formateurs'
+      path: '/formateurs'
+      fullPath: '/admin/formateurs'
+      preLoaderRoute: typeof AdminFormateursRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/cohortes': {
       id: '/admin/cohortes'
       path: '/cohortes'
@@ -762,6 +871,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/mon-espace/emargement/$sessionId'
       preLoaderRoute: typeof MonEspaceEmargementSessionIdRouteImport
       parentRoute: typeof MonEspaceRoute
+    }
+    '/formateur/emargement/$sessionId': {
+      id: '/formateur/emargement/$sessionId'
+      path: '/emargement/$sessionId'
+      fullPath: '/formateur/emargement/$sessionId'
+      preLoaderRoute: typeof FormateurEmargementSessionIdRouteImport
+      parentRoute: typeof FormateurRoute
     }
     '/admin/partenaires/new': {
       id: '/admin/partenaires/new'
@@ -834,6 +950,7 @@ const AdminPartenairesRouteWithChildren =
 interface AdminRouteChildren {
   AdminApprenantsRoute: typeof AdminApprenantsRoute
   AdminCohortesRoute: typeof AdminCohortesRouteWithChildren
+  AdminFormateursRoute: typeof AdminFormateursRoute
   AdminLeadsRoute: typeof AdminLeadsRouteWithChildren
   AdminPartenairesRoute: typeof AdminPartenairesRouteWithChildren
   AdminReportingRoute: typeof AdminReportingRoute
@@ -844,6 +961,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminApprenantsRoute: AdminApprenantsRoute,
   AdminCohortesRoute: AdminCohortesRouteWithChildren,
+  AdminFormateursRoute: AdminFormateursRoute,
   AdminLeadsRoute: AdminLeadsRouteWithChildren,
   AdminPartenairesRoute: AdminPartenairesRouteWithChildren,
   AdminReportingRoute: AdminReportingRoute,
@@ -865,6 +983,24 @@ const FinancementRouteChildren: FinancementRouteChildren = {
 
 const FinancementRouteWithChildren = FinancementRoute._addFileChildren(
   FinancementRouteChildren,
+)
+
+interface FormateurRouteChildren {
+  FormateurMesApprenantsRoute: typeof FormateurMesApprenantsRoute
+  FormateurMesCohortesRoute: typeof FormateurMesCohortesRoute
+  FormateurMonPlanningRoute: typeof FormateurMonPlanningRoute
+  FormateurEmargementSessionIdRoute: typeof FormateurEmargementSessionIdRoute
+}
+
+const FormateurRouteChildren: FormateurRouteChildren = {
+  FormateurMesApprenantsRoute: FormateurMesApprenantsRoute,
+  FormateurMesCohortesRoute: FormateurMesCohortesRoute,
+  FormateurMonPlanningRoute: FormateurMonPlanningRoute,
+  FormateurEmargementSessionIdRoute: FormateurEmargementSessionIdRoute,
+}
+
+const FormateurRouteWithChildren = FormateurRoute._addFileChildren(
+  FormateurRouteChildren,
 )
 
 interface MonEspaceRouteChildren {
@@ -917,6 +1053,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   FinancementRoute: FinancementRouteWithChildren,
+  FormateurRoute: FormateurRouteWithChildren,
   FormationsRoute: FormationsRoute,
   LoginRoute: LoginRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
@@ -934,13 +1071,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
