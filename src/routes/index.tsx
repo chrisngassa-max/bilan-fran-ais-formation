@@ -140,6 +140,7 @@ function IndexPage() {
 
           <div className="mt-6 p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
             <strong>⚠️ Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source : diplomatie.gouv.fr
+          </div>
         </div>
       </section>
 
