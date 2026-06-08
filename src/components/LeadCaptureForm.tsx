@@ -97,7 +97,7 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
 
     const payload = {
       source: "bilan_post_result" as const,
-      lead_type: consentPartner ? ("combined" as const) : ("training" as const),
+      lead_intent: consentPartner ? ("training_and_admin_accompaniment" as const) : ("training" as const),
       first_name: firstName.trim(),
       email: email.trim(),
       whatsapp_phone: whatsapp.trim() || undefined,
@@ -169,6 +169,18 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
             {error}
           </p>
         )}
+        <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
+          <p className="font-bold text-slate-900">Vous ne souhaitez pas suivre de formation ?</p>
+          <p className="mt-1">
+            L'accompagnement administratif reste disponible separement pour verifier votre dossier prefecture.
+          </p>
+          <Link
+            to="/accompagnement-administratif"
+            className="mt-3 inline-flex font-bold text-orange-700 underline underline-offset-4"
+          >
+            Voir l'accompagnement administratif
+          </Link>
+        </div>
       </div>
     );
   }

@@ -26,6 +26,8 @@ export const Route = createFileRoute("/api/capture-lead")({
           const requestType = payload.partner_request_type || payload.type_demarche || null;
           const message = payload.message || null;
           const estimatedLevel = payload.estimated_level || payload.niveau_estime || null;
+          const fundingProfile = payload.funding_profile || null;
+          const leadIntent = resolveLeadIntent(payload);
 
           // Consent handling
           const partenaireConsent = !!(payload.consent_partner || payload.partenaire_consent);
@@ -41,19 +43,24 @@ export const Route = createFileRoute("/api/capture-lead")({
             return Response.json({ error: "L'adresse email ou le numéro WhatsApp est obligatoire." }, { status: 400 });
           }
 
-          // 3. Determine Lead Type & Routing Destination
-          // T1 is partner-only, others depend on partenaireConsent
+          // 3. Determine Lead Type & Routing Destination.
+          // Administrative accompaniment is distinct from financing-partner consent.
           let destination = "formation";
-          if (tunnel === "T1_administratif_direct") {
+          if (leadIntent === "admin_accompaniment") {
             destination = "partenaire";
-          } else if (partenaireConsent) {
+          } else if (leadIntent === "training_and_admin_accompaniment") {
             destination = "les_deux";
           }
 
-          const leadType = payload.lead_type || (destination === "les_deux" ? "combined" : (destination === "partenaire" ? "admin_support" : "training"));
+          const leadType = destination === "les_deux" ? "combined" : (destination === "partenaire" ? "admin_support" : "training");
           const partnerStatus = destination === "partenaire" || destination === "les_deux" 
             ? "partner_requested_but_unassigned" 
             : "unassigned";
+          const fundingStatus = payload.financement_opt_in
+            ? partenaireConsent
+              ? "to_qualify"
+              : "interested"
+            : "not_requested";
 
           const leadData = {
             source,
@@ -87,12 +94,27 @@ export const Route = createFileRoute("/api/capture-lead")({
             type_demarche: requestType,
             situation_pro: payload.situation_pro || null,
             date_rdv_prefecture: payload.date_rdv || payload.date_rdv_prefecture || null,
+            lead_intent: leadIntent,
+            funding_status: fundingStatus,
+            professional_status: fundingProfile?.professional_status || null,
+            sector_activity: fundingProfile?.sector_activity || null,
+            birth_date: fundingProfile?.birth_date || null,
+            nationality: fundingProfile?.nationality || null,
+            address_line1: fundingProfile?.address_line1 || null,
+            postal_code: fundingProfile?.postal_code || null,
+            city: fundingProfile?.city || null,
+            cpf_status: fundingProfile?.cpf_status || null,
+            cpf_balance_declared: fundingProfile?.cpf_balance_declared ?? null,
+            france_travail_registered: fundingProfile?.france_travail_registered || null,
+            employer_support: fundingProfile?.employer_support || null,
+            funding_target_date: fundingProfile?.target_date || null,
             
             // Capture V3 Flags and Diagnostics in metadata
             metadata: {
               flags: payload.flags || [],
               reliability_by_level: payload.reliability_by_level || {},
-              time_metrics: payload.time_metrics || {}
+              time_metrics: payload.time_metrics || {},
+              funding_profile: fundingProfile,
             }
           };
 
@@ -185,3 +207,18 @@ export const Route = createFileRoute("/api/capture-lead")({
     },
   },
 });
+
+function resolveLeadIntent(payload: any) {
+  const allowedIntents = new Set([
+    "training",
+    "training_financing",
+    "admin_accompaniment",
+    "training_and_admin_accompaniment",
+  ]);
+
+  if (allowedIntents.has(payload.lead_intent)) return payload.lead_intent;
+  if (payload.tunnel === "T1_administratif_direct") return "admin_accompaniment";
+  if (payload.financement_opt_in) return "training_financing";
+  if (payload.consent_partner || payload.partenaire_consent) return "training_and_admin_accompaniment";
+  return "training";
+}

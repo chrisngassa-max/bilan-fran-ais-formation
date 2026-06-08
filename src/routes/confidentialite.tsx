@@ -41,8 +41,9 @@ function ConfidentialitePage() {
               Dans le cadre de l'utilisation de la plateforme et de notre outil de diagnostic linguistique, nous collectons les données suivantes :
             </p>
             <ul className="list-disc pl-5 mt-2 space-y-1.5">
-              <li><strong>Identité :</strong> Prénom, nom (optionnel).</li>
+              <li><strong>Identité :</strong> Prénom, nom et, lorsque vous les renseignez pour une préqualification financement, date de naissance et nationalité.</li>
               <li><strong>Coordonnées :</strong> Adresse e-mail (obligatoire pour l'envoi), numéro WhatsApp (optionnel).</li>
+              <li><strong>Adresse déclarée :</strong> Adresse postale, code postal et ville lorsque vous choisissez de les transmettre dans le profil financement.</li>
               <li><strong>Données de positionnement linguistique :</strong> Réponses au test, temps de réponse, niveau estimé (A1, A2, B1, B2). Ces données constituent un positionnement interne indicatif et n'ont pas de valeur officielle préfectorale.</li>
               <li><strong>Démarche administrative :</strong> Type de démarche déclarée (Titre de séjour, Carte de résident, Naturalisation, autre).</li>
               <li><strong>Preuves de consentement :</strong> Case cochée, adresse IP (anonymisée), version des textes de consentement présentés et horodatage précis (timestamp).</li>
@@ -58,6 +59,7 @@ function ConfidentialitePage() {
             <ul className="list-disc pl-5 mt-2 space-y-1.5">
               <li><strong>Envoi de votre bilan :</strong> Génération et envoi automatique de votre bilan de positionnement et du guide pratique par e-mail ou WhatsApp.</li>
               <li><strong>Proposition de formations adaptées :</strong> Recommandation de parcours linguistiques et d'accompagnement de préparation aux examens (TCF, DELF) et vérification de votre éligibilité à des financements publics ou paritaires (CPF, France Travail, OPCO).</li>
+              <li><strong>Étude de financement :</strong> Transmission des informations nécessaires à un partenaire chargé d'étudier les pistes de financement de votre formation, <strong>uniquement si vous y avez consenti via la case dédiée au financement</strong>.</li>
               <li><strong>Mise en relation avec un partenaire tiers :</strong> Transmission sécurisée de vos coordonnées et de votre niveau estimé à un cabinet expert en démarches administratives et montage de dossiers de séjour/nationalité, <strong>uniquement si vous y avez consenti de manière expresse et distincte</strong>.</li>
             </ul>
           </section>
@@ -68,7 +70,7 @@ function ConfidentialitePage() {
               4. Base légale des traitements
             </h2>
             <p>
-              La base légale du traitement de vos données personnelles est votre <strong>consentement explicite et éclairé</strong> (Article 6.1.a du RGPD), matérialisé par des cases à cocher distinctes lors de la soumission de vos formulaires. Vous êtes libre de consentir uniquement à la réception de votre bilan sans consentir à la mise en relation partenaire.
+              La base légale du traitement de vos données personnelles est votre <strong>consentement explicite et éclairé</strong> (Article 6.1.a du RGPD), matérialisé par des cases à cocher distinctes lors de la soumission de vos formulaires. Vous êtes libre de consentir uniquement à la réception de votre bilan sans consentir à une transmission vers un partenaire financement ou vers un partenaire d'accompagnement administratif.
             </p>
           </section>
 
@@ -78,10 +80,13 @@ function ConfidentialitePage() {
               5. Transmission à des tiers
             </h2>
             <p>
+              Lorsque vous demandez l'étude d'un financement de formation et donnez l'opt-in correspondant, les informations utiles à cette étude peuvent être transmises à notre <strong>partenaire financement</strong>. Cette transmission concerne le financement de la formation et ne vaut pas demande d'accompagnement administratif.
+            </p>
+            <p>
               Vos données de contact et de niveau linguistique peuvent être transmises à notre <strong>partenaire spécialisé en accompagnement administratif</strong> (cabinet conseil externe sélectionné) dans le seul but de vous aider dans la constitution de votre dossier préfectoral.
             </p>
             <p className="bg-surface-container p-4 rounded-xl border border-outline-variant italic">
-              <strong>⚠️ Règle absolue de consentement :</strong> Aucune donnée n'est transmise à ce partenaire tiers sans votre consentement explicite, libre et séparé, recueilli via la case d'opt-in dédiée sous le formulaire.
+              <strong>⚠️ Règle absolue de consentement :</strong> Aucune donnée n'est transmise à un partenaire sans votre consentement explicite, libre et séparé, recueilli via la case d'opt-in correspondant à votre demande.
             </p>
           </section>
 

@@ -258,6 +258,14 @@ function BilanTestPage() {
               </div>
 
               {/* Primary action buttons */}
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+                <p className="font-black text-slate-900">Deux chemins apres votre bilan</p>
+                <p className="mt-1">
+                  Verifiez vos pistes de financement si vous souhaitez explorer CPF, OPCO,
+                  employeur ou France Travail. Contactez-nous directement si vous voulez avancer
+                  au prix public.
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-slate-100">
                 <Link to="/qualification/$attemptId" params={{ attemptId }} className="flex-1">
                   <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-xl hover:opacity-95 active:scale-95 transition-all">
@@ -276,6 +284,25 @@ function BilanTestPage() {
               <p className="text-[10px] text-center font-bold text-slate-400 uppercase tracking-wider">
                 Eligible CPF, OPCO, France Travail. Paiement en 3 fois sans frais.
               </p>
+
+              <div className="rounded-2xl border border-orange-200 bg-orange-50/70 p-4 text-sm text-slate-700">
+                <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
+                  <div>
+                    <p className="font-black text-slate-900">Vous ne souhaitez pas suivre de formation ?</p>
+                    <p className="mt-1">
+                      Si vous avez surtout besoin d'aide pour votre dossier prefecture,
+                      l'accompagnement administratif peut etre demande separement.
+                    </p>
+                  </div>
+                  <Link
+                    to="/accompagnement-administratif"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-600 px-4 font-black text-white hover:bg-orange-700"
+                  >
+                    Voir ce service
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Proof Validation Badges */}

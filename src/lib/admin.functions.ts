@@ -12,7 +12,11 @@ const getLeadsInputSchema = z.object({
   status: z.string().optional(),
   level: z.string().optional(),
   source: z.string().optional(),
+  leadIntent: z.string().optional(),
   partnerStatus: z.string().optional(),
+  fundingOnly: z.boolean().optional(),
+  fundingStatus: z.string().optional(),
+  fundingFollowup: z.enum(["all", "overdue", "upcoming"]).optional(),
   page: z.number().int().min(1).default(1),
   limit: z.number().int().min(1).max(100).default(20),
 });
@@ -25,6 +29,37 @@ const updateLeadStatusSchema = z.object({
   leadId: z.string().uuid(),
   status: z.string(),
   assignedTo: z.string().uuid().nullable().optional(),
+});
+
+const fundingStatusSchema = z.enum([
+  "interested",
+  "to_qualify",
+  "ready_to_transmit",
+  "transmitted",
+]);
+
+const updateLeadFundingStatusSchema = z.object({
+  leadId: z.string().uuid(),
+  fundingStatus: fundingStatusSchema,
+});
+
+const fundingNextActionSchema = z.enum([
+  "call_candidate",
+  "complete_profile",
+  "prepare_export",
+  "wait_partner",
+  "no_action",
+]);
+
+const updateLeadFundingQualificationSchema = z.object({
+  leadId: z.string().uuid(),
+  nextAction: fundingNextActionSchema.nullable(),
+  followupAt: z.string().datetime().nullable(),
+  internalNotes: z.string().trim().max(4000).nullable(),
+});
+
+const fundingExportAuditSchema = z.object({
+  leadIds: z.array(z.string().uuid()).min(1).max(1000),
 });
 
 const partnerSchema = z.object({
@@ -50,7 +85,7 @@ export const getLeadsAdminFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     let query = supabaseAdmin
       .from("leads")
-      .select("id, created_at, source, lead_type, first_name, last_name, email, whatsapp_phone, estimated_level, goal, status, partner_status, partner_id, assigned_to, metadata", { count: "exact" });
+      .select("id, created_at, source, lead_type, lead_intent, first_name, last_name, email, whatsapp_phone, estimated_level, goal, status, partner_status, partner_id, assigned_to, tunnel, financement_opt_in, funding_status, funding_next_action, funding_followup_at, consent_partner, professional_status, cpf_status, france_travail_registered, metadata", { count: "exact" });
 
     // Apply search filter (first_name, last_name, email, phone)
     if (data.search && data.search.trim() !== "") {
@@ -68,8 +103,27 @@ export const getLeadsAdminFn = createServerFn({ method: "POST" })
     if (data.source && data.source !== "all") {
       query = query.eq("source", data.source);
     }
+    if (data.leadIntent && data.leadIntent !== "all") {
+      query = query.eq("lead_intent", data.leadIntent);
+    }
     if (data.partnerStatus && data.partnerStatus !== "all") {
       query = query.eq("partner_status", data.partnerStatus);
+    }
+    if (data.fundingOnly) {
+      query = query.eq("financement_opt_in", true);
+    }
+    if (data.fundingStatus && data.fundingStatus !== "all") {
+      query = query.eq("funding_status", data.fundingStatus);
+    }
+    if (data.fundingFollowup === "overdue") {
+      query = query
+        .not("funding_followup_at", "is", null)
+        .lt("funding_followup_at", new Date().toISOString());
+    }
+    if (data.fundingFollowup === "upcoming") {
+      query = query
+        .not("funding_followup_at", "is", null)
+        .gte("funding_followup_at", new Date().toISOString());
     }
 
     // Pagination
@@ -82,6 +136,67 @@ export const getLeadsAdminFn = createServerFn({ method: "POST" })
 
     if (error) throw new Error(`Failed to load leads: ${error.message}`);
     return { leads: leads ?? [], total: count ?? 0 };
+  });
+
+export const getFundingPartnerExportAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
+  .handler(async () => {
+    const { data: leads, error } = await supabaseAdmin
+      .from("leads")
+      .select("id, created_at, first_name, last_name, email, whatsapp_phone, estimated_level, goal, source, tunnel, attempt_id, lead_intent, message, financement_opt_in, consent_partner, consent_partner_text_version, consent_timestamp, partner_status, funding_status, birth_date, nationality, address_line1, postal_code, city, professional_status, sector_activity, cpf_status, cpf_balance_declared, france_travail_registered, employer_support, funding_target_date, metadata")
+      .eq("financement_opt_in", true)
+      .eq("consent_partner", true)
+      .eq("funding_status", "ready_to_transmit")
+      .order("created_at", { ascending: false })
+      .limit(1000);
+
+    if (error) throw new Error(`Export financement indisponible: ${error.message}`);
+
+    return { leads: leads ?? [] };
+  });
+
+export const logFundingPartnerExportAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire"])])
+  .inputValidator((input) => fundingExportAuditSchema.parse(input))
+  .handler(async ({ data }) => {
+    const exportedAt = new Date().toISOString();
+
+    const { data: transmittedLeads, error: updateError } = await supabaseAdmin
+      .from("leads")
+      .update({
+        funding_status: "transmitted",
+        funding_next_action: "wait_partner",
+        funding_followup_at: null,
+        updated_at: exportedAt,
+      })
+      .in("id", data.leadIds)
+      .eq("funding_status", "ready_to_transmit")
+      .select("id");
+
+    if (updateError) throw new Error(`Marquage transmis impossible: ${updateError.message}`);
+
+    const transmittedLeadIds = (transmittedLeads ?? []).map((lead) => lead.id);
+    if (transmittedLeadIds.length === 0) {
+      throw new Error("Aucun dossier exporte n'etait encore pret a transmettre.");
+    }
+
+    const { error } = await supabaseAdmin.from("lead_events").insert(
+      transmittedLeadIds.map((leadId) => ({
+        lead_id: leadId,
+        event_name: "funding_export_transmitted",
+        properties: {
+          format: "csv",
+          scope: "funding_partner_prequalification",
+          exported_at: exportedAt,
+          previous_funding_status: "ready_to_transmit",
+          new_funding_status: "transmitted",
+        },
+      })),
+    );
+
+    if (error) throw new Error(`Trace export financement indisponible: ${error.message}`);
+
+    return { ok: true, count: transmittedLeadIds.length };
   });
 
 export const getLeadDetailAdminFn = createServerFn({ method: "POST" })
@@ -167,6 +282,100 @@ export const updateLeadStatusAdminFn = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
+
+export const updateLeadFundingStatusAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire", "conseiller"])])
+  .inputValidator((input) => updateLeadFundingStatusSchema.parse(input))
+  .handler(async ({ data }) => {
+    if (data.fundingStatus === "ready_to_transmit") {
+      const { data: lead, error: leadError } = await supabaseAdmin
+        .from("leads")
+        .select("first_name, last_name, email, whatsapp_phone, goal, consent_partner, professional_status, cpf_status, france_travail_registered")
+        .eq("id", data.leadId)
+        .maybeSingle();
+
+      if (leadError || !lead) throw new Error("Prospect introuvable pour la qualification financement");
+
+      const missingFields = getFundingReadinessMissingFields(lead);
+      if (missingFields.length > 0) {
+        throw new Error(`Dossier financement incomplet: ${missingFields.join(", ")}`);
+      }
+    }
+
+    const { error } = await supabaseAdmin
+      .from("leads")
+      .update({
+        funding_status: data.fundingStatus,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.leadId);
+
+    if (error) throw new Error("Impossible de modifier le statut financement");
+
+    await supabaseAdmin.from("lead_events").insert({
+      lead_id: data.leadId,
+      event_name: "funding_status_changed",
+      properties: {
+        new_funding_status: data.fundingStatus,
+      },
+    });
+
+    return { ok: true };
+  });
+
+export const updateLeadFundingQualificationAdminFn = createServerFn({ method: "POST" })
+  .middleware([requireRole(["admin", "gestionnaire", "conseiller"])])
+  .inputValidator((input) => updateLeadFundingQualificationSchema.parse(input))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin
+      .from("leads")
+      .update({
+        funding_next_action: data.nextAction,
+        funding_followup_at: data.followupAt,
+        funding_internal_notes: data.internalNotes,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.leadId);
+
+    if (error) throw new Error("Impossible d'enregistrer le suivi financement");
+
+    await supabaseAdmin.from("lead_events").insert({
+      lead_id: data.leadId,
+      event_name: "funding_qualification_updated",
+      properties: {
+        next_action: data.nextAction,
+        followup_at: data.followupAt,
+        has_internal_notes: !!data.internalNotes,
+      },
+    });
+
+    return { ok: true };
+  });
+
+function getFundingReadinessMissingFields(lead: {
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  whatsapp_phone: string | null;
+  goal: string | null;
+  consent_partner: boolean | null;
+  professional_status: string | null;
+  cpf_status: string | null;
+  france_travail_registered: string | null;
+}) {
+  const missingFields: string[] = [];
+
+  if (!lead.consent_partner) missingFields.push("consentement partenaire financement");
+  if (!lead.first_name?.trim()) missingFields.push("prenom");
+  if (!lead.last_name?.trim()) missingFields.push("nom");
+  if (!lead.email?.trim() && !lead.whatsapp_phone?.trim()) missingFields.push("email ou WhatsApp");
+  if (!lead.goal?.trim()) missingFields.push("objectif");
+  if (!lead.professional_status?.trim()) missingFields.push("situation professionnelle");
+  if (!lead.cpf_status?.trim()) missingFields.push("statut CPF");
+  if (!lead.france_travail_registered?.trim()) missingFields.push("statut France Travail");
+
+  return missingFields;
+}
 
 export const getPartnersAdminFn = createServerFn({ method: "POST" })
   .middleware([requireRole(["admin", "gestionnaire"])])

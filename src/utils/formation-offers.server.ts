@@ -1,10 +1,10 @@
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { type NiveauIndicatif, type Journey } from "@/types/bilan";
-import { FALLBACK_JOURNEYS, mapDbOfferToJourney, getRecommendedJourneyFromList } from "../hooks/useFormationOffers";
+import { FALLBACK_JOURNEYS, mapDbOfferToJourney, getRecommendedJourneyFromList } from "./formation-offers.shared";
 
 export async function getFormationOffersServer(): Promise<Journey[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("formation_journeys")
       .select("*")
       .eq("is_active", true)
@@ -25,3 +25,4 @@ export async function getRecommendedJourneyServer(level: NiveauIndicatif): Promi
   const offers = await getFormationOffersServer();
   return getRecommendedJourneyFromList(offers, level);
 }
+

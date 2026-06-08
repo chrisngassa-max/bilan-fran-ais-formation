@@ -5,9 +5,5 @@ export const Route = createFileRoute("/financement")({
 });
 
 function FinancementLayout() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 }

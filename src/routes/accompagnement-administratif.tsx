@@ -20,6 +20,8 @@ export const Route = createFileRoute("/accompagnement-administratif")({
 
 function AccompagnementAdministratifPage() {
   const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [requestType, setRequestType] = useState<DemarcheType>("pluriannuelle");
   const [situationPro, setSituationPro] = useState<SituationPro>("salarie");
@@ -60,6 +62,11 @@ function AccompagnementAdministratifPage() {
       return;
     }
 
+    if (!lastName.trim()) {
+      setError("Le nom est obligatoire.");
+      return;
+    }
+
     if (!whatsapp.trim()) {
       setError("Le numéro WhatsApp est obligatoire.");
       return;
@@ -88,7 +95,10 @@ function AccompagnementAdministratifPage() {
     const payload = {
       tunnel: "T1_administratif_direct",
       source: "accompagnement_admin",
+      lead_intent: "admin_accompaniment",
       prenom: firstName.trim(),
+      last_name: lastName.trim(),
+      email: email.trim() || undefined,
       whatsapp: whatsapp.trim(),
       type_demarche: requestType,
       situation_pro: situationPro,
@@ -293,6 +303,21 @@ function AccompagnementAdministratifPage() {
                 </div>
 
                 <div>
+                  <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-lastname">
+                    Votre nom <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="admin-lastname"
+                    type="text"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Diallo"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-[#ea580c] focus:bg-white transition-all font-bold text-sm"
+                  />
+                </div>
+
+                <div>
                   <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-whatsapp">
                     Numéro WhatsApp <span className="text-red-500">*</span>
                   </label>
@@ -307,6 +332,23 @@ function AccompagnementAdministratifPage() {
                   />
                   <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase tracking-wider leading-relaxed">
                     Format international requis (commençant par + ou 00)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-email">
+                    Adresse e-mail <span className="text-slate-400 normal-case tracking-normal">(optionnel)</span>
+                  </label>
+                  <input
+                    id="admin-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="vous@exemple.com"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-[#ea580c] focus:bg-white transition-all font-bold text-sm"
+                  />
+                  <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase tracking-wider leading-relaxed">
+                    Utile pour garder une trace ecrite en plus du rappel WhatsApp.
                   </p>
                 </div>
 
@@ -354,7 +396,7 @@ function AccompagnementAdministratifPage() {
 
                 <button
                   type="submit"
-                  disabled={loading || !firstName || !whatsapp || !consentPartner || !consentWhatsapp}
+                  disabled={loading || !firstName || !lastName || !whatsapp || !consentPartner || !consentWhatsapp}
                   className="w-full h-14 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md
                     bg-[#ea580c] text-white hover:bg-[#c2410c] active:scale-[0.98]
                     disabled:opacity-50 disabled:cursor-not-allowed"

@@ -199,12 +199,20 @@ function FormationsPage() {
         </div>
 
         {/* Call to Actions Principaux */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="mx-auto mb-6 max-w-2xl text-center">
+            <h2 className="text-2xl font-black text-slate-900">Choisissez la prochaine etape</h2>
+            <p className="mt-2 text-sm font-medium leading-relaxed text-slate-600">
+              Le test precise le parcours recommande. Si vous connaissez deja votre besoin,
+              vous pouvez verifier vos pistes de financement ou parler d'une inscription directe.
+            </p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-3">
           <Link 
             to="/passer-test/$token"
             params={{ token: "latest" }}
             onClick={() => trackEvent("formations_cta_click", { action: "start_test" })}
-            className="flex-1 max-w-sm"
+            className="w-full"
           >
             <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all">
               Faire le test de positionnement gratuit
@@ -222,16 +230,48 @@ function FormationsPage() {
             </button>
           </Link>
           <Link 
-            to="/accompagnement-administratif"
+            to="/profil-financement"
             onClick={() => trackEvent("formations_cta_click", { action: "check_funding" })}
-            className="flex-1 max-w-sm"
+            className="w-full"
           >
-            <button className="w-full h-16 border-2 border-slate-900 text-slate-900 font-black text-lg rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-950 hover:text-white active:scale-95 transition-all">
+            <button className="w-full h-16 border-2 border-emerald-700 text-emerald-800 font-black text-lg rounded-2xl flex items-center justify-center gap-2 hover:bg-emerald-700 hover:text-white active:scale-95 transition-all">
               <Wallet className="h-5 w-5 shrink-0" />
               Vérifier mon financement
             </button>
           </Link>
-        </div>
+          <Link
+            to="/contact"
+            onClick={() => trackEvent("formations_cta_click", { action: "direct_contact" })}
+            className="w-full"
+          >
+            <button className="w-full h-16 border-2 border-slate-900 text-slate-900 font-black text-lg rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-950 hover:text-white active:scale-95 transition-all">
+              Parler d'une inscription directe
+              <ArrowRight className="h-5 w-5" />
+            </button>
+          </Link>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-orange-200 bg-orange-50/70 p-6 shadow-sm md:p-8">
+          <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-orange-700">Besoin sans cours</p>
+              <h2 className="mt-2 text-2xl font-black text-slate-900">Vous voulez seulement etre accompagne sur votre dossier administratif ?</h2>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-relaxed text-slate-700">
+                L'accompagnement administratif reste accessible meme si vous ne choisissez pas une formation de langue.
+                Il sert a verifier votre demarche et vos pieces avec le partenaire specialise.
+              </p>
+            </div>
+            <Link
+              to="/accompagnement-administratif"
+              onClick={() => trackEvent("formations_cta_click", { action: "admin_support_only" })}
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-orange-600 px-5 text-base font-black text-white transition-colors hover:bg-orange-700"
+            >
+              Demander l'accompagnement
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </div>
+        </section>
 
         {/* Détails des Cartes Parcours (Bonus Recommandé) */}
         <div className="space-y-6">
@@ -306,4 +346,3 @@ function FormationsPage() {
     </div>
   );
 }
-

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TestRapideRouteImport } from './routes/test-rapide'
 import { Route as SessionsRouteImport } from './routes/sessions'
+import { Route as ProfilFinancementRouteImport } from './routes/profil-financement'
 import { Route as PartenaireRouteImport } from './routes/partenaire'
 import { Route as NiveauxRouteImport } from './routes/niveaux'
 import { Route as MonEspaceRouteImport } from './routes/mon-espace'
@@ -68,6 +69,11 @@ const TestRapideRoute = TestRapideRouteImport.update({
 const SessionsRoute = SessionsRouteImport.update({
   id: '/sessions',
   path: '/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilFinancementRoute = ProfilFinancementRouteImport.update({
+  id: '/profil-financement',
+  path: '/profil-financement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartenaireRoute = PartenaireRouteImport.update({
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/profil-financement': typeof ProfilFinancementRoute
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -344,6 +351,7 @@ export interface FileRoutesByTo {
   '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/profil-financement': typeof ProfilFinancementRoute
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -392,6 +400,7 @@ export interface FileRoutesById {
   '/mon-espace': typeof MonEspaceRouteWithChildren
   '/niveaux': typeof NiveauxRoute
   '/partenaire': typeof PartenaireRouteWithChildren
+  '/profil-financement': typeof ProfilFinancementRoute
   '/sessions': typeof SessionsRouteWithChildren
   '/test-rapide': typeof TestRapideRoute
   '/unsubscribe': typeof UnsubscribeRoute
@@ -441,6 +450,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/profil-financement'
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
@@ -486,6 +496,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/profil-financement'
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
@@ -533,6 +544,7 @@ export interface FileRouteTypes {
     | '/mon-espace'
     | '/niveaux'
     | '/partenaire'
+    | '/profil-financement'
     | '/sessions'
     | '/test-rapide'
     | '/unsubscribe'
@@ -581,6 +593,7 @@ export interface RootRouteChildren {
   MonEspaceRoute: typeof MonEspaceRouteWithChildren
   NiveauxRoute: typeof NiveauxRoute
   PartenaireRoute: typeof PartenaireRouteWithChildren
+  ProfilFinancementRoute: typeof ProfilFinancementRoute
   SessionsRoute: typeof SessionsRouteWithChildren
   TestRapideRoute: typeof TestRapideRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
@@ -611,6 +624,13 @@ declare module '@tanstack/react-router' {
       path: '/sessions'
       fullPath: '/sessions'
       preLoaderRoute: typeof SessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil-financement': {
+      id: '/profil-financement'
+      path: '/profil-financement'
+      fullPath: '/profil-financement'
+      preLoaderRoute: typeof ProfilFinancementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partenaire': {
@@ -1060,6 +1080,7 @@ const rootRouteChildren: RootRouteChildren = {
   MonEspaceRoute: MonEspaceRouteWithChildren,
   NiveauxRoute: NiveauxRoute,
   PartenaireRoute: PartenaireRouteWithChildren,
+  ProfilFinancementRoute: ProfilFinancementRoute,
   SessionsRoute: SessionsRouteWithChildren,
   TestRapideRoute: TestRapideRoute,
   UnsubscribeRoute: UnsubscribeRoute,

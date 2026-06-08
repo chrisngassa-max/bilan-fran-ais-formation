@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { 
   getLeadDetailAdminFn, 
   updateLeadStatusAdminFn, 
+  updateLeadFundingStatusAdminFn,
+  updateLeadFundingQualificationAdminFn,
   getPartnersAdminFn, 
   assignPartnerManualFn 
 } from "../lib/admin.functions";
@@ -49,6 +51,8 @@ export function LeadDetailAdmin() {
   
   const getLeadDetail = useServerFn(getLeadDetailAdminFn);
   const updateStatus = useServerFn(updateLeadStatusAdminFn);
+  const updateFundingStatus = useServerFn(updateLeadFundingStatusAdminFn);
+  const updateFundingQualification = useServerFn(updateLeadFundingQualificationAdminFn);
   const getPartners = useServerFn(getPartnersAdminFn);
   const assignPartner = useServerFn(assignPartnerManualFn);
 
@@ -65,6 +69,11 @@ export function LeadDetailAdmin() {
   const [selectedPartnerId, setSelectedPartnerId] = useState("");
   const [wizardNotes, setWizardNotes] = useState("");
   const [sendingTx, setSendingTx] = useState(false);
+  const [updatingFundingStatus, setUpdatingFundingStatus] = useState(false);
+  const [savingFundingQualification, setSavingFundingQualification] = useState(false);
+  const [fundingNextAction, setFundingNextAction] = useState("");
+  const [fundingFollowupAt, setFundingFollowupAt] = useState("");
+  const [fundingInternalNotes, setFundingInternalNotes] = useState("");
 
   // General profile update
   const [statusVal, setStatusVal] = useState("");
@@ -78,6 +87,9 @@ export function LeadDetailAdmin() {
       setTransmissions(res.transmissions);
       setDossier((res as any).dossier ?? null);
       setStatusVal(res.lead.status);
+      setFundingNextAction(res.lead.funding_next_action || "");
+      setFundingFollowupAt(toDateTimeLocalValue(res.lead.funding_followup_at));
+      setFundingInternalNotes(res.lead.funding_internal_notes || "");
 
       // Load active partners
       const partnersRes = await getPartners();
@@ -101,6 +113,39 @@ export function LeadDetailAdmin() {
       loadData();
     } catch (err: any) {
       toast.error(err.message || "Erreur lors de la mise à jour");
+    }
+  };
+
+  const handleUpdateFundingStatus = async (newVal: FundingStatus) => {
+    setUpdatingFundingStatus(true);
+    try {
+      await updateFundingStatus({ data: { leadId, fundingStatus: newVal } });
+      toast.success("Statut financement mis a jour.");
+      await loadData();
+    } catch (err: any) {
+      toast.error(err.message || "Erreur lors de la mise a jour financement");
+    } finally {
+      setUpdatingFundingStatus(false);
+    }
+  };
+
+  const handleSaveFundingQualification = async () => {
+    setSavingFundingQualification(true);
+    try {
+      await updateFundingQualification({
+        data: {
+          leadId,
+          nextAction: fundingNextAction ? (fundingNextAction as FundingNextAction) : null,
+          followupAt: fundingFollowupAt ? new Date(fundingFollowupAt).toISOString() : null,
+          internalNotes: fundingInternalNotes.trim() || null,
+        },
+      });
+      toast.success("Suivi financement enregistre.");
+      await loadData();
+    } catch (err: any) {
+      toast.error(err.message || "Erreur lors de l'enregistrement financement");
+    } finally {
+      setSavingFundingQualification(false);
     }
   };
 
@@ -147,6 +192,8 @@ export function LeadDetailAdmin() {
       </div>
     );
   }
+
+  const fundingReadiness = getFundingReadiness(lead);
 
   return (
     <div className="space-y-8">
@@ -224,6 +271,13 @@ export function LeadDetailAdmin() {
               </div>
 
               <div className="space-y-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Intention du lead</span>
+                <p className="font-semibold text-on-surface">
+                  {LEAD_INTENT_LABELS[lead.lead_intent] || "Formation"}
+                </p>
+              </div>
+
+              <div className="space-y-1">
                 <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Type de démarche administrative</span>
                 <p className="font-semibold text-on-surface text-primary">
                   {lead.partner_request_type || "Aucune"}
@@ -277,6 +331,153 @@ export function LeadDetailAdmin() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {(lead.financement_opt_in || lead.metadata?.funding_profile) && (
+                <div className="sm:col-span-2 space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Profil financement</span>
+                    <p className="mt-1 text-sm text-emerald-950">
+                      Donnees declaratives collectees avant transmission au partenaire financement.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-3 text-sm sm:grid-cols-2">
+                    <FundingInfo label="Statut financement" value={FUNDING_STATUS_LABELS[lead.funding_status] || lead.funding_status} />
+                    <FundingInfo label="Date de naissance" value={formatDate(lead.birth_date || lead.metadata?.funding_profile?.birth_date)} />
+                    <FundingInfo label="Nationalite" value={lead.nationality || lead.metadata?.funding_profile?.nationality} />
+                    <FundingInfo label="Adresse" value={lead.address_line1 || lead.metadata?.funding_profile?.address_line1} />
+                    <FundingInfo label="Code postal" value={lead.postal_code || lead.metadata?.funding_profile?.postal_code} />
+                    <FundingInfo label="Ville" value={lead.city || lead.metadata?.funding_profile?.city} />
+                    <FundingInfo label="Situation" value={lead.professional_status || lead.metadata?.funding_profile?.professional_status} />
+                    <FundingInfo label="Secteur" value={lead.sector_activity || lead.metadata?.funding_profile?.sector_activity} />
+                    <FundingInfo label="Compte CPF" value={lead.cpf_status || lead.metadata?.funding_profile?.cpf_status} />
+                    <FundingInfo label="Solde CPF" value={formatCurrency(lead.cpf_balance_declared ?? lead.metadata?.funding_profile?.cpf_balance_declared)} />
+                    <FundingInfo label="France Travail" value={lead.france_travail_registered || lead.metadata?.funding_profile?.france_travail_registered} />
+                    <FundingInfo label="Soutien employeur" value={lead.employer_support || lead.metadata?.funding_profile?.employer_support} />
+                    <FundingInfo label="Date cible" value={formatDate(lead.funding_target_date || lead.metadata?.funding_profile?.target_date)} />
+                  </div>
+
+                  <div className="rounded-xl border border-emerald-200 bg-white p-3">
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Pilotage transmission</p>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                      L'export financement reprend uniquement les demandes consentantes marquees pretes a transmettre.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <FundingStatusButton
+                        active={lead.funding_status === "to_qualify"}
+                        disabled={updatingFundingStatus}
+                        label="A qualifier"
+                        onClick={() => handleUpdateFundingStatus("to_qualify")}
+                      />
+                      <FundingStatusButton
+                        active={lead.funding_status === "ready_to_transmit"}
+                        disabled={updatingFundingStatus || !fundingReadiness.ready}
+                        label="Pret a transmettre"
+                        onClick={() => handleUpdateFundingStatus("ready_to_transmit")}
+                      />
+                      <FundingStatusButton
+                        active={lead.funding_status === "transmitted"}
+                        disabled={updatingFundingStatus}
+                        label="Transmis"
+                        onClick={() => handleUpdateFundingStatus("transmitted")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 rounded-xl border border-emerald-200 bg-white p-3">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Qualification manuelle</p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                        Notes internes et prochaine action pour garder le suivi financement lisible avant export.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                        Prochaine action
+                        <select
+                          value={fundingNextAction}
+                          onChange={(event) => setFundingNextAction(event.target.value)}
+                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                        >
+                          <option value="">A definir</option>
+                          <option value="call_candidate">Rappeler le candidat</option>
+                          <option value="complete_profile">Completer le profil</option>
+                          <option value="prepare_export">Preparer l'export</option>
+                          <option value="wait_partner">Attendre le partenaire</option>
+                          <option value="no_action">Aucune action</option>
+                        </select>
+                      </label>
+
+                      <label className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                        Date de relance
+                        <input
+                          type="datetime-local"
+                          value={fundingFollowupAt}
+                          onChange={(event) => setFundingFollowupAt(event.target.value)}
+                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                        />
+                      </label>
+                    </div>
+
+                    <label className="block text-xs font-bold uppercase tracking-wider text-emerald-800">
+                      Notes internes financement
+                      <textarea
+                        rows={4}
+                        value={fundingInternalNotes}
+                        onChange={(event) => setFundingInternalNotes(event.target.value)}
+                        placeholder="Ex : candidat disponible le soir, solde CPF a confirmer, rappeler apres RDV employeur..."
+                        className="mt-1 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                      />
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveFundingQualification}
+                      disabled={savingFundingQualification}
+                      className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-700 px-4 text-sm font-black text-white shadow-sm transition hover:bg-emerald-800 disabled:opacity-50"
+                    >
+                      {savingFundingQualification ? "Enregistrement..." : "Enregistrer le suivi financement"}
+                    </button>
+                  </div>
+
+                  <div className={`rounded-xl border p-3 ${fundingReadiness.ready ? "border-emerald-200 bg-emerald-100/60" : "border-amber-200 bg-amber-50"}`}>
+                    <p className={`text-xs font-bold uppercase tracking-wider ${fundingReadiness.ready ? "text-emerald-800" : "text-amber-800"}`}>
+                      Checklist avant export
+                    </p>
+                    <div className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
+                      {fundingReadiness.items.map((item) => (
+                        <div
+                          key={item.label}
+                          className={`flex items-center gap-2 rounded-lg border px-2.5 py-2 font-bold ${
+                            item.ok
+                              ? "border-emerald-200 bg-white text-emerald-900"
+                              : "border-amber-200 bg-white text-amber-900"
+                          }`}
+                        >
+                          <Check size={14} className={item.ok ? "text-emerald-600" : "text-amber-300"} />
+                          {item.label}
+                        </div>
+                      ))}
+                    </div>
+                    {!fundingReadiness.ready && (
+                      <p className="mt-3 text-xs font-semibold leading-relaxed text-amber-900">
+                        Completez les elements manquants avant de preparer l'export partenaire.
+                      </p>
+                    )}
+                  </div>
+
+                  {lead.metadata?.funding_profile?.recommended_journey && (
+                    <div className="rounded-xl border border-emerald-200 bg-white p-3 text-sm text-slate-800">
+                      <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Parcours rattache</p>
+                      <p className="mt-1 font-black">{lead.metadata.funding_profile.recommended_journey.name}</p>
+                      <p className="mt-1 text-xs text-slate-600">
+                        {lead.metadata.funding_profile.recommended_journey.hours}h - {lead.metadata.funding_profile.recommended_journey.exam_target} - {formatCurrency(lead.metadata.funding_profile.recommended_journey.public_price)}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -608,4 +809,103 @@ export function LeadDetailAdmin() {
       </div>
     </div>
   );
+}
+
+type FundingStatus = "interested" | "to_qualify" | "ready_to_transmit" | "transmitted";
+type FundingNextAction = "call_candidate" | "complete_profile" | "prepare_export" | "wait_partner" | "no_action";
+
+const FUNDING_STATUS_LABELS: Record<string, string> = {
+  not_requested: "Sans demande",
+  interested: "A rappeler",
+  to_qualify: "A qualifier",
+  ready_to_transmit: "Pret a transmettre",
+  transmitted: "Transmis",
+};
+
+const LEAD_INTENT_LABELS: Record<string, string> = {
+  training: "Formation",
+  training_financing: "Financement formation",
+  admin_accompaniment: "Accompagnement administratif",
+  training_and_admin_accompaniment: "Formation + accompagnement administratif",
+};
+
+function FundingStatusButton({
+  active,
+  disabled,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  disabled: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className={`rounded-lg border px-3 py-2 text-xs font-black transition ${
+        active
+          ? "border-emerald-700 bg-emerald-700 text-white"
+          : "border-emerald-200 bg-emerald-50 text-emerald-900 hover:border-emerald-400"
+      } disabled:cursor-not-allowed disabled:opacity-50`}
+    >
+      {label}
+    </button>
+  );
+}
+
+function getFundingReadiness(lead: any) {
+  const items = [
+    { label: "Consentement partenaire financement", ok: !!lead.consent_partner },
+    { label: "Prenom et nom", ok: !!lead.first_name?.trim() && !!lead.last_name?.trim() },
+    { label: "Email ou WhatsApp", ok: !!lead.email?.trim() || !!lead.whatsapp_phone?.trim() },
+    { label: "Objectif", ok: !!lead.goal?.trim() },
+    { label: "Situation professionnelle", ok: !!lead.professional_status?.trim() },
+    { label: "Statut CPF", ok: !!lead.cpf_status?.trim() },
+    { label: "Statut France Travail", ok: !!lead.france_travail_registered?.trim() },
+  ];
+
+  return {
+    items,
+    ready: items.every((item) => item.ok),
+  };
+}
+
+function FundingInfo({ label, value }: { label: string; value: unknown }) {
+  return (
+    <div className="rounded-xl border border-emerald-100 bg-white p-3">
+      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">{label}</span>
+      <p className="mt-1 font-bold text-slate-900">{displayValue(value)}</p>
+    </div>
+  );
+}
+
+function displayValue(value: unknown) {
+  if (value === null || value === undefined || value === "") return "Non renseigne";
+  if (value === "yes") return "Oui";
+  if (value === "no") return "Non";
+  if (value === "unknown") return "A verifier";
+  return String(value).replaceAll("_", " ");
+}
+
+function formatCurrency(value: unknown) {
+  if (typeof value !== "number" || Number.isNaN(value)) return "Non renseigne";
+  return `${value.toLocaleString("fr-FR")} EUR`;
+}
+
+function formatDate(value: unknown) {
+  if (typeof value !== "string" || !value) return "Non renseigne";
+  return new Date(value).toLocaleDateString("fr-FR");
+}
+
+function toDateTimeLocalValue(value: unknown) {
+  if (typeof value !== "string" || !value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const offsetMs = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
 }

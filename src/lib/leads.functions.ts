@@ -50,3 +50,26 @@ export const captureBilanLead = createServerFn({ method: "POST" })
 
     return { id: inserted.id, ok: true };
   });
+
+export const unsubscribeLeadFn = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z.object({ email: z.string().trim().email() }).parse(input)
+  )
+  .handler(async ({ data }) => {
+    const emailLower = data.email.trim().toLowerCase();
+    const { error } = await supabaseAdmin
+      .from("leads")
+      .update({
+        consent_marketing: false,
+        partenaire_consent: false,
+      })
+      .eq("email", emailLower);
+
+    if (error) {
+      console.error("[unsubscribeLeadFn] update failed:", error);
+      throw new Error("Impossible de traiter la désinscription pour le moment.");
+    }
+
+    return { ok: true };
+  });
+

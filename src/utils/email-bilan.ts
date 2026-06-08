@@ -140,7 +140,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
 
           <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0 20px 0;">
           <p style="font-size: 11px; color: #94a3b8; text-align: center;">
-            Organisme agréé. RGPD compliant. Vous pouvez demander la suppression de vos données ou <a href="https://bilanfrancaisformation.fr/unsubscribe" style="color: #ea580c; text-decoration: underline;">vous désinscrire</a> à tout moment.
+            Vous pouvez demander la suppression de vos données ou <a href="https://bilanfrancaisformation.fr/unsubscribe" style="color: #ea580c; text-decoration: underline;">vous désinscrire</a> à tout moment.
           </p>
         </div>
       `

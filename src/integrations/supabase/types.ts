@@ -14,6 +14,325 @@ export type Database = {
   }
   public: {
     Tables: {
+      activites_sauvegardees: {
+        Row: {
+          contenu_genere: Json
+          created_at: string
+          duree_minutes: number | null
+          formateur_id: string
+          id: string
+          niveau: string | null
+          seance_numero: number | null
+          titre: string
+          type_activite: string
+        }
+        Insert: {
+          contenu_genere?: Json
+          created_at?: string
+          duree_minutes?: number | null
+          formateur_id: string
+          id?: string
+          niveau?: string | null
+          seance_numero?: number | null
+          titre: string
+          type_activite: string
+        }
+        Update: {
+          contenu_genere?: Json
+          created_at?: string
+          duree_minutes?: number | null
+          formateur_id?: string
+          id?: string
+          niveau?: string | null
+          seance_numero?: number | null
+          titre?: string
+          type_activite?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activites_sauvegardees_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_processing_consents: {
+        Row: {
+          consent_ai: boolean
+          consent_biometric: boolean
+          consented_at: string | null
+          created_at: string
+          last_reminded_at: string | null
+          reminder_count: number
+          revoked_at: string | null
+          source: string | null
+          updated_at: string
+          user_id: string
+          version: string
+        }
+        Insert: {
+          consent_ai?: boolean
+          consent_biometric?: boolean
+          consented_at?: string | null
+          created_at?: string
+          last_reminded_at?: string | null
+          reminder_count?: number
+          revoked_at?: string | null
+          source?: string | null
+          updated_at?: string
+          user_id: string
+          version?: string
+        }
+        Update: {
+          consent_ai?: boolean
+          consent_biometric?: boolean
+          consented_at?: string | null
+          created_at?: string
+          last_reminded_at?: string | null
+          reminder_count?: number
+          revoked_at?: string | null
+          source?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      ai_processing_logs: {
+        Row: {
+          consent_version: string | null
+          created_at: string
+          data_categories: string[] | null
+          duration_ms: number | null
+          function_name: string
+          id: number
+          model: string | null
+          provider: string | null
+          pseudonymization_level: string | null
+          status: string | null
+          subject_user_id: string | null
+          triggered_by_user_id: string | null
+        }
+        Insert: {
+          consent_version?: string | null
+          created_at?: string
+          data_categories?: string[] | null
+          duration_ms?: number | null
+          function_name: string
+          id?: number
+          model?: string | null
+          provider?: string | null
+          pseudonymization_level?: string | null
+          status?: string | null
+          subject_user_id?: string | null
+          triggered_by_user_id?: string | null
+        }
+        Update: {
+          consent_version?: string | null
+          created_at?: string
+          data_categories?: string[] | null
+          duration_ms?: number | null
+          function_name?: string
+          id?: number
+          model?: string | null
+          provider?: string | null
+          pseudonymization_level?: string | null
+          status?: string | null
+          subject_user_id?: string | null
+          triggered_by_user_id?: string | null
+        }
+        Relationships: []
+      }
+      alertes: {
+        Row: {
+          created_at: string
+          eleve_id: string
+          formateur_id: string
+          id: string
+          is_read: boolean
+          is_resolved: boolean
+          message: string | null
+          resolved_at: string | null
+          type: Database["public"]["Enums"]["alerte_type"]
+        }
+        Insert: {
+          created_at?: string
+          eleve_id: string
+          formateur_id: string
+          id?: string
+          is_read?: boolean
+          is_resolved?: boolean
+          message?: string | null
+          resolved_at?: string | null
+          type: Database["public"]["Enums"]["alerte_type"]
+        }
+        Update: {
+          created_at?: string
+          eleve_id?: string
+          formateur_id?: string
+          id?: string
+          is_read?: boolean
+          is_resolved?: boolean
+          message?: string | null
+          resolved_at?: string | null
+          type?: Database["public"]["Enums"]["alerte_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alertes_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alertes_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_events: {
+        Row: {
+          actor_id: string
+          actor_type: string
+          competence: string | null
+          context: string | null
+          created_at: string
+          gabarit_id: string | null
+          group_id: string | null
+          id: string
+          micro_competence_id: string | null
+          object_id: string | null
+          object_type: string | null
+          result: Json | null
+          seance_numero: number | null
+          session_id: string | null
+          source_app: string | null
+          verb: string
+        }
+        Insert: {
+          actor_id: string
+          actor_type: string
+          competence?: string | null
+          context?: string | null
+          created_at?: string
+          gabarit_id?: string | null
+          group_id?: string | null
+          id?: string
+          micro_competence_id?: string | null
+          object_id?: string | null
+          object_type?: string | null
+          result?: Json | null
+          seance_numero?: number | null
+          session_id?: string | null
+          source_app?: string | null
+          verb: string
+        }
+        Update: {
+          actor_id?: string
+          actor_type?: string
+          competence?: string | null
+          context?: string | null
+          created_at?: string
+          gabarit_id?: string | null
+          group_id?: string | null
+          id?: string
+          micro_competence_id?: string | null
+          object_id?: string | null
+          object_type?: string | null
+          result?: Json | null
+          seance_numero?: number | null
+          session_id?: string | null
+          source_app?: string | null
+          verb?: string
+        }
+        Relationships: []
+      }
+      atelier_bilans: {
+        Row: {
+          contenu: Json
+          created_at: string
+          formateur_id: string
+          id: string
+          recalibrations_appliquees: boolean
+          session_id: string
+        }
+        Insert: {
+          contenu?: Json
+          created_at?: string
+          formateur_id: string
+          id?: string
+          recalibrations_appliquees?: boolean
+          session_id: string
+        }
+        Update: {
+          contenu?: Json
+          created_at?: string
+          formateur_id?: string
+          id?: string
+          recalibrations_appliquees?: boolean
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atelier_bilans_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atelier_bilans_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance: {
         Row: {
           arrival_time: string | null
@@ -70,6 +389,169 @@ export type Database = {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "cohort_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bilan_post_devoirs: {
+        Row: {
+          analyse_data: Json
+          archived_at: string | null
+          archived_reason: string | null
+          created_at: string
+          eleve_id: string
+          formateur_id: string
+          id: string
+          is_integrated: boolean
+          is_read: boolean
+          session_id: string | null
+        }
+        Insert: {
+          analyse_data?: Json
+          archived_at?: string | null
+          archived_reason?: string | null
+          created_at?: string
+          eleve_id: string
+          formateur_id: string
+          id?: string
+          is_integrated?: boolean
+          is_read?: boolean
+          session_id?: string | null
+        }
+        Update: {
+          analyse_data?: Json
+          archived_at?: string | null
+          archived_reason?: string | null
+          created_at?: string
+          eleve_id?: string
+          formateur_id?: string
+          id?: string
+          is_integrated?: boolean
+          is_read?: boolean
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bilan_post_devoirs_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bilan_post_devoirs_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bilan_post_devoirs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bilan_test_results: {
+        Row: {
+          bilan_test_id: string
+          correction: Json
+          created_at: string
+          eleve_id: string
+          id: string
+          reponses: Json
+          score_global: number
+          scores_par_competence: Json
+        }
+        Insert: {
+          bilan_test_id: string
+          correction?: Json
+          created_at?: string
+          eleve_id: string
+          id?: string
+          reponses?: Json
+          score_global?: number
+          scores_par_competence?: Json
+        }
+        Update: {
+          bilan_test_id?: string
+          correction?: Json
+          created_at?: string
+          eleve_id?: string
+          id?: string
+          reponses?: Json
+          score_global?: number
+          scores_par_competence?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bilan_test_results_bilan_test_id_fkey"
+            columns: ["bilan_test_id"]
+            isOneToOne: false
+            referencedRelation: "bilan_tests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bilan_test_results_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bilan_tests: {
+        Row: {
+          archived_at: string | null
+          archived_reason: string | null
+          competences_couvertes: string[]
+          contenu: Json
+          created_at: string
+          formateur_id: string
+          id: string
+          nb_questions: number
+          session_id: string
+          statut: string
+        }
+        Insert: {
+          archived_at?: string | null
+          archived_reason?: string | null
+          competences_couvertes?: string[]
+          contenu?: Json
+          created_at?: string
+          formateur_id: string
+          id?: string
+          nb_questions?: number
+          session_id: string
+          statut?: string
+        }
+        Update: {
+          archived_at?: string | null
+          archived_reason?: string | null
+          competences_couvertes?: string[]
+          contenu?: Json
+          created_at?: string
+          formateur_id?: string
+          id?: string
+          nb_questions?: number
+          session_id?: string
+          statut?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bilan_tests_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bilan_tests_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -350,6 +832,237 @@ export type Database = {
           },
         ]
       }
+      daily_reports: {
+        Row: {
+          auto_applied: number
+          created_at: string
+          formateur_id: string
+          id: string
+          is_read: boolean
+          kind: string
+          pending_validation: number
+          report_date: string
+          summary: Json
+          total_reports: number
+        }
+        Insert: {
+          auto_applied?: number
+          created_at?: string
+          formateur_id: string
+          id?: string
+          is_read?: boolean
+          kind?: string
+          pending_validation?: number
+          report_date: string
+          summary?: Json
+          total_reports?: number
+        }
+        Update: {
+          auto_applied?: number
+          created_at?: string
+          formateur_id?: string
+          id?: string
+          is_read?: boolean
+          kind?: string
+          pending_validation?: number
+          report_date?: string
+          summary?: Json
+          total_reports?: number
+        }
+        Relationships: []
+      }
+      devoir_feedback: {
+        Row: {
+          created_at: string
+          devoir_id: string
+          difficulty_felt: string
+          eleve_id: string
+          exercice_id: string | null
+          id: string
+          score: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          devoir_id: string
+          difficulty_felt: string
+          eleve_id: string
+          exercice_id?: string | null
+          id?: string
+          score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          devoir_id?: string
+          difficulty_felt?: string
+          eleve_id?: string
+          exercice_id?: string | null
+          id?: string
+          score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devoir_feedback_devoir_id_fkey"
+            columns: ["devoir_id"]
+            isOneToOne: false
+            referencedRelation: "devoirs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devoir_feedback_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devoir_feedback_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      devoirs: {
+        Row: {
+          archived_at: string | null
+          archived_reason: string | null
+          contexte: string
+          created_at: string
+          date_echeance: string
+          eleve_id: string
+          exercice_id: string
+          formateur_id: string
+          id: string
+          nb_reussites_consecutives: number
+          raison: Database["public"]["Enums"]["devoir_raison"]
+          serie: number | null
+          session_id: string | null
+          source_label: string | null
+          statut: Database["public"]["Enums"]["devoir_statut"]
+          updated_at: string
+        }
+        Insert: {
+          archived_at?: string | null
+          archived_reason?: string | null
+          contexte?: string
+          created_at?: string
+          date_echeance?: string
+          eleve_id: string
+          exercice_id: string
+          formateur_id: string
+          id?: string
+          nb_reussites_consecutives?: number
+          raison?: Database["public"]["Enums"]["devoir_raison"]
+          serie?: number | null
+          session_id?: string | null
+          source_label?: string | null
+          statut?: Database["public"]["Enums"]["devoir_statut"]
+          updated_at?: string
+        }
+        Update: {
+          archived_at?: string | null
+          archived_reason?: string | null
+          contexte?: string
+          created_at?: string
+          date_echeance?: string
+          eleve_id?: string
+          exercice_id?: string
+          formateur_id?: string
+          id?: string
+          nb_reussites_consecutives?: number
+          raison?: Database["public"]["Enums"]["devoir_raison"]
+          serie?: number | null
+          session_id?: string | null
+          source_label?: string | null
+          statut?: Database["public"]["Enums"]["devoir_statut"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devoirs_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devoirs_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devoirs_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devoirs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnostic_entree: {
+        Row: {
+          competence: string
+          created_at: string
+          eleve_id: string
+          formateur_id: string
+          id: string
+          niveau_difficulte: number | null
+          score: number
+          sous_item: string
+          updated_at: string
+        }
+        Insert: {
+          competence: string
+          created_at?: string
+          eleve_id: string
+          formateur_id: string
+          id?: string
+          niveau_difficulte?: number | null
+          score?: number
+          sous_item: string
+          updated_at?: string
+        }
+        Update: {
+          competence?: string
+          created_at?: string
+          eleve_id?: string
+          formateur_id?: string
+          id?: string
+          niveau_difficulte?: number | null
+          score?: number
+          sous_item?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnostic_entree_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnostic_entree_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dossiers: {
         Row: {
           attempt_id: string | null
@@ -413,6 +1126,685 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "dossiers_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_send_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          message_id: string | null
+          metadata: Json | null
+          recipient_email: string
+          status: string
+          template_name: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json | null
+          recipient_email: string
+          status: string
+          template_name: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json | null
+          recipient_email?: string
+          status?: string
+          template_name?: string
+        }
+        Relationships: []
+      }
+      email_send_state: {
+        Row: {
+          auth_email_ttl_minutes: number
+          batch_size: number
+          id: number
+          retry_after_until: string | null
+          send_delay_ms: number
+          transactional_email_ttl_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          auth_email_ttl_minutes?: number
+          batch_size?: number
+          id?: number
+          retry_after_until?: string | null
+          send_delay_ms?: number
+          transactional_email_ttl_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          auth_email_ttl_minutes?: number
+          batch_size?: number
+          id?: number
+          retry_after_until?: string | null
+          send_delay_ms?: number
+          transactional_email_ttl_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_unsubscribe_tokens: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
+      epreuves: {
+        Row: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          created_at: string
+          description: string | null
+          id: string
+          nom: string
+          ordre: number
+        }
+        Insert: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom: string
+          ordre?: number
+        }
+        Update: {
+          competence?: Database["public"]["Enums"]["competence_type"]
+          created_at?: string
+          description?: string | null
+          id?: string
+          nom?: string
+          ordre?: number
+        }
+        Relationships: []
+      }
+      exercices: {
+        Row: {
+          aides_disponibles: string[]
+          animation_guide: Json | null
+          autonomie_requise: string | null
+          collectif: boolean
+          competence: Database["public"]["Enums"]["competence_type"]
+          consigne: string
+          contenu: Json
+          contexte_irn: string | null
+          created_at: string
+          difficulte: number
+          duree_estimee_min: number | null
+          duree_limite_secondes: number | null
+          eleve_id: string | null
+          format: Database["public"]["Enums"]["exercice_format"]
+          formateur_id: string
+          id: string
+          is_ai_generated: boolean
+          is_devoir: boolean
+          is_live_ready: boolean | null
+          is_template: boolean
+          metadata_code: string | null
+          metadata_skill: string | null
+          mode: Database["public"]["Enums"]["exercice_mode"]
+          niveau_guidage: string | null
+          niveau_vise: string
+          nombre_ecoutes_max: number | null
+          objectif_tcf: string | null
+          outils_aide: string[]
+          play_token: string | null
+          point_a_maitriser_id: string
+          regle_montee_auto: boolean
+          sequence_id: string | null
+          source_url: string | null
+          sous_competence: string | null
+          statut: string | null
+          theme: string | null
+          titre: string
+          transcription_verrouillee: boolean
+          type_differenciation: string | null
+          updated_at: string
+          variante_niveau_bas: Json | null
+          variante_niveau_haut: Json | null
+        }
+        Insert: {
+          aides_disponibles?: string[]
+          animation_guide?: Json | null
+          autonomie_requise?: string | null
+          collectif?: boolean
+          competence: Database["public"]["Enums"]["competence_type"]
+          consigne: string
+          contenu?: Json
+          contexte_irn?: string | null
+          created_at?: string
+          difficulte?: number
+          duree_estimee_min?: number | null
+          duree_limite_secondes?: number | null
+          eleve_id?: string | null
+          format?: Database["public"]["Enums"]["exercice_format"]
+          formateur_id: string
+          id?: string
+          is_ai_generated?: boolean
+          is_devoir?: boolean
+          is_live_ready?: boolean | null
+          is_template?: boolean
+          metadata_code?: string | null
+          metadata_skill?: string | null
+          mode?: Database["public"]["Enums"]["exercice_mode"]
+          niveau_guidage?: string | null
+          niveau_vise?: string
+          nombre_ecoutes_max?: number | null
+          objectif_tcf?: string | null
+          outils_aide?: string[]
+          play_token?: string | null
+          point_a_maitriser_id: string
+          regle_montee_auto?: boolean
+          sequence_id?: string | null
+          source_url?: string | null
+          sous_competence?: string | null
+          statut?: string | null
+          theme?: string | null
+          titre: string
+          transcription_verrouillee?: boolean
+          type_differenciation?: string | null
+          updated_at?: string
+          variante_niveau_bas?: Json | null
+          variante_niveau_haut?: Json | null
+        }
+        Update: {
+          aides_disponibles?: string[]
+          animation_guide?: Json | null
+          autonomie_requise?: string | null
+          collectif?: boolean
+          competence?: Database["public"]["Enums"]["competence_type"]
+          consigne?: string
+          contenu?: Json
+          contexte_irn?: string | null
+          created_at?: string
+          difficulte?: number
+          duree_estimee_min?: number | null
+          duree_limite_secondes?: number | null
+          eleve_id?: string | null
+          format?: Database["public"]["Enums"]["exercice_format"]
+          formateur_id?: string
+          id?: string
+          is_ai_generated?: boolean
+          is_devoir?: boolean
+          is_live_ready?: boolean | null
+          is_template?: boolean
+          metadata_code?: string | null
+          metadata_skill?: string | null
+          mode?: Database["public"]["Enums"]["exercice_mode"]
+          niveau_guidage?: string | null
+          niveau_vise?: string
+          nombre_ecoutes_max?: number | null
+          objectif_tcf?: string | null
+          outils_aide?: string[]
+          play_token?: string | null
+          point_a_maitriser_id?: string
+          regle_montee_auto?: boolean
+          sequence_id?: string | null
+          source_url?: string | null
+          sous_competence?: string | null
+          statut?: string | null
+          theme?: string | null
+          titre?: string
+          transcription_verrouillee?: boolean
+          type_differenciation?: string | null
+          updated_at?: string
+          variante_niveau_bas?: Json | null
+          variante_niveau_haut?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercices_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercices_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercices_point_a_maitriser_id_fkey"
+            columns: ["point_a_maitriser_id"]
+            isOneToOne: false
+            referencedRelation: "points_a_maitriser"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercices_sequence_id_fkey"
+            columns: ["sequence_id"]
+            isOneToOne: false
+            referencedRelation: "sequences_pedagogiques"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercise_assignments: {
+        Row: {
+          assigned_by: string | null
+          context: string | null
+          created_at: string | null
+          due_date: string | null
+          exercise_id: string | null
+          group_id: string | null
+          id: string
+          learner_id: string | null
+          sync_status: string | null
+        }
+        Insert: {
+          assigned_by?: string | null
+          context?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          exercise_id?: string | null
+          group_id?: string | null
+          id?: string
+          learner_id?: string | null
+          sync_status?: string | null
+        }
+        Update: {
+          assigned_by?: string | null
+          context?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          exercise_id?: string | null
+          group_id?: string | null
+          id?: string
+          learner_id?: string | null
+          sync_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_assignments_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_assignments_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_assignments_learner_id_fkey"
+            columns: ["learner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercise_attempts: {
+        Row: {
+          answers: Json | null
+          assignment_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          exercise_id: string | null
+          feedback_text: string | null
+          id: string
+          item_results: Json | null
+          learner_id: string | null
+          score_normalized: number | null
+          score_raw: number | null
+          source_app: string | null
+          started_at: string | null
+          status: string | null
+          time_spent_seconds: number | null
+        }
+        Insert: {
+          answers?: Json | null
+          assignment_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          exercise_id?: string | null
+          feedback_text?: string | null
+          id?: string
+          item_results?: Json | null
+          learner_id?: string | null
+          score_normalized?: number | null
+          score_raw?: number | null
+          source_app?: string | null
+          started_at?: string | null
+          status?: string | null
+          time_spent_seconds?: number | null
+        }
+        Update: {
+          answers?: Json | null
+          assignment_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          exercise_id?: string | null
+          feedback_text?: string | null
+          id?: string
+          item_results?: Json | null
+          learner_id?: string | null
+          score_normalized?: number | null
+          score_raw?: number | null
+          source_app?: string | null
+          started_at?: string | null
+          status?: string | null
+          time_spent_seconds?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_attempts_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "exercise_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_attempts_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_attempts_learner_id_fkey"
+            columns: ["learner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercise_reports: {
+        Row: {
+          ai_analysis: Json | null
+          ai_applied_at: string | null
+          ai_auto_applied: boolean
+          ai_confidence: number | null
+          ai_problem_type: string | null
+          ai_processed_at: string | null
+          ai_proposed_solution: Json | null
+          bilan_test_id: string | null
+          comment: string | null
+          context: string
+          created_at: string
+          devoir_id: string | null
+          eleve_id: string
+          exercice_id: string | null
+          exercice_snapshot: Json | null
+          formateur_decision: string | null
+          formateur_decision_at: string | null
+          formateur_id: string | null
+          id: string
+          item_index: number | null
+          page_url: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          screenshot_path: string | null
+          status: string
+          user_agent: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          ai_applied_at?: string | null
+          ai_auto_applied?: boolean
+          ai_confidence?: number | null
+          ai_problem_type?: string | null
+          ai_processed_at?: string | null
+          ai_proposed_solution?: Json | null
+          bilan_test_id?: string | null
+          comment?: string | null
+          context?: string
+          created_at?: string
+          devoir_id?: string | null
+          eleve_id: string
+          exercice_id?: string | null
+          exercice_snapshot?: Json | null
+          formateur_decision?: string | null
+          formateur_decision_at?: string | null
+          formateur_id?: string | null
+          id?: string
+          item_index?: number | null
+          page_url?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_path?: string | null
+          status?: string
+          user_agent?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          ai_applied_at?: string | null
+          ai_auto_applied?: boolean
+          ai_confidence?: number | null
+          ai_problem_type?: string | null
+          ai_processed_at?: string | null
+          ai_proposed_solution?: Json | null
+          bilan_test_id?: string | null
+          comment?: string | null
+          context?: string
+          created_at?: string
+          devoir_id?: string | null
+          eleve_id?: string
+          exercice_id?: string | null
+          exercice_snapshot?: Json | null
+          formateur_decision?: string | null
+          formateur_decision_at?: string | null
+          formateur_id?: string | null
+          id?: string
+          item_index?: number | null
+          page_url?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_path?: string | null
+          status?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      external_resource_results: {
+        Row: {
+          comment: string | null
+          created_at: string
+          difficulty_felt: string | null
+          external_resource_id: string
+          id: string
+          score: number | null
+          screenshot_path: string | null
+          source: string
+          student_id: string
+          time_spent_seconds: number | null
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          difficulty_felt?: string | null
+          external_resource_id: string
+          id?: string
+          score?: number | null
+          screenshot_path?: string | null
+          source?: string
+          student_id: string
+          time_spent_seconds?: number | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          difficulty_felt?: string | null
+          external_resource_id?: string
+          id?: string
+          score?: number | null
+          screenshot_path?: string | null
+          source?: string
+          student_id?: string
+          time_spent_seconds?: number | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "external_resource_results_external_resource_id_fkey"
+            columns: ["external_resource_id"]
+            isOneToOne: false
+            referencedRelation: "external_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "external_resource_results_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "external_resource_results_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      external_resources: {
+        Row: {
+          competence_id: string | null
+          created_at: string
+          created_by: string
+          embed_type: string
+          embeddable_checked_at: string | null
+          embeddable_result: boolean | null
+          id: string
+          ordre: number | null
+          provider: string
+          session_id: string
+          title: string
+          url: string
+        }
+        Insert: {
+          competence_id?: string | null
+          created_at?: string
+          created_by: string
+          embed_type: string
+          embeddable_checked_at?: string | null
+          embeddable_result?: boolean | null
+          id?: string
+          ordre?: number | null
+          provider?: string
+          session_id: string
+          title: string
+          url: string
+        }
+        Update: {
+          competence_id?: string | null
+          created_at?: string
+          created_by?: string
+          embed_type?: string
+          embeddable_checked_at?: string | null
+          embeddable_result?: boolean | null
+          id?: string
+          ordre?: number | null
+          provider?: string
+          session_id?: string
+          title?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "external_resources_competence_id_fkey"
+            columns: ["competence_id"]
+            isOneToOne: false
+            referencedRelation: "points_a_maitriser"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "external_resources_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "external_resources_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      formateur_competences_config: {
+        Row: {
+          competences_ordonnees: Json
+          formateur_id: string
+          id: string
+          seance_id: string
+          updated_at: string
+        }
+        Insert: {
+          competences_ordonnees?: Json
+          formateur_id: string
+          id?: string
+          seance_id: string
+          updated_at?: string
+        }
+        Update: {
+          competences_ordonnees?: Json
+          formateur_id?: string
+          id?: string
+          seance_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formateur_competences_config_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       formation_journeys: {
@@ -453,6 +1845,299 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      gabarits_pedagogiques: {
+        Row: {
+          bloc: string
+          competences_cibles: string[]
+          consignes_generation: string
+          created_at: string
+          criteres_reussite: string
+          dependances_seances: number[]
+          duree_minutes: number
+          id: string
+          lexique_cibles: string
+          niveau_cible: string
+          numero: number
+          objectif_principal: string
+          palier_cecrl: string
+          titre: string
+          version: string
+        }
+        Insert: {
+          bloc: string
+          competences_cibles?: string[]
+          consignes_generation?: string
+          created_at?: string
+          criteres_reussite?: string
+          dependances_seances?: number[]
+          duree_minutes?: number
+          id?: string
+          lexique_cibles?: string
+          niveau_cible?: string
+          numero: number
+          objectif_principal?: string
+          palier_cecrl: string
+          titre: string
+          version?: string
+        }
+        Update: {
+          bloc?: string
+          competences_cibles?: string[]
+          consignes_generation?: string
+          created_at?: string
+          criteres_reussite?: string
+          dependances_seances?: number[]
+          duree_minutes?: number
+          id?: string
+          lexique_cibles?: string
+          niveau_cible?: string
+          numero?: number
+          objectif_principal?: string
+          palier_cecrl?: string
+          titre?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      group_invitations: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string
+          expires_at: string
+          group_id: string
+          id: string
+          used_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by: string
+          expires_at?: string
+          group_id: string
+          id?: string
+          used_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          group_id?: string
+          id?: string
+          used_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_invitations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_members: {
+        Row: {
+          eleve_id: string
+          group_id: string
+          id: string
+          joined_at: string
+        }
+        Insert: {
+          eleve_id: string
+          group_id: string
+          id?: string
+          joined_at?: string
+        }
+        Update: {
+          eleve_id?: string
+          group_id?: string
+          id?: string
+          joined_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string
+          description: string | null
+          formateur_id: string
+          homework_delivery_mode: string
+          id: string
+          is_active: boolean
+          niveau: string
+          nom: string
+          type_demarche: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          formateur_id: string
+          homework_delivery_mode?: string
+          id?: string
+          is_active?: boolean
+          niveau?: string
+          nom: string
+          type_demarche?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          formateur_id?: string
+          homework_delivery_mode?: string
+          id?: string
+          is_active?: boolean
+          niveau?: string
+          nom?: string
+          type_demarche?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "groups_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homework_generation_queue: {
+        Row: {
+          attempts: number
+          completed_serie: number | null
+          created_at: string
+          eleve_id: string
+          error_message: string | null
+          formateur_id: string
+          id: string
+          max_attempts: number
+          next_attempt_at: string
+          processed_at: string | null
+          reason: string
+          session_id: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          completed_serie?: number | null
+          created_at?: string
+          eleve_id: string
+          error_message?: string | null
+          formateur_id: string
+          id?: string
+          max_attempts?: number
+          next_attempt_at?: string
+          processed_at?: string | null
+          reason?: string
+          session_id?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          completed_serie?: number | null
+          created_at?: string
+          eleve_id?: string
+          error_message?: string | null
+          formateur_id?: string
+          id?: string
+          max_attempts?: number
+          next_attempt_at?: string
+          processed_at?: string | null
+          reason?: string
+          session_id?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      interventions: {
+        Row: {
+          audio_generated_at: string | null
+          audio_url: string | null
+          competence: string | null
+          contenu_texte: string
+          created_at: string
+          formateur_id: string | null
+          id: string
+          is_systeme: boolean
+          niveau_cible: string | null
+          titre: string
+          type_erreur_id: string | null
+          updated_at: string
+          voix: string
+        }
+        Insert: {
+          audio_generated_at?: string | null
+          audio_url?: string | null
+          competence?: string | null
+          contenu_texte: string
+          created_at?: string
+          formateur_id?: string | null
+          id?: string
+          is_systeme?: boolean
+          niveau_cible?: string | null
+          titre: string
+          type_erreur_id?: string | null
+          updated_at?: string
+          voix?: string
+        }
+        Update: {
+          audio_generated_at?: string | null
+          audio_url?: string | null
+          competence?: string | null
+          contenu_texte?: string
+          created_at?: string
+          formateur_id?: string | null
+          id?: string
+          is_systeme?: boolean
+          niveau_cible?: string | null
+          titre?: string
+          type_erreur_id?: string | null
+          updated_at?: string
+          voix?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interventions_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interventions_type_erreur_id_fkey"
+            columns: ["type_erreur_id"]
+            isOneToOne: false
+            referencedRelation: "types_erreur"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lead_events: {
         Row: {
@@ -525,145 +2210,151 @@ export type Database = {
       leads: {
         Row: {
           address_line1: string | null
-          attempt_id: string | null
+          assigned_to: string | null
           birth_date: string | null
-          checklist_states: Json | null
           city: string | null
           consent_at: string | null
-          consent_marketing: boolean
+          consent_partner: boolean
+          consent_partner_text_version: string | null
+          consent_timestamp: string | null
+          consent_training: boolean
+          consent_training_text_version: string | null
           contacte: boolean | null
           contacte_at: string | null
           cpf_balance_declared: number | null
           cpf_status: string | null
-          created_at: string
-          date_rdv_prefecture: string | null
+          created_at: string | null
           demarche_inconnue: boolean | null
           destination: string | null
-          dispense_demandee: boolean | null
-          email: string
+          email: string | null
           employer_support: boolean | null
           estimated_level: string | null
           financement_opt_in: boolean | null
-          first_name: string | null
+          first_name: string
           france_travail_registered: boolean | null
           funding_followup_at: string | null
           funding_internal_notes: string | null
           funding_next_action: string | null
           funding_status: string
           funding_target_date: string | null
+          goal: string | null
           id: string
+          last_name: string | null
           lead_intent: string
-          metadata: Json
+          lead_type: string
+          message: string | null
           nationality: string | null
-          partenaire_consent: boolean
-          partenaire_consent_at: string | null
           partenaire_opt_in: boolean | null
           partner_id: string | null
+          partner_request_type: string | null
           partner_status: string | null
           postal_code: string | null
           professional_status: string | null
           sector_activity: string | null
-          situation_pro: string | null
           source: string
-          status: string
+          status: string | null
           tunnel: string | null
-          type_demarche: string | null
+          updated_at: string | null
           whatsapp_consent: boolean
           whatsapp_phone: string | null
         }
         Insert: {
           address_line1?: string | null
-          attempt_id?: string | null
+          assigned_to?: string | null
           birth_date?: string | null
-          checklist_states?: Json | null
           city?: string | null
           consent_at?: string | null
-          consent_marketing?: boolean
+          consent_partner?: boolean
+          consent_partner_text_version?: string | null
+          consent_timestamp?: string | null
+          consent_training?: boolean
+          consent_training_text_version?: string | null
           contacte?: boolean | null
           contacte_at?: string | null
           cpf_balance_declared?: number | null
           cpf_status?: string | null
-          created_at?: string
-          date_rdv_prefecture?: string | null
+          created_at?: string | null
           demarche_inconnue?: boolean | null
           destination?: string | null
-          dispense_demandee?: boolean | null
-          email: string
+          email?: string | null
           employer_support?: boolean | null
           estimated_level?: string | null
           financement_opt_in?: boolean | null
-          first_name?: string | null
+          first_name: string
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
           funding_next_action?: string | null
           funding_status?: string
           funding_target_date?: string | null
+          goal?: string | null
           id?: string
+          last_name?: string | null
           lead_intent?: string
-          metadata?: Json
+          lead_type: string
+          message?: string | null
           nationality?: string | null
-          partenaire_consent?: boolean
-          partenaire_consent_at?: string | null
           partenaire_opt_in?: boolean | null
           partner_id?: string | null
+          partner_request_type?: string | null
           partner_status?: string | null
           postal_code?: string | null
           professional_status?: string | null
           sector_activity?: string | null
-          situation_pro?: string | null
-          source?: string
-          status?: string
+          source: string
+          status?: string | null
           tunnel?: string | null
-          type_demarche?: string | null
+          updated_at?: string | null
           whatsapp_consent?: boolean
           whatsapp_phone?: string | null
         }
         Update: {
           address_line1?: string | null
-          attempt_id?: string | null
+          assigned_to?: string | null
           birth_date?: string | null
-          checklist_states?: Json | null
           city?: string | null
           consent_at?: string | null
-          consent_marketing?: boolean
+          consent_partner?: boolean
+          consent_partner_text_version?: string | null
+          consent_timestamp?: string | null
+          consent_training?: boolean
+          consent_training_text_version?: string | null
           contacte?: boolean | null
           contacte_at?: string | null
           cpf_balance_declared?: number | null
           cpf_status?: string | null
-          created_at?: string
-          date_rdv_prefecture?: string | null
+          created_at?: string | null
           demarche_inconnue?: boolean | null
           destination?: string | null
-          dispense_demandee?: boolean | null
-          email?: string
+          email?: string | null
           employer_support?: boolean | null
           estimated_level?: string | null
           financement_opt_in?: boolean | null
-          first_name?: string | null
+          first_name?: string
           france_travail_registered?: boolean | null
           funding_followup_at?: string | null
           funding_internal_notes?: string | null
           funding_next_action?: string | null
           funding_status?: string
           funding_target_date?: string | null
+          goal?: string | null
           id?: string
+          last_name?: string | null
           lead_intent?: string
-          metadata?: Json
+          lead_type?: string
+          message?: string | null
           nationality?: string | null
-          partenaire_consent?: boolean
-          partenaire_consent_at?: string | null
           partenaire_opt_in?: boolean | null
           partner_id?: string | null
+          partner_request_type?: string | null
           partner_status?: string | null
           postal_code?: string | null
           professional_status?: string | null
           sector_activity?: string | null
-          situation_pro?: string | null
           source?: string
-          status?: string
+          status?: string | null
           tunnel?: string | null
-          type_demarche?: string | null
+          updated_at?: string | null
           whatsapp_consent?: boolean
           whatsapp_phone?: string | null
         }
@@ -756,6 +2447,244 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          message: string
+          titre: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message: string
+          titre: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string
+          titre?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parametres: {
+        Row: {
+          alerte_absence_heures: number
+          auto_adapt: boolean
+          created_at: string
+          delai_devoirs_jours: number
+          formateur_id: string
+          id: string
+          max_devoirs_actifs: number
+          nb_reussites_consecutives: number
+          seuil_acquis: number
+          seuil_consolidation: number
+          seuil_score_risque: number
+          updated_at: string
+        }
+        Insert: {
+          alerte_absence_heures?: number
+          auto_adapt?: boolean
+          created_at?: string
+          delai_devoirs_jours?: number
+          formateur_id: string
+          id?: string
+          max_devoirs_actifs?: number
+          nb_reussites_consecutives?: number
+          seuil_acquis?: number
+          seuil_consolidation?: number
+          seuil_score_risque?: number
+          updated_at?: string
+        }
+        Update: {
+          alerte_absence_heures?: number
+          auto_adapt?: boolean
+          created_at?: string
+          delai_devoirs_jours?: number
+          formateur_id?: string
+          id?: string
+          max_devoirs_actifs?: number
+          nb_reussites_consecutives?: number
+          seuil_acquis?: number
+          seuil_consolidation?: number
+          seuil_score_risque?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parametres_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parcours: {
+        Row: {
+          created_at: string
+          date_examen_cible: string | null
+          description: string | null
+          formateur_id: string
+          group_id: string | null
+          heures_totales_prevues: number
+          heures_totales_reelles: number
+          id: string
+          is_template: boolean
+          nb_seances_prevues: number
+          nb_seances_realisees: number
+          niveau_cible: string
+          niveau_depart: string
+          statut: string
+          titre: string
+          type_demarche: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date_examen_cible?: string | null
+          description?: string | null
+          formateur_id: string
+          group_id?: string | null
+          heures_totales_prevues?: number
+          heures_totales_reelles?: number
+          id?: string
+          is_template?: boolean
+          nb_seances_prevues?: number
+          nb_seances_realisees?: number
+          niveau_cible?: string
+          niveau_depart?: string
+          statut?: string
+          titre: string
+          type_demarche?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date_examen_cible?: string | null
+          description?: string | null
+          formateur_id?: string
+          group_id?: string | null
+          heures_totales_prevues?: number
+          heures_totales_reelles?: number
+          id?: string
+          is_template?: boolean
+          nb_seances_prevues?: number
+          nb_seances_realisees?: number
+          niveau_cible?: string
+          niveau_depart?: string
+          statut?: string
+          titre?: string
+          type_demarche?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parcours_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parcours_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parcours_seances: {
+        Row: {
+          competences_cibles: string[]
+          created_at: string
+          duree_minutes: number
+          exercices_faits: number | null
+          exercices_total: number | null
+          heures_reelles: number | null
+          id: string
+          nb_exercices_suggeres: number
+          notes: string | null
+          objectif_principal: string | null
+          ordre: number
+          parcours_id: string
+          session_id: string | null
+          statut: string
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          competences_cibles?: string[]
+          created_at?: string
+          duree_minutes?: number
+          exercices_faits?: number | null
+          exercices_total?: number | null
+          heures_reelles?: number | null
+          id?: string
+          nb_exercices_suggeres?: number
+          notes?: string | null
+          objectif_principal?: string | null
+          ordre?: number
+          parcours_id: string
+          session_id?: string | null
+          statut?: string
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          competences_cibles?: string[]
+          created_at?: string
+          duree_minutes?: number
+          exercices_faits?: number | null
+          exercices_total?: number | null
+          heures_reelles?: number | null
+          id?: string
+          nb_exercices_suggeres?: number
+          notes?: string | null
+          objectif_principal?: string | null
+          ordre?: number
+          parcours_id?: string
+          session_id?: string | null
+          statut?: string
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parcours_seances_parcours_id_fkey"
+            columns: ["parcours_id"]
+            isOneToOne: false
+            referencedRelation: "parcours"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parcours_seances_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -916,6 +2845,2312 @@ export type Database = {
         }
         Relationships: []
       }
+      pedagogical_activities: {
+        Row: {
+          activity_id: string
+          audience: string | null
+          category: string
+          created_at: string
+          document_id: string | null
+          duration_max: number | null
+          duration_min: number | null
+          id: string
+          import_key: string
+          instructions: string
+          level_max: string
+          level_max_rank: number | null
+          level_min: string
+          level_min_rank: number | null
+          materials_needed: string[]
+          objective: string
+          raw: Json
+          source_kind: string
+          source_pdf: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          audience?: string | null
+          category: string
+          created_at?: string
+          document_id?: string | null
+          duration_max?: number | null
+          duration_min?: number | null
+          id?: string
+          import_key: string
+          instructions?: string
+          level_max: string
+          level_max_rank?: number | null
+          level_min: string
+          level_min_rank?: number | null
+          materials_needed?: string[]
+          objective?: string
+          raw?: Json
+          source_kind?: string
+          source_pdf?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          audience?: string | null
+          category?: string
+          created_at?: string
+          document_id?: string | null
+          duration_max?: number | null
+          duration_min?: number | null
+          id?: string
+          import_key?: string
+          instructions?: string
+          level_max?: string
+          level_max_rank?: number | null
+          level_min?: string
+          level_min_rank?: number | null
+          materials_needed?: string[]
+          objective?: string
+          raw?: Json
+          source_kind?: string
+          source_pdf?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pedagogical_documents: {
+        Row: {
+          activity_count: number
+          audience: string | null
+          created_at: string
+          document_id: string
+          document_type: string | null
+          file_name: string
+          id: string
+          levels: string[]
+          markdown_file: string | null
+          raw: Json
+          short_summary: string
+          source_kind: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          activity_count?: number
+          audience?: string | null
+          created_at?: string
+          document_id: string
+          document_type?: string | null
+          file_name: string
+          id?: string
+          levels?: string[]
+          markdown_file?: string | null
+          raw?: Json
+          short_summary?: string
+          source_kind?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          activity_count?: number
+          audience?: string | null
+          created_at?: string
+          document_id?: string
+          document_type?: string | null
+          file_name?: string
+          id?: string
+          levels?: string[]
+          markdown_file?: string | null
+          raw?: Json
+          short_summary?: string
+          source_kind?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pedagogical_extraction_errors: {
+        Row: {
+          created_at: string
+          error: string
+          file_name: string
+          id: string
+          raw: Json
+          source_kind: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error: string
+          file_name: string
+          id?: string
+          raw?: Json
+          source_kind?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error?: string
+          file_name?: string
+          id?: string
+          raw?: Json
+          source_kind?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pedagogical_images: {
+        Row: {
+          alt_text: string
+          attribution: string | null
+          author: string | null
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          import_key: string
+          is_active: boolean
+          language_level: string | null
+          level_tags: string[]
+          license: string | null
+          pedagogical_relevance_score: number | null
+          pedagogical_tags: string[]
+          public_url: string | null
+          quality_score: number | null
+          raw: Json
+          recommended_exercise_types: string[]
+          rejected: boolean
+          rejection_reason: string
+          skill_tags: string[]
+          source: string | null
+          source_url: string | null
+          storage_bucket: string
+          storage_path: string
+          theme_tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          alt_text?: string
+          attribution?: string | null
+          author?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          import_key: string
+          is_active?: boolean
+          language_level?: string | null
+          level_tags?: string[]
+          license?: string | null
+          pedagogical_relevance_score?: number | null
+          pedagogical_tags?: string[]
+          public_url?: string | null
+          quality_score?: number | null
+          raw?: Json
+          recommended_exercise_types?: string[]
+          rejected?: boolean
+          rejection_reason?: string
+          skill_tags?: string[]
+          source?: string | null
+          source_url?: string | null
+          storage_bucket?: string
+          storage_path: string
+          theme_tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          alt_text?: string
+          attribution?: string | null
+          author?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          import_key?: string
+          is_active?: boolean
+          language_level?: string | null
+          level_tags?: string[]
+          license?: string | null
+          pedagogical_relevance_score?: number | null
+          pedagogical_tags?: string[]
+          public_url?: string | null
+          quality_score?: number | null
+          raw?: Json
+          recommended_exercise_types?: string[]
+          rejected?: boolean
+          rejection_reason?: string
+          skill_tags?: string[]
+          source?: string | null
+          source_url?: string | null
+          storage_bucket?: string
+          storage_path?: string
+          theme_tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      placement_test_answers: {
+        Row: {
+          attempt_id: string | null
+          created_at: string
+          error_tags: string[] | null
+          id: string
+          is_correct: boolean | null
+          item_id: string | null
+          score: number | null
+          student_answer: string | null
+          teacher_feedback: string | null
+          time_spent: number | null
+        }
+        Insert: {
+          attempt_id?: string | null
+          created_at?: string
+          error_tags?: string[] | null
+          id?: string
+          is_correct?: boolean | null
+          item_id?: string | null
+          score?: number | null
+          student_answer?: string | null
+          teacher_feedback?: string | null
+          time_spent?: number | null
+        }
+        Update: {
+          attempt_id?: string | null
+          created_at?: string
+          error_tags?: string[] | null
+          id?: string
+          is_correct?: boolean | null
+          item_id?: string | null
+          score?: number | null
+          student_answer?: string | null
+          teacher_feedback?: string | null
+          time_spent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "placement_test_answers_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "placement_test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "placement_test_answers_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "placement_test_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      placement_test_attempts: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          estimated_level: string | null
+          id: string
+          max_score: number | null
+          started_at: string
+          status: string
+          student_id: string | null
+          student_name: string | null
+          test_id: string | null
+          total_score: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          estimated_level?: string | null
+          id?: string
+          max_score?: number | null
+          started_at?: string
+          status?: string
+          student_id?: string | null
+          student_name?: string | null
+          test_id?: string | null
+          total_score?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          estimated_level?: string | null
+          id?: string
+          max_score?: number | null
+          started_at?: string
+          status?: string
+          student_id?: string | null
+          student_name?: string | null
+          test_id?: string | null
+          total_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "placement_test_attempts_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "placement_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      placement_test_exports: {
+        Row: {
+          access_token: string | null
+          created_at: string
+          export_format: string | null
+          export_status: string | null
+          export_url: string | null
+          exported_at: string | null
+          id: string
+          last_synced_at: string | null
+          private_answer_key: Json
+          public_payload: Json
+          schema_version: string | null
+          target_site: string | null
+          test_id: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string
+          export_format?: string | null
+          export_status?: string | null
+          export_url?: string | null
+          exported_at?: string | null
+          id?: string
+          last_synced_at?: string | null
+          private_answer_key: Json
+          public_payload: Json
+          schema_version?: string | null
+          target_site?: string | null
+          test_id?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string
+          export_format?: string | null
+          export_status?: string | null
+          export_url?: string | null
+          exported_at?: string | null
+          id?: string
+          last_synced_at?: string | null
+          private_answer_key?: Json
+          public_payload?: Json
+          schema_version?: string | null
+          target_site?: string | null
+          test_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "placement_test_exports_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "placement_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      placement_test_items: {
+        Row: {
+          audio_script: string | null
+          context: string | null
+          correct_answer: string | null
+          created_at: string
+          difficulty: number | null
+          distractors_analysis: string | null
+          explanation: string | null
+          id: string
+          is_validated: boolean | null
+          level_cecrl: string
+          options: Json | null
+          order_index: number | null
+          prompt: string | null
+          question: string | null
+          score: number | null
+          skill: string
+          support: string | null
+          support_type: string | null
+          tags: string[] | null
+          test_id: string | null
+        }
+        Insert: {
+          audio_script?: string | null
+          context?: string | null
+          correct_answer?: string | null
+          created_at?: string
+          difficulty?: number | null
+          distractors_analysis?: string | null
+          explanation?: string | null
+          id?: string
+          is_validated?: boolean | null
+          level_cecrl: string
+          options?: Json | null
+          order_index?: number | null
+          prompt?: string | null
+          question?: string | null
+          score?: number | null
+          skill: string
+          support?: string | null
+          support_type?: string | null
+          tags?: string[] | null
+          test_id?: string | null
+        }
+        Update: {
+          audio_script?: string | null
+          context?: string | null
+          correct_answer?: string | null
+          created_at?: string
+          difficulty?: number | null
+          distractors_analysis?: string | null
+          explanation?: string | null
+          id?: string
+          is_validated?: boolean | null
+          level_cecrl?: string
+          options?: Json | null
+          order_index?: number | null
+          prompt?: string | null
+          question?: string | null
+          score?: number | null
+          skill?: string
+          support?: string | null
+          support_type?: string | null
+          tags?: string[] | null
+          test_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "placement_test_items_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "placement_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      placement_test_results: {
+        Row: {
+          attempt_id: string | null
+          ce_level: string | null
+          ce_score_pct: number | null
+          co_level: string | null
+          co_score_pct: number | null
+          created_at: string
+          ee_level: string | null
+          ee_score_pct: number | null
+          eo_level: string | null
+          eo_score_pct: number | null
+          flags: string[] | null
+          global_level: string | null
+          global_score_pct: number | null
+          id: string
+          raw_analysis: Json | null
+          recommended_group: string | null
+          recommended_pathway: string | null
+          remediation_exercises: Json | null
+          strengths: string[] | null
+          teacher_notes: string | null
+          updated_at: string
+          weaknesses: string[] | null
+        }
+        Insert: {
+          attempt_id?: string | null
+          ce_level?: string | null
+          ce_score_pct?: number | null
+          co_level?: string | null
+          co_score_pct?: number | null
+          created_at?: string
+          ee_level?: string | null
+          ee_score_pct?: number | null
+          eo_level?: string | null
+          eo_score_pct?: number | null
+          flags?: string[] | null
+          global_level?: string | null
+          global_score_pct?: number | null
+          id?: string
+          raw_analysis?: Json | null
+          recommended_group?: string | null
+          recommended_pathway?: string | null
+          remediation_exercises?: Json | null
+          strengths?: string[] | null
+          teacher_notes?: string | null
+          updated_at?: string
+          weaknesses?: string[] | null
+        }
+        Update: {
+          attempt_id?: string | null
+          ce_level?: string | null
+          ce_score_pct?: number | null
+          co_level?: string | null
+          co_score_pct?: number | null
+          created_at?: string
+          ee_level?: string | null
+          ee_score_pct?: number | null
+          eo_level?: string | null
+          eo_score_pct?: number | null
+          flags?: string[] | null
+          global_level?: string | null
+          global_score_pct?: number | null
+          id?: string
+          raw_analysis?: Json | null
+          recommended_group?: string | null
+          recommended_pathway?: string | null
+          remediation_exercises?: Json | null
+          strengths?: string[] | null
+          teacher_notes?: string | null
+          updated_at?: string
+          weaknesses?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "placement_test_results_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: true
+            referencedRelation: "placement_test_attempts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      placement_tests: {
+        Row: {
+          competences: string[]
+          contexte: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          niveaux_couverts: string[]
+          play_token: string | null
+          published_at: string | null
+          status: string
+          target_exam: string
+          target_public: string
+          title: string
+          updated_at: string
+          validated_by: string | null
+          version: number
+        }
+        Insert: {
+          competences?: string[]
+          contexte?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          niveaux_couverts?: string[]
+          play_token?: string | null
+          published_at?: string | null
+          status?: string
+          target_exam?: string
+          target_public: string
+          title: string
+          updated_at?: string
+          validated_by?: string | null
+          version?: number
+        }
+        Update: {
+          competences?: string[]
+          contexte?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          niveaux_couverts?: string[]
+          play_token?: string | null
+          published_at?: string | null
+          status?: string
+          target_exam?: string
+          target_public?: string
+          title?: string
+          updated_at?: string
+          validated_by?: string | null
+          version?: number
+        }
+        Relationships: []
+      }
+      points_a_maitriser: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          niveau_max: string
+          niveau_min: string
+          nom: string
+          ordre: number
+          sous_section_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          niveau_max?: string
+          niveau_min?: string
+          nom: string
+          ordre?: number
+          sous_section_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          niveau_max?: string
+          niveau_min?: string
+          nom?: string
+          ordre?: number
+          sous_section_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "points_a_maitriser_sous_section_id_fkey"
+            columns: ["sous_section_id"]
+            isOneToOne: false
+            referencedRelation: "sous_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presences: {
+        Row: {
+          commentaire: string | null
+          created_at: string
+          eleve_id: string
+          id: string
+          present: boolean
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          commentaire?: string | null
+          created_at?: string
+          eleve_id: string
+          id?: string
+          present?: boolean
+          session_id: string
+          updated_at?: string
+        }
+        Update: {
+          commentaire?: string | null
+          created_at?: string
+          eleve_id?: string
+          id?: string
+          present?: boolean
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presences_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "presences_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          last_login: string | null
+          mot_de_passe_initial: string | null
+          nom: string
+          prenom: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          is_active?: boolean
+          last_login?: string | null
+          mot_de_passe_initial?: string | null
+          nom?: string
+          prenom?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          last_login?: string | null
+          mot_de_passe_initial?: string | null
+          nom?: string
+          prenom?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profils_eleves: {
+        Row: {
+          aisance_numerique: string | null
+          autres_langues: string[]
+          besoins_accessibilite: string[]
+          date_cible_tcf: string | null
+          dernier_score_phase2_ce: number | null
+          dernier_score_phase2_co: number | null
+          disponibilite_hors_seance: string | null
+          eleve_id: string
+          fragilite_principale: string | null
+          id: string
+          langue_maternelle: string | null
+          montee_auto_phase2: boolean
+          niveau_actuel: string
+          niveau_ce: string
+          niveau_co: string
+          niveau_ee: string
+          niveau_eo: string
+          niveau_locked: boolean | null
+          niveau_scolarisation: string | null
+          niveau_source: string | null
+          niveau_updated_at: string | null
+          objectif_tcf: string | null
+          preferences_apprentissage: string[]
+          priorites_pedagogiques: Json
+          profil_litteratie: string | null
+          projet_personnel: string | null
+          score_risque: number
+          seances_consecutives_sous_60: Json
+          taux_reussite_ce: number
+          taux_reussite_co: number
+          taux_reussite_ee: number
+          taux_reussite_eo: number
+          taux_reussite_global: number
+          taux_reussite_structures: number
+          type_demarche: string | null
+          type_erreur_dominant: string | null
+          updated_at: string
+          vitesse_lecture: string | null
+        }
+        Insert: {
+          aisance_numerique?: string | null
+          autres_langues?: string[]
+          besoins_accessibilite?: string[]
+          date_cible_tcf?: string | null
+          dernier_score_phase2_ce?: number | null
+          dernier_score_phase2_co?: number | null
+          disponibilite_hors_seance?: string | null
+          eleve_id: string
+          fragilite_principale?: string | null
+          id?: string
+          langue_maternelle?: string | null
+          montee_auto_phase2?: boolean
+          niveau_actuel?: string
+          niveau_ce?: string
+          niveau_co?: string
+          niveau_ee?: string
+          niveau_eo?: string
+          niveau_locked?: boolean | null
+          niveau_scolarisation?: string | null
+          niveau_source?: string | null
+          niveau_updated_at?: string | null
+          objectif_tcf?: string | null
+          preferences_apprentissage?: string[]
+          priorites_pedagogiques?: Json
+          profil_litteratie?: string | null
+          projet_personnel?: string | null
+          score_risque?: number
+          seances_consecutives_sous_60?: Json
+          taux_reussite_ce?: number
+          taux_reussite_co?: number
+          taux_reussite_ee?: number
+          taux_reussite_eo?: number
+          taux_reussite_global?: number
+          taux_reussite_structures?: number
+          type_demarche?: string | null
+          type_erreur_dominant?: string | null
+          updated_at?: string
+          vitesse_lecture?: string | null
+        }
+        Update: {
+          aisance_numerique?: string | null
+          autres_langues?: string[]
+          besoins_accessibilite?: string[]
+          date_cible_tcf?: string | null
+          dernier_score_phase2_ce?: number | null
+          dernier_score_phase2_co?: number | null
+          disponibilite_hors_seance?: string | null
+          eleve_id?: string
+          fragilite_principale?: string | null
+          id?: string
+          langue_maternelle?: string | null
+          montee_auto_phase2?: boolean
+          niveau_actuel?: string
+          niveau_ce?: string
+          niveau_co?: string
+          niveau_ee?: string
+          niveau_eo?: string
+          niveau_locked?: boolean | null
+          niveau_scolarisation?: string | null
+          niveau_source?: string | null
+          niveau_updated_at?: string | null
+          objectif_tcf?: string | null
+          preferences_apprentissage?: string[]
+          priorites_pedagogiques?: Json
+          profil_litteratie?: string | null
+          projet_personnel?: string | null
+          score_risque?: number
+          seances_consecutives_sous_60?: Json
+          taux_reussite_ce?: number
+          taux_reussite_co?: number
+          taux_reussite_ee?: number
+          taux_reussite_eo?: number
+          taux_reussite_global?: number
+          taux_reussite_structures?: number
+          type_demarche?: string | null
+          type_erreur_dominant?: string | null
+          updated_at?: string
+          vitesse_lecture?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profils_eleves_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recalibrages_niveau: {
+        Row: {
+          competence: string
+          created_at: string
+          eleve_id: string
+          id: string
+          niveau_apres: string
+          niveau_avant: string
+          raison: string
+          session_id: string | null
+        }
+        Insert: {
+          competence: string
+          created_at?: string
+          eleve_id: string
+          id?: string
+          niveau_apres: string
+          niveau_avant: string
+          raison?: string
+          session_id?: string | null
+        }
+        Update: {
+          competence?: string
+          created_at?: string
+          eleve_id?: string
+          id?: string
+          niveau_apres?: string
+          niveau_avant?: string
+          raison?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recalibrages_niveau_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recalibrages_niveau_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resource_assignments: {
+        Row: {
+          assigned_by: string | null
+          created_at: string | null
+          due_date: string | null
+          group_id: string | null
+          id: string
+          learner_id: string | null
+          resource_id: string | null
+        }
+        Insert: {
+          assigned_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          group_id?: string | null
+          id?: string
+          learner_id?: string | null
+          resource_id?: string | null
+        }
+        Update: {
+          assigned_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          group_id?: string | null
+          id?: string
+          learner_id?: string | null
+          resource_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_assignments_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_assignments_learner_id_fkey"
+            columns: ["learner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_assignments_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "ressources_pedagogiques"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ressources_pedagogiques: {
+        Row: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          contenu: Json
+          created_at: string
+          exercice_id: string | null
+          formateur_id: string
+          id: string
+          niveau: string
+          session_id: string | null
+          source: Database["public"]["Enums"]["ressource_source"]
+          statut: Database["public"]["Enums"]["ressource_statut"]
+          titre: string
+          type: Database["public"]["Enums"]["ressource_type"]
+          updated_at: string
+        }
+        Insert: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          contenu?: Json
+          created_at?: string
+          exercice_id?: string | null
+          formateur_id: string
+          id?: string
+          niveau?: string
+          session_id?: string | null
+          source?: Database["public"]["Enums"]["ressource_source"]
+          statut?: Database["public"]["Enums"]["ressource_statut"]
+          titre: string
+          type: Database["public"]["Enums"]["ressource_type"]
+          updated_at?: string
+        }
+        Update: {
+          competence?: Database["public"]["Enums"]["competence_type"]
+          contenu?: Json
+          created_at?: string
+          exercice_id?: string | null
+          formateur_id?: string
+          id?: string
+          niveau?: string
+          session_id?: string | null
+          source?: Database["public"]["Enums"]["ressource_source"]
+          statut?: Database["public"]["Enums"]["ressource_statut"]
+          titre?: string
+          type?: Database["public"]["Enums"]["ressource_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ressources_pedagogiques_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ressources_pedagogiques_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resultats: {
+        Row: {
+          correction_detaillee: Json
+          created_at: string
+          devoir_id: string | null
+          eleve_id: string
+          exercice_id: string
+          id: string
+          is_bonus: boolean
+          reponses_eleve: Json
+          score: number
+          tentative: number
+        }
+        Insert: {
+          correction_detaillee?: Json
+          created_at?: string
+          devoir_id?: string | null
+          eleve_id: string
+          exercice_id: string
+          id?: string
+          is_bonus?: boolean
+          reponses_eleve?: Json
+          score: number
+          tentative?: number
+        }
+        Update: {
+          correction_detaillee?: Json
+          created_at?: string
+          devoir_id?: string | null
+          eleve_id?: string
+          exercice_id?: string
+          id?: string
+          is_bonus?: boolean
+          reponses_eleve?: Json
+          score?: number
+          tentative?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resultats_devoir_id_fkey"
+            columns: ["devoir_id"]
+            isOneToOne: false
+            referencedRelation: "devoirs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resultats_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resultats_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      routing_decisions: {
+        Row: {
+          competence: string
+          context_snapshot: Json
+          created_at: string
+          decision: string
+          devoir_genere: string | null
+          eleve_id: string
+          exercice_id: string | null
+          formateur_id: string | null
+          id: string
+          modified_by_trainer: boolean
+          phase: string
+          reason_student: string
+          reason_trainer: string
+          rule_id: string
+          session_id: string | null
+        }
+        Insert: {
+          competence: string
+          context_snapshot?: Json
+          created_at?: string
+          decision: string
+          devoir_genere?: string | null
+          eleve_id: string
+          exercice_id?: string | null
+          formateur_id?: string | null
+          id?: string
+          modified_by_trainer?: boolean
+          phase: string
+          reason_student: string
+          reason_trainer: string
+          rule_id: string
+          session_id?: string | null
+        }
+        Update: {
+          competence?: string
+          context_snapshot?: Json
+          created_at?: string
+          decision?: string
+          devoir_genere?: string | null
+          eleve_id?: string
+          exercice_id?: string | null
+          formateur_id?: string | null
+          id?: string
+          modified_by_trainer?: boolean
+          phase?: string
+          reason_student?: string
+          reason_trainer?: string
+          rule_id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "routing_decisions_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "routing_decisions_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "routing_decisions_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "routing_decisions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sequences_pedagogiques: {
+        Row: {
+          created_at: string
+          description: string | null
+          formateur_id: string
+          id: string
+          is_ai_generated: boolean
+          is_public: boolean
+          niveau: string
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          formateur_id: string
+          id?: string
+          is_ai_generated?: boolean
+          is_public?: boolean
+          niveau?: string
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          formateur_id?: string
+          id?: string
+          is_ai_generated?: boolean
+          is_public?: boolean
+          niveau?: string
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sequences_pedagogiques_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_blocks: {
+        Row: {
+          block_type: string
+          created_at: string
+          error_message: string | null
+          id: string
+          session_id: string
+          status: string
+          updated_at: string
+          warning_message: string | null
+        }
+        Insert: {
+          block_type: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          session_id: string
+          status: string
+          updated_at?: string
+          warning_message?: string | null
+        }
+        Update: {
+          block_type?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          session_id?: string
+          status?: string
+          updated_at?: string
+          warning_message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_blocks_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_blocks_test: {
+        Row: {
+          block_type: string
+          created_at: string
+          error_message: string | null
+          id: string
+          session_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          block_type: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          session_id: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          block_type?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          session_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      session_exercices: {
+        Row: {
+          bloc: string
+          created_at: string
+          eleve_id: string | null
+          exercice_id: string
+          id: string
+          is_bonus: boolean
+          is_sent: boolean
+          notes: string | null
+          ordre: number
+          session_id: string
+          statut: Database["public"]["Enums"]["session_exercice_statut"]
+          updated_at: string
+        }
+        Insert: {
+          bloc?: string
+          created_at?: string
+          eleve_id?: string | null
+          exercice_id: string
+          id?: string
+          is_bonus?: boolean
+          is_sent?: boolean
+          notes?: string | null
+          ordre?: number
+          session_id: string
+          statut?: Database["public"]["Enums"]["session_exercice_statut"]
+          updated_at?: string
+        }
+        Update: {
+          bloc?: string
+          created_at?: string
+          eleve_id?: string | null
+          exercice_id?: string
+          id?: string
+          is_bonus?: boolean
+          is_sent?: boolean
+          notes?: string | null
+          ordre?: number
+          session_id?: string
+          statut?: Database["public"]["Enums"]["session_exercice_statut"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_exercices_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_exercices_exercice_id_fkey"
+            columns: ["exercice_id"]
+            isOneToOne: false
+            referencedRelation: "exercices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_exercices_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_exercise_variants: {
+        Row: {
+          competence_cible: string | null
+          created_at: string
+          eleve_id: string
+          exercice_index: number
+          generated_by: string | null
+          generation_run_id: string
+          id: string
+          is_active: boolean
+          mode_adaptation: string
+          niveau_etayage: string
+          niveau_variante: string
+          session_id: string
+          variant_payload: Json
+        }
+        Insert: {
+          competence_cible?: string | null
+          created_at?: string
+          eleve_id: string
+          exercice_index: number
+          generated_by?: string | null
+          generation_run_id: string
+          id?: string
+          is_active?: boolean
+          mode_adaptation: string
+          niveau_etayage: string
+          niveau_variante: string
+          session_id: string
+          variant_payload: Json
+        }
+        Update: {
+          competence_cible?: string | null
+          created_at?: string
+          eleve_id?: string
+          exercice_index?: number
+          generated_by?: string | null
+          generation_run_id?: string
+          id?: string
+          is_active?: boolean
+          mode_adaptation?: string
+          niveau_etayage?: string
+          niveau_variante?: string
+          session_id?: string
+          variant_payload?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_exercise_variants_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_exercise_variants_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_exercise_variants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_feedback: {
+        Row: {
+          commentaire_libre: string | null
+          confiance: number
+          created_at: string
+          difficulte_percue: number
+          eleve_id: string
+          id: string
+          session_id: string
+          utilite_percue: number
+        }
+        Insert: {
+          commentaire_libre?: string | null
+          confiance: number
+          created_at?: string
+          difficulte_percue: number
+          eleve_id: string
+          id?: string
+          session_id: string
+          utilite_percue: number
+        }
+        Update: {
+          commentaire_libre?: string | null
+          confiance?: number
+          created_at?: string
+          difficulte_percue?: number
+          eleve_id?: string
+          id?: string
+          session_id?: string
+          utilite_percue?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_feedback_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_live_events: {
+        Row: {
+          competence: string | null
+          created_at: string
+          eleve_id: string | null
+          event_type: string
+          id: string
+          payload: Json | null
+          priorite_score: number | null
+          session_id: string
+          type_erreur_id: string | null
+        }
+        Insert: {
+          competence?: string | null
+          created_at?: string
+          eleve_id?: string | null
+          event_type: string
+          id?: string
+          payload?: Json | null
+          priorite_score?: number | null
+          session_id: string
+          type_erreur_id?: string | null
+        }
+        Update: {
+          competence?: string | null
+          created_at?: string
+          eleve_id?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          priorite_score?: number | null
+          session_id?: string
+          type_erreur_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_live_events_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_live_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_live_events_type_erreur_id_fkey"
+            columns: ["type_erreur_id"]
+            isOneToOne: false
+            referencedRelation: "types_erreur"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_recommendations: {
+        Row: {
+          action_proposee: Json
+          competence: string | null
+          created_at: string
+          eleves_concernes: Json
+          formateur_id: string | null
+          id: string
+          raison_formateur: string
+          source: string
+          source_session_id: string | null
+          status: string
+          target_session_id: string | null
+          type: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          action_proposee?: Json
+          competence?: string | null
+          created_at?: string
+          eleves_concernes?: Json
+          formateur_id?: string | null
+          id?: string
+          raison_formateur: string
+          source?: string
+          source_session_id?: string | null
+          status?: string
+          target_session_id?: string | null
+          type: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          action_proposee?: Json
+          competence?: string | null
+          created_at?: string
+          eleves_concernes?: Json
+          formateur_id?: string | null
+          id?: string
+          raison_formateur?: string
+          source?: string
+          source_session_id?: string | null
+          status?: string
+          target_session_id?: string | null
+          type?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_recommendations_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_recommendations_source_session_id_fkey"
+            columns: ["source_session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_recommendations_target_session_id_fkey"
+            columns: ["target_session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_recommendations_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_student_outcomes: {
+        Row: {
+          besoin_pedagogique:
+            | Database["public"]["Enums"]["session_outcome_besoin"]
+            | null
+          created_at: string
+          decision_formateur: string | null
+          devoir_recommande: string | null
+          eleve_id: string
+          formateur_id: string
+          id: string
+          objectif_status:
+            | Database["public"]["Enums"]["session_outcome_objectif_status"]
+            | null
+          points_forts: string | null
+          points_vigilance: string | null
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          besoin_pedagogique?:
+            | Database["public"]["Enums"]["session_outcome_besoin"]
+            | null
+          created_at?: string
+          decision_formateur?: string | null
+          devoir_recommande?: string | null
+          eleve_id: string
+          formateur_id: string
+          id?: string
+          objectif_status?:
+            | Database["public"]["Enums"]["session_outcome_objectif_status"]
+            | null
+          points_forts?: string | null
+          points_vigilance?: string | null
+          session_id: string
+          updated_at?: string
+        }
+        Update: {
+          besoin_pedagogique?:
+            | Database["public"]["Enums"]["session_outcome_besoin"]
+            | null
+          created_at?: string
+          decision_formateur?: string | null
+          devoir_recommande?: string | null
+          eleve_id?: string
+          formateur_id?: string
+          id?: string
+          objectif_status?:
+            | Database["public"]["Enums"]["session_outcome_objectif_status"]
+            | null
+          points_forts?: string | null
+          points_vigilance?: string | null
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sso_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sso_formateur_id_fkey"
+            columns: ["formateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sso_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_templates_v4: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          duree_totale_min: number
+          id: string
+          is_active: boolean
+          is_public: boolean
+          mvp_competences: string[]
+          objectif_commun: string
+          phases: Json
+          theme: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          duree_totale_min?: number
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          mvp_competences?: string[]
+          objectif_commun: string
+          phases: Json
+          theme: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          duree_totale_min?: number
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          mvp_competences?: string[]
+          objectif_commun?: string
+          phases?: Json
+          theme?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_templates_v4_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          competences_autorisees: string[]
+          competences_cibles: string[] | null
+          created_at: string
+          date_seance: string
+          difficulte_par_defaut: number
+          duree_minutes: number
+          duree_retrospective: number
+          generation_automatique_activee: boolean
+          group_id: string
+          id: string
+          lien_visio: string | null
+          lieu: string | null
+          nb_exercices_retrospective: number
+          nb_exercices_souhaite: number
+          nb_questions_diagnostic: number
+          niveau_cible: string
+          objectifs: string | null
+          session_template_v4_id: string | null
+          statut: Database["public"]["Enums"]["session_statut"]
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          competences_autorisees?: string[]
+          competences_cibles?: string[] | null
+          created_at?: string
+          date_seance: string
+          difficulte_par_defaut?: number
+          duree_minutes?: number
+          duree_retrospective?: number
+          generation_automatique_activee?: boolean
+          group_id: string
+          id?: string
+          lien_visio?: string | null
+          lieu?: string | null
+          nb_exercices_retrospective?: number
+          nb_exercices_souhaite?: number
+          nb_questions_diagnostic?: number
+          niveau_cible?: string
+          objectifs?: string | null
+          session_template_v4_id?: string | null
+          statut?: Database["public"]["Enums"]["session_statut"]
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          competences_autorisees?: string[]
+          competences_cibles?: string[] | null
+          created_at?: string
+          date_seance?: string
+          difficulte_par_defaut?: number
+          duree_minutes?: number
+          duree_retrospective?: number
+          generation_automatique_activee?: boolean
+          group_id?: string
+          id?: string
+          lien_visio?: string | null
+          lieu?: string | null
+          nb_exercices_retrospective?: number
+          nb_exercices_souhaite?: number
+          nb_questions_diagnostic?: number
+          niveau_cible?: string
+          objectifs?: string | null
+          session_template_v4_id?: string | null
+          statut?: Database["public"]["Enums"]["session_statut"]
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_session_template_v4_id_fkey"
+            columns: ["session_template_v4_id"]
+            isOneToOne: false
+            referencedRelation: "session_templates_v4"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sous_sections: {
+        Row: {
+          created_at: string
+          description: string | null
+          epreuve_id: string
+          id: string
+          nom: string
+          ordre: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          epreuve_id: string
+          id?: string
+          nom: string
+          ordre?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          epreuve_id?: string
+          id?: string
+          nom?: string
+          ordre?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sous_sections_epreuve_id_fkey"
+            columns: ["epreuve_id"]
+            isOneToOne: false
+            referencedRelation: "epreuves"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_competency_levels: {
+        Row: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          created_at: string
+          eleve_id: string
+          id: string
+          niveau_actuel: number
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          created_at?: string
+          eleve_id: string
+          id?: string
+          niveau_actuel?: number
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          competence?: Database["public"]["Enums"]["competence_type"]
+          created_at?: string
+          eleve_id?: string
+          id?: string
+          niveau_actuel?: number
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_competency_levels_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_competency_levels_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_competency_status: {
+        Row: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          eleve_id: string
+          id: string
+          statut: Database["public"]["Enums"]["competence_statut"]
+          updated_at: string
+        }
+        Insert: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          eleve_id: string
+          id?: string
+          statut?: Database["public"]["Enums"]["competence_statut"]
+          updated_at?: string
+        }
+        Update: {
+          competence?: Database["public"]["Enums"]["competence_type"]
+          eleve_id?: string
+          id?: string
+          statut?: Database["public"]["Enums"]["competence_statut"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_competency_status_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_vocabulary: {
+        Row: {
+          audio_url: string | null
+          context_sentence: string | null
+          created_at: string
+          id: string
+          last_reviewed_at: string | null
+          normalized_word: string
+          review_count: number
+          simple_definition: string | null
+          student_id: string
+          translation: string | null
+          translation_language: string | null
+          updated_at: string
+          word: string
+        }
+        Insert: {
+          audio_url?: string | null
+          context_sentence?: string | null
+          created_at?: string
+          id?: string
+          last_reviewed_at?: string | null
+          normalized_word: string
+          review_count?: number
+          simple_definition?: string | null
+          student_id: string
+          translation?: string | null
+          translation_language?: string | null
+          updated_at?: string
+          word: string
+        }
+        Update: {
+          audio_url?: string | null
+          context_sentence?: string | null
+          created_at?: string
+          id?: string
+          last_reviewed_at?: string | null
+          normalized_word?: string
+          review_count?: number
+          simple_definition?: string | null
+          student_id?: string
+          translation?: string | null
+          translation_language?: string | null
+          updated_at?: string
+          word?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_vocabulary_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppressed_emails: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          metadata: Json | null
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          metadata?: Json | null
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          metadata?: Json | null
+          reason?: string
+        }
+        Relationships: []
+      }
+      sync_log: {
+        Row: {
+          created_at: string | null
+          direction: string | null
+          error_message: string | null
+          id: string
+          payload: Json | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          direction?: string | null
+          error_message?: string | null
+          id?: string
+          payload?: Json | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          direction?: string | null
+          error_message?: string | null
+          id?: string
+          payload?: Json | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      tcf_questions: {
+        Row: {
+          audio: string | null
+          bonne_reponse: string
+          choix: Json
+          competence: string
+          created_at: string
+          enonce: string
+          id: string
+          palier: number
+          type: string
+          visual: string | null
+        }
+        Insert: {
+          audio?: string | null
+          bonne_reponse: string
+          choix?: Json
+          competence: string
+          created_at?: string
+          enonce: string
+          id?: string
+          palier?: number
+          type?: string
+          visual?: string | null
+        }
+        Update: {
+          audio?: string | null
+          bonne_reponse?: string
+          choix?: Json
+          competence?: string
+          created_at?: string
+          enonce?: string
+          id?: string
+          palier?: number
+          type?: string
+          visual?: string | null
+        }
+        Relationships: []
+      }
+      test_entree_items: {
+        Row: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          contenu: Json
+          created_at: string
+          format: Database["public"]["Enums"]["exercice_format"]
+          id: string
+          niveau: string
+          ordre: number
+        }
+        Insert: {
+          competence: Database["public"]["Enums"]["competence_type"]
+          contenu?: Json
+          created_at?: string
+          format?: Database["public"]["Enums"]["exercice_format"]
+          id?: string
+          niveau?: string
+          ordre?: number
+        }
+        Update: {
+          competence?: Database["public"]["Enums"]["competence_type"]
+          contenu?: Json
+          created_at?: string
+          format?: Database["public"]["Enums"]["exercice_format"]
+          id?: string
+          niveau?: string
+          ordre?: number
+        }
+        Relationships: []
+      }
+      test_questions: {
+        Row: {
+          choix_a: string | null
+          choix_b: string | null
+          choix_c: string | null
+          competence: string
+          consigne: string
+          criteres_evaluation: Json | null
+          id: string
+          numero_dans_palier: number
+          palier: number
+          points_max: number | null
+          reponse_correcte: string | null
+          script_audio: string | null
+          support: string | null
+          type_reponse: string
+        }
+        Insert: {
+          choix_a?: string | null
+          choix_b?: string | null
+          choix_c?: string | null
+          competence: string
+          consigne: string
+          criteres_evaluation?: Json | null
+          id?: string
+          numero_dans_palier: number
+          palier: number
+          points_max?: number | null
+          reponse_correcte?: string | null
+          script_audio?: string | null
+          support?: string | null
+          type_reponse: string
+        }
+        Update: {
+          choix_a?: string | null
+          choix_b?: string | null
+          choix_c?: string | null
+          competence?: string
+          consigne?: string
+          criteres_evaluation?: Json | null
+          id?: string
+          numero_dans_palier?: number
+          palier?: number
+          points_max?: number | null
+          reponse_correcte?: string | null
+          script_audio?: string | null
+          support?: string | null
+          type_reponse?: string
+        }
+        Relationships: []
+      }
+      test_reponses: {
+        Row: {
+          competence: string
+          date_reponse: string | null
+          est_correct: boolean | null
+          id: string
+          justification_ia: string | null
+          palier: number
+          question_id: string
+          reponse_apprenant: string | null
+          reponse_audio_url: string | null
+          score_formateur: number | null
+          score_ia: number | null
+          score_obtenu: number | null
+          session_id: string
+        }
+        Insert: {
+          competence: string
+          date_reponse?: string | null
+          est_correct?: boolean | null
+          id?: string
+          justification_ia?: string | null
+          palier: number
+          question_id: string
+          reponse_apprenant?: string | null
+          reponse_audio_url?: string | null
+          score_formateur?: number | null
+          score_ia?: number | null
+          score_obtenu?: number | null
+          session_id: string
+        }
+        Update: {
+          competence?: string
+          date_reponse?: string | null
+          est_correct?: boolean | null
+          id?: string
+          justification_ia?: string | null
+          palier?: number
+          question_id?: string
+          reponse_apprenant?: string | null
+          reponse_audio_url?: string | null
+          score_formateur?: number | null
+          score_ia?: number | null
+          score_obtenu?: number | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_reponses_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "test_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_resultats_apprenants: {
+        Row: {
+          apprenant_id: string
+          date_test: string | null
+          groupe_confirme: string | null
+          groupe_suggere: string | null
+          id: string
+          palier_final_ce: number | null
+          palier_final_co: number | null
+          palier_final_ee: number | null
+          palier_final_eo: number | null
+          profil: string | null
+          score_ce: number | null
+          score_co: number | null
+          score_ee: number | null
+          score_eo: number | null
+          score_total: number | null
+          session_id: string
+        }
+        Insert: {
+          apprenant_id: string
+          date_test?: string | null
+          groupe_confirme?: string | null
+          groupe_suggere?: string | null
+          id?: string
+          palier_final_ce?: number | null
+          palier_final_co?: number | null
+          palier_final_ee?: number | null
+          palier_final_eo?: number | null
+          profil?: string | null
+          score_ce?: number | null
+          score_co?: number | null
+          score_ee?: number | null
+          score_eo?: number | null
+          score_total?: number | null
+          session_id: string
+        }
+        Update: {
+          apprenant_id?: string
+          date_test?: string | null
+          groupe_confirme?: string | null
+          groupe_suggere?: string | null
+          id?: string
+          palier_final_ce?: number | null
+          palier_final_co?: number | null
+          palier_final_ee?: number | null
+          palier_final_eo?: number | null
+          profil?: string | null
+          score_ce?: number | null
+          score_co?: number | null
+          score_ee?: number | null
+          score_eo?: number | null
+          score_total?: number | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_resultats_apprenants_apprenant_id_fkey"
+            columns: ["apprenant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       test_sessions: {
         Row: {
           created_at: string
@@ -966,6 +5201,95 @@ export type Database = {
           },
         ]
       }
+      tests_entree: {
+        Row: {
+          completed_at: string | null
+          derniere_question: number
+          eleve_id: string
+          en_cours: boolean
+          id: string
+          niveau_estime: string | null
+          recommandations: string | null
+          score_ce: number | null
+          score_co: number | null
+          score_ee: number | null
+          score_global: number | null
+          score_structures: number | null
+          started_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          derniere_question?: number
+          eleve_id: string
+          en_cours?: boolean
+          id?: string
+          niveau_estime?: string | null
+          recommandations?: string | null
+          score_ce?: number | null
+          score_co?: number | null
+          score_ee?: number | null
+          score_global?: number | null
+          score_structures?: number | null
+          started_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          derniere_question?: number
+          eleve_id?: string
+          en_cours?: boolean
+          id?: string
+          niveau_estime?: string | null
+          recommandations?: string | null
+          score_ce?: number | null
+          score_co?: number | null
+          score_ee?: number | null
+          score_global?: number | null
+          score_structures?: number | null
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tests_entree_eleve_id_fkey"
+            columns: ["eleve_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      types_erreur: {
+        Row: {
+          besoin_humain_base: number | null
+          categorie: string
+          competences: string[]
+          created_at: string | null
+          description: string | null
+          gravite_base: number | null
+          id: string
+          libelle_court: string
+        }
+        Insert: {
+          besoin_humain_base?: number | null
+          categorie: string
+          competences?: string[]
+          created_at?: string | null
+          description?: string | null
+          gravite_base?: number | null
+          id: string
+          libelle_court: string
+        }
+        Update: {
+          besoin_humain_base?: number | null
+          categorie?: string
+          competences?: string[]
+          created_at?: string | null
+          description?: string | null
+          gravite_base?: number | null
+          id?: string
+          libelle_court?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -992,9 +5316,44 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_live_session_exercises: {
+        Args: {
+          p_eleve_ids: string[]
+          p_exercice_ids: string[]
+          p_session_id: string
+        }
+        Returns: number
+      }
+      claim_session_block: {
+        Args: { p_block_type: string; p_session_id: string }
+        Returns: boolean
+      }
+      claim_session_block_test: {
+        Args: { p_block_type: string; p_session_id: string }
+        Returns: boolean
+      }
+      delete_email: {
+        Args: { message_id: number; queue_name: string }
+        Returns: boolean
+      }
+      descendre_niveau: { Args: { v_niveau: string }; Returns: string }
+      enqueue_email: {
+        Args: { payload: Json; queue_name: string }
+        Returns: number
+      }
       get_cohort_enrolled_count: {
         Args: { p_cohort_id: string }
         Returns: number
+      }
+      get_group_formateur: { Args: { _group_id: string }; Returns: string }
+      get_parcours_formateur: {
+        Args: { _parcours_id: string }
+        Returns: string
+      }
+      get_session_formateur: { Args: { _session_id: string }; Returns: string }
+      has_ai_consent: {
+        Args: { _require_biometric?: boolean; _user_id: string }
+        Returns: boolean
       }
       has_role: {
         Args: {
@@ -1003,14 +5362,215 @@ export type Database = {
         }
         Returns: boolean
       }
+      monter_niveau: { Args: { p_niveau_actuel: string }; Returns: string }
+      move_to_dlq: {
+        Args: {
+          dlq_name: string
+          message_id: number
+          payload: Json
+          source_queue: string
+        }
+        Returns: number
+      }
+      publish_session_variants_run: {
+        Args: { p_generation_run_id: string; p_session_id: string }
+        Returns: undefined
+      }
+      purge_ai_processing_logs_older_than_12_months: {
+        Args: never
+        Returns: number
+      }
+      purge_test_audio_older_than_12_months: { Args: never; Returns: number }
+      read_email_batch: {
+        Args: { batch_size: number; queue_name: string; vt: number }
+        Returns: {
+          message: Json
+          msg_id: number
+          read_ct: number
+        }[]
+      }
+      search_pedagogical_activities: {
+        Args: {
+          p_category?: string
+          p_level?: string
+          p_limit?: number
+          p_max_duration?: number
+          p_query?: string
+          p_tags?: string[]
+        }
+        Returns: {
+          activity_id: string
+          audience: string | null
+          category: string
+          created_at: string
+          document_id: string | null
+          duration_max: number | null
+          duration_min: number | null
+          id: string
+          import_key: string
+          instructions: string
+          level_max: string
+          level_max_rank: number | null
+          level_min: string
+          level_min_rank: number | null
+          materials_needed: string[]
+          objective: string
+          raw: Json
+          source_kind: string
+          source_pdf: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pedagogical_activities"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      search_pedagogical_documents: {
+        Args: {
+          p_document_type?: string
+          p_level?: string
+          p_limit?: number
+          p_query?: string
+        }
+        Returns: {
+          activity_count: number
+          audience: string | null
+          created_at: string
+          document_id: string
+          document_type: string | null
+          file_name: string
+          id: string
+          levels: string[]
+          markdown_file: string | null
+          raw: Json
+          short_summary: string
+          source_kind: string
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pedagogical_documents"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      search_pedagogical_images: {
+        Args: {
+          p_level?: string
+          p_limit?: number
+          p_query?: string
+          p_skill?: string
+          p_theme?: string
+        }
+        Returns: {
+          alt_text: string
+          attribution: string | null
+          author: string | null
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          import_key: string
+          is_active: boolean
+          language_level: string | null
+          level_tags: string[]
+          license: string | null
+          pedagogical_relevance_score: number | null
+          pedagogical_tags: string[]
+          public_url: string | null
+          quality_score: number | null
+          raw: Json
+          recommended_exercise_types: string[]
+          rejected: boolean
+          rejection_reason: string
+          skill_tags: string[]
+          source: string | null
+          source_url: string | null
+          storage_bucket: string
+          storage_path: string
+          theme_tags: string[]
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "pedagogical_images"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      update_andragogical_profile: {
+        Args: { p_eleve_id: string; p_profile: Json }
+        Returns: undefined
+      }
+      update_priorites_pedagogiques: {
+        Args: { p_eleve_id: string; p_nouvelle_priorite: string }
+        Returns: undefined
+      }
     }
     Enums: {
+      alerte_type:
+        | "score_risque"
+        | "absence"
+        | "devoir_expire"
+        | "tendance_baisse"
+        | "progression"
       app_role:
+        | "formateur"
+        | "eleve"
         | "admin"
-        | "conseiller"
         | "gestionnaire"
         | "partenaire"
         | "inscrit"
+        | "conseiller"
+      competence_statut:
+        | "non_evalue"
+        | "non_acquis"
+        | "consolide"
+        | "acquis_provisoire"
+      competence_type: "CO" | "CE" | "EE" | "EO" | "Structures"
+      devoir_raison: "remediation" | "consolidation"
+      devoir_statut: "en_attente" | "fait" | "expire" | "arrete" | "archive"
+      exercice_format:
+        | "qcm"
+        | "vrai_faux"
+        | "appariement"
+        | "production_ecrite"
+        | "production_orale"
+        | "texte_lacunaire"
+        | "transformation"
+      exercice_mode: "papier" | "en_ligne" | "les_deux"
+      ressource_source: "auto" | "manuel"
+      ressource_statut: "draft" | "published"
+      ressource_type:
+        | "lecon"
+        | "vocabulaire"
+        | "rappel_methodo"
+        | "rappel_visuel"
+      session_exercice_statut:
+        | "planifie"
+        | "traite_en_classe"
+        | "reporte"
+        | "devoir_remediation"
+        | "devoir_anticipation"
+      session_outcome_besoin:
+        | "rattrapage"
+        | "remediation"
+        | "consolidation"
+        | "approfondissement"
+        | "aucun"
+      session_outcome_objectif_status:
+        | "absent"
+        | "non_atteint"
+        | "a_consolider"
+        | "atteint"
+        | "au_dela"
+      session_statut: "planifiee" | "en_cours" | "terminee" | "annulee"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1138,13 +5698,71 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      alerte_type: [
+        "score_risque",
+        "absence",
+        "devoir_expire",
+        "tendance_baisse",
+        "progression",
+      ],
       app_role: [
+        "formateur",
+        "eleve",
         "admin",
-        "conseiller",
         "gestionnaire",
         "partenaire",
         "inscrit",
+        "conseiller",
       ],
+      competence_statut: [
+        "non_evalue",
+        "non_acquis",
+        "consolide",
+        "acquis_provisoire",
+      ],
+      competence_type: ["CO", "CE", "EE", "EO", "Structures"],
+      devoir_raison: ["remediation", "consolidation"],
+      devoir_statut: ["en_attente", "fait", "expire", "arrete", "archive"],
+      exercice_format: [
+        "qcm",
+        "vrai_faux",
+        "appariement",
+        "production_ecrite",
+        "production_orale",
+        "texte_lacunaire",
+        "transformation",
+      ],
+      exercice_mode: ["papier", "en_ligne", "les_deux"],
+      ressource_source: ["auto", "manuel"],
+      ressource_statut: ["draft", "published"],
+      ressource_type: [
+        "lecon",
+        "vocabulaire",
+        "rappel_methodo",
+        "rappel_visuel",
+      ],
+      session_exercice_statut: [
+        "planifie",
+        "traite_en_classe",
+        "reporte",
+        "devoir_remediation",
+        "devoir_anticipation",
+      ],
+      session_outcome_besoin: [
+        "rattrapage",
+        "remediation",
+        "consolidation",
+        "approfondissement",
+        "aucun",
+      ],
+      session_outcome_objectif_status: [
+        "absent",
+        "non_atteint",
+        "a_consolider",
+        "atteint",
+        "au_dela",
+      ],
+      session_statut: ["planifiee", "en_cours", "terminee", "annulee"],
     },
   },
 } as const

@@ -1,360 +1,510 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState, useMemo, useEffect } from 'react';
-import { type NiveauIndicatif } from '@/types/bilan';
-import { Button } from '@/components/bff/Button';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
-import { 
-  CheckCircle2, 
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { FormEvent, useMemo, useState } from "react";
+import {
+  AlertCircle,
   ArrowRight,
+  CheckCircle2,
+  ClipboardCheck,
   Loader2,
-  AlertTriangle,
+  ShieldCheck,
   Wallet,
-  Zap,
-  UserCheck,
-  Award,
-  Check
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { track } from '@/utils/tracking-plausible';
-import { useFormationOffers, getRecommendedJourneyFromList } from '@/hooks/useFormationOffers';
-import { Stepper } from '@/components/Stepper';
-import { Tooltip } from '@/components/Tooltip';
+} from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@/components/bff/Button";
+import { Stepper } from "@/components/Stepper";
+import { type NiveauIndicatif } from "@/types/bilan";
+import { getRecommendedJourneyFromList, useFormationOffers } from "@/hooks/useFormationOffers";
 
-export const Route = createFileRoute('/qualification/$attemptId')({
+export const Route = createFileRoute("/qualification/$attemptId")({
   component: QualificationPage,
 });
 
+type QualificationForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  whatsapp: string;
+  birthDate: string;
+  nationality: string;
+  addressLine1: string;
+  postalCode: string;
+  city: string;
+  professionalStatus: string;
+  sectorActivity: string;
+  cpfStatus: string;
+  cpfBalance: string;
+  franceTravailRegistered: string;
+  employerSupport: string;
+  targetDate: string;
+  notes: string;
+  consentTraining: boolean;
+  consentPartner: boolean;
+};
+
+const initialForm: QualificationForm = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  whatsapp: "",
+  birthDate: "",
+  nationality: "",
+  addressLine1: "",
+  postalCode: "",
+  city: "",
+  professionalStatus: "",
+  sectorActivity: "",
+  cpfStatus: "unknown",
+  cpfBalance: "",
+  franceTravailRegistered: "unknown",
+  employerSupport: "unknown",
+  targetDate: "",
+  notes: "",
+  consentTraining: false,
+  consentPartner: false,
+};
+
 function QualificationPage() {
   const { attemptId } = Route.useParams();
-  const navigate = useNavigate();
-  const { data: journeys, isError: journeysError, isLoading: journeysLoading } = useFormationOffers();
-
-  useEffect(() => {
-    track("result_viewed");
-  }, []);
-  
-  const [formData, setFormData] = useState({
-    status: '',
-    soldeCpf: 0,
-    hasEmployerAgreement: null as boolean | null,
-    hasSiret: null as boolean | null,
-    hasMainDocs: null as boolean | null,
-    isSmallCompany: null as boolean | null,
-    niveau_indicatif: 'a_verifier' as NiveauIndicatif,
-  });
+  const { data: journeys, isLoading: journeysLoading } = useFormationOffers();
+  const [form, setForm] = useState(initialForm);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { data: testResult, isLoading: loadingTest } = useQuery({
-    queryKey: ['placement-result', attemptId],
+    queryKey: ["placement-result-qualification", attemptId],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('placement_test_results')
-        .select('*, placement_test_attempts(*)')
-        .eq('attempt_id', attemptId)
+      const { data, error: queryError } = await supabase
+        .from("placement_test_results")
+        .select("*, placement_test_attempts(*)")
+        .eq("attempt_id", attemptId)
         .single();
-      if (error) throw error;
+
+      if (queryError) throw queryError;
       return data;
     },
   });
 
-  // Calcul du Parcours et du Financement dynamique depuis pricing.ts
-  const simulation = useMemo(() => {
-    if (!journeys) return null;
+  const journey = useMemo(() => {
+    const level: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || "A2";
+    return getRecommendedJourneyFromList(journeys || [], level);
+  }, [journeys, testResult?.global_level]);
 
-    const current: NiveauIndicatif = (testResult?.global_level as NiveauIndicatif) || 'A2';
-    const recommendedOfferCode = testResult?.recommended_pathway || testResult?.raw_analysis?.recommended_offer_code;
-    
-    let journey: any = null;
-    if (recommendedOfferCode) {
-      journey = journeys.find((j: any) => j.id === recommendedOfferCode) ?? null;
+  const setField = <K extends keyof QualificationForm>(
+    key: K,
+    value: QualificationForm[K],
+  ) => {
+    setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError(null);
+
+    if (!form.firstName.trim() || !form.lastName.trim()) {
+      setError("Le nom et le prenom sont obligatoires.");
+      return;
     }
-    if (!journey) {
-      journey = getRecommendedJourneyFromList(journeys, current) ?? null;
+
+    if (!form.email.trim() && !form.whatsapp.trim()) {
+      setError("Renseignez un email ou un numero WhatsApp.");
+      return;
     }
-    if (!journey) return null;
-    
-    const mobilizedCpf = Math.min(formData.soldeCpf || 0, journey.publicPrice);
-    
-    // Calcul de l'OPCO si salarié (estimation simplifiée de 50% du prix public jusqu'à concurrence)
-    const opcoEst = formData.status === 'salarie' ? Math.round(journey.publicPrice * 0.5) : 0;
-    
-    const totalAides = Math.min(mobilizedCpf + opcoEst, journey.publicPrice);
-    const rac = journey.publicPrice - totalAides;
 
-    // Calcul de la Priorité Système
-    let priority = 'moyenne';
-    const isReady = rac === 0 && (testResult?.flags?.length || 0) === 0 && formData.hasMainDocs;
-    if (isReady) priority = 'critique';
-    else if (rac === 0 || formData.hasMainDocs) priority = 'haute';
+    if (!form.professionalStatus || !form.consentTraining) {
+      setError("Completez votre situation et le consentement requis.");
+      return;
+    }
 
-    return { journey, mobilizedCpf, opcoEst, totalAides, rac, priority };
-  }, [testResult, formData, journeys]);
+    setLoading(true);
 
-  const submitMutation = useMutation({
-    onSuccess: () => {
-      toast.success('Votre fiche de financement a été transmise au conseiller.');
-      navigate({ to: '/' });
-    },
-    mutationFn: async () => {
-      if (!simulation) throw new Error("Simulation indisponible");
-      const { data, error } = await supabase
-        .from('dossiers')
-        .insert({
-          external_ref: attemptId,
-          student_name: testResult?.placement_test_attempts?.student_name || 'Inconnu',
-          student_email: 'A renseigner',
-          status: 'en_qualification',
-          priority: simulation.priority,
-          context: {
-            pedagogy: {
-              current_level: testResult?.global_level,
-              target_level: simulation.journey.toLevel,
-              reliability_flags: testResult?.flags || [],
-              rationale: simulation.journey.description
+    try {
+      const response = await fetch("/api/capture-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "qualification_post_bilan",
+          tunnel: "T4_financement_post_bilan",
+          lead_intent: "training_financing",
+          first_name: form.firstName.trim(),
+          last_name: form.lastName.trim(),
+          email: form.email.trim() || undefined,
+          whatsapp_phone: form.whatsapp.trim() || undefined,
+          estimated_level: testResult?.global_level || undefined,
+          attempt_id: attemptId,
+          consent_training: form.consentTraining,
+          consent_partner: form.consentPartner,
+          financement_opt_in: true,
+          message: form.notes.trim() || undefined,
+          flags: testResult?.flags || undefined,
+          reliability_by_level: testResult?.reliability_by_level || undefined,
+          time_metrics: testResult?.time_metrics || testResult?.time_spent_by_level || undefined,
+          funding_profile: {
+            origin: "post_bilan",
+            birth_date: form.birthDate || null,
+            nationality: form.nationality.trim() || null,
+            address_line1: form.addressLine1.trim() || null,
+            postal_code: form.postalCode.trim() || null,
+            city: form.city.trim() || null,
+            professional_status: form.professionalStatus,
+            sector_activity: form.professionalStatus === "salarie" ? form.sectorActivity.trim() || null : null,
+            cpf_status: form.cpfStatus,
+            cpf_balance_declared: form.cpfBalance ? Number(form.cpfBalance) : null,
+            france_travail_registered: form.franceTravailRegistered,
+            employer_support: form.employerSupport,
+            target_date: form.targetDate || null,
+            recommended_journey: {
+              id: journey.id,
+              name: journey.name,
+              hours: journey.hours,
+              exam_target: journey.examTarget,
+              public_price: journey.publicPrice,
             },
-            administration: {
-              student_status: formData.status,
-              declarative_info: formData
-            },
-            finances: {
-              journey_id: simulation.journey.id,
-              total_price: simulation.journey.publicPrice,
-              aides_est: simulation.totalAides,
-              rac: simulation.rac,
-              is_estimated: true
-            }
-          }
-        })
-        .select();
-      
-      if (error) throw error;
+          },
+        }),
+      });
 
-      // Déclencher la notification partenaire
-      if (data && data[0]?.id) {
-        await supabase.functions.invoke('notify-partner-lead', {
-          body: { dossier_id: data[0].id }
-        });
-      }
-      return data;
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Envoi impossible.");
+
+      setSuccess(true);
+    } catch (submitError: any) {
+      setError(submitError?.message || "Une erreur est survenue.");
+    } finally {
+      setLoading(false);
     }
-  });
+  };
 
   if (loadingTest || journeysLoading) {
     return (
-      <div className="p-20 text-center">
-        <Loader2 className="animate-spin h-8 w-8 mx-auto mb-4 text-primary" />
-        <span className="font-extrabold text-slate-800">Chargement de votre profil et initialisation du simulateur...</span>
+      <div className="flex min-h-[60vh] flex-col items-center justify-center p-10 text-center">
+        <Loader2 className="mb-4 h-9 w-9 animate-spin text-primary" />
+        <p className="font-bold text-on-surface">Chargement de votre bilan...</p>
       </div>
     );
   }
 
-  if (journeysError || !simulation) {
+  if (!testResult) {
     return (
-      <div className="p-20 text-center">
-        <AlertTriangle className="h-10 w-10 mx-auto mb-4 text-red-500" />
-        <span className="font-extrabold text-slate-800 text-lg">Erreur de chargement des offres de formation.</span>
+      <div className="flex min-h-[60vh] flex-col items-center justify-center p-10 text-center">
+        <AlertCircle className="mb-4 h-10 w-10 text-error" />
+        <p className="text-lg font-bold text-on-surface">Bilan introuvable.</p>
+        <Link to="/passer-test/latest" className="mt-4 font-bold text-primary hover:underline">
+          Repasser le test
+        </Link>
       </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-14">
+        <div className="rounded-3xl border border-primary/30 bg-primary-container/10 p-8 text-center shadow-sm md:p-10">
+          <CheckCircle2 className="mx-auto h-16 w-16 text-primary" />
+          <h1 className="mt-5 text-3xl font-black text-on-surface">Demande financement recue</h1>
+          <p className="mt-3 text-on-surface-variant">
+            Votre bilan et votre profil de financement sont maintenant relies.
+            Nous pourrons verifier les pistes pertinentes avant toute demande de
+            document.
+          </p>
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to="/formations"
+              className="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-5 font-bold text-on-primary"
+            >
+              Voir les formations
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex h-12 items-center justify-center rounded-lg border border-outline-variant px-5 font-bold text-on-surface"
+            >
+              Echanger avec nous
+            </Link>
+          </div>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 space-y-6">
-      {/* Stepper de Progression */}
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen bg-slate-50 px-4 py-10">
+      <div className="mx-auto max-w-5xl space-y-6">
         <Stepper currentStep={3} />
-      </div>
 
-      <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8">
-        
-        {/* Colonne Gauche : Questionnaire */}
-        <div className="lg:col-span-3 space-y-6">
-          <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-            <h1 className="text-2xl font-black text-slate-900 mb-2">Simulateur de Financement</h1>
-            <p className="text-slate-500 mb-8 text-sm">Déterminez vos droits de prise en charge en 3 questions simples.</p>
+        <section className="grid gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-[1fr_320px] md:p-8">
+          <div>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-black uppercase text-primary">
+              <ClipboardCheck className="h-4 w-4" />
+              Etape financement
+            </div>
+            <h1 className="text-3xl font-black text-slate-900">
+              Prequalifier votre financement
+            </h1>
+            <p className="mt-3 max-w-2xl text-slate-600">
+              Votre bilan nous donne deja une base pedagogique. Completez votre
+              profil de financement pour relier votre besoin au bon parcours.
+            </p>
+          </div>
 
-            <div className="space-y-8">
-              {/* Statut Professionnel */}
-              <div className="space-y-3">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">1. Votre situation professionnelle</label>
-                <div className="grid grid-cols-2 gap-2.5">
-                  {[
-                    { id: 'salarie', label: 'Salarié(e)' },
-                    { id: 'demandeur_emploi', label: 'Demandeur d\'emploi' },
-                    { id: 'independant', label: 'Indépendant / Chef d\'entreprise' },
-                    { id: 'autre', label: 'Sans activité / Autre' }
-                  ].map(s => (
-                    <button
-                      key={s.id}
-                      onClick={() => setFormData(p => ({ ...p, status: s.id }))}
-                      className={`h-14 px-4 rounded-xl border-2 text-sm font-black transition-all ${
-                        formData.status === s.id ? 'border-primary bg-primary/5 text-primary' : 'border-slate-100 hover:border-slate-200 text-slate-700 bg-slate-50/50'
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
+          <aside className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
+            <p className="text-xs font-black uppercase text-primary">Parcours recommande</p>
+            <h2 className="mt-2 text-2xl font-black text-slate-900">{journey.name}</h2>
+            <p className="mt-1 text-sm font-semibold text-slate-600">
+              Niveau estime {testResult.global_level || "a verifier"} - {journey.hours}h - {journey.examTarget}
+            </p>
+            <p className="mt-4 text-sm text-slate-700">{journey.objective}</p>
+            <p className="mt-4 text-2xl font-black text-slate-900">{journey.publicPrice} EUR</p>
+          </aside>
+        </section>
+
+        <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[1fr_340px]">
+          <section className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+            <fieldset className="space-y-4">
+              <legend className="text-xl font-black text-slate-900">1. Coordonnees</legend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <TextField label="Prenom" value={form.firstName} onChange={(value) => setField("firstName", value)} required />
+                <TextField label="Nom" value={form.lastName} onChange={(value) => setField("lastName", value)} required />
+                <TextField label="Email" type="email" value={form.email} onChange={(value) => setField("email", value)} />
+                <TextField label="WhatsApp" type="tel" value={form.whatsapp} onChange={(value) => setField("whatsapp", value)} />
               </div>
+            </fieldset>
 
-              {/* CPF */}
-              <div className="space-y-3">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">
-                  2. Solde disponible sur votre compte <Tooltip content="Mon Compte Formation : l'argent gagné en travaillant pour financer vos cours.">CPF</Tooltip> (€)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-slate-400">€</span>
-                  <input 
-                    type="number" 
-                    placeholder="Ex: 1500"
-                    className="w-full h-14 pl-10 pr-6 rounded-xl bg-slate-50 border-2 border-slate-100 text-lg font-bold focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-slate-800"
-                    onChange={(e) => setFormData(p => ({ ...p, soldeCpf: parseInt(e.target.value) || 0 }))}
-                  />
-                </div>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                  Vos droits <Tooltip content="Mon Compte Formation : l'argent gagné en travaillant pour financer vos cours.">CPF</Tooltip> cumulés en travaillant en France peuvent financer votre formation, sous réserve de solde suffisant.
+            <fieldset className="space-y-4">
+              <legend className="text-xl font-black text-slate-900">2. Situation financement</legend>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm font-bold text-slate-900">Identite utile au dossier</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                  Facultatif maintenant : ces informations aident a preparer une prequalification plus complete.
                 </p>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <TextField label="Date de naissance" type="date" value={form.birthDate} onChange={(value) => setField("birthDate", value)} />
+                  <TextField label="Nationalite" value={form.nationality} onChange={(value) => setField("nationality", value)} />
+                  <div className="sm:col-span-2">
+                    <TextField label="Adresse" value={form.addressLine1} onChange={(value) => setField("addressLine1", value)} />
+                  </div>
+                  <TextField label="Code postal" value={form.postalCode} onChange={(value) => setField("postalCode", value)} />
+                  <TextField label="Ville" value={form.city} onChange={(value) => setField("city", value)} />
+                </div>
               </div>
-
-              {/* Checkboxes Administratifs */}
-              <div className="space-y-4 pt-6 border-t border-slate-100">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">3. Pièces administratives</label>
-                <BooleanToggle 
-                  label="Je possède les justificatifs requis pour ma démarche préfecture (identité, logement...)"
-                  value={formData.hasMainDocs}
-                  onChange={(v) => setFormData(p => ({ ...p, hasMainDocs: v }))}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <SelectField
+                  label="Situation professionnelle"
+                  value={form.professionalStatus}
+                  onChange={(value) => setField("professionalStatus", value)}
+                  options={[
+                    ["", "Choisir"],
+                    ["salarie", "Salarie"],
+                    ["independant", "Independant"],
+                    ["demandeur_emploi", "Demandeur d'emploi"],
+                    ["etudiant", "Etudiant"],
+                    ["sans_activite", "Sans activite"],
+                    ["autre", "Autre"],
+                  ]}
+                  required
                 />
-                {formData.status === 'salarie' && (
-                  <BooleanToggle 
-                    label="Mon employeur soutient ma démarche d'évolution professionnelle"
-                    value={formData.hasEmployerAgreement}
-                    onChange={(v) => setFormData(p => ({ ...p, hasEmployerAgreement: v }))}
+                <SelectField
+                  label="Compte CPF"
+                  value={form.cpfStatus}
+                  onChange={(value) => setField("cpfStatus", value)}
+                  options={[
+                    ["yes", "Oui"],
+                    ["no", "Non"],
+                    ["unknown", "Je ne sais pas"],
+                  ]}
+                />
+                {form.professionalStatus === "salarie" ? (
+                  <TextField
+                    label="Secteur d'activite"
+                    value={form.sectorActivity}
+                    onChange={(value) => setField("sectorActivity", value)}
                   />
-                )}
+                ) : null}
+                <TextField
+                  label="Solde CPF connu"
+                  type="number"
+                  value={form.cpfBalance}
+                  onChange={(value) => setField("cpfBalance", value)}
+                />
+                <SelectField
+                  label="Inscrit France Travail"
+                  value={form.franceTravailRegistered}
+                  onChange={(value) => setField("franceTravailRegistered", value)}
+                  options={[
+                    ["yes", "Oui"],
+                    ["no", "Non"],
+                    ["unknown", "Je ne sais pas"],
+                  ]}
+                />
+                <SelectField
+                  label="Soutien employeur"
+                  value={form.employerSupport}
+                  onChange={(value) => setField("employerSupport", value)}
+                  options={[
+                    ["yes", "Oui"],
+                    ["no", "Non"],
+                    ["unknown", "Je ne sais pas"],
+                  ]}
+                />
+                <TextField
+                  label="Date cible"
+                  type="date"
+                  value={form.targetDate}
+                  onChange={(value) => setField("targetDate", value)}
+                />
               </div>
-            </div>
-          </div>
+              <TextAreaField
+                label="Precision utile"
+                value={form.notes}
+                onChange={(value) => setField("notes", value)}
+                placeholder="Ex : disponibilites, urgence, financeur deja contacte..."
+              />
+            </fieldset>
+          </section>
 
-          {/* Rassurance Pédagogique */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
-               <Zap className="h-6 w-6 text-emerald-600 mb-3" />
-               <h3 className="font-extrabold text-emerald-950 mb-1 text-sm">Effectifs Réduits</h3>
-               <p className="text-xs text-emerald-700 leading-relaxed">
-                 Groupes de 6 élèves maximum pour maximiser votre temps de parole et sécuriser votre réussite préfecture.
-               </p>
-             </div>
-             <div className="bg-primary/5 p-6 rounded-2xl border border-primary/20">
-               <UserCheck className="h-6 w-6 text-primary mb-3" />
-               <h3 className="font-extrabold text-slate-900 mb-1 text-sm">Formateur Référent Dédié</h3>
-               <p className="text-xs text-slate-600 leading-relaxed">
-                 Un enseignant professionnel vous accompagne individuellement et valide vos devoirs chaque semaine.
-               </p>
-             </div>
-          </div>
-        </div>
-
-        {/* Colonne Droite : Simulation de Reste à Charge */}
-        <div className="lg:col-span-2">
-          <div className="sticky top-8 space-y-6">
-            <div className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl relative overflow-hidden space-y-6">
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <Award className="h-24 w-24" />
-              </div>
-
-              <div className="relative z-10 space-y-6">
-                <div>
-                  <div className="inline-block px-3 py-1 bg-primary rounded-full text-[10px] font-black uppercase tracking-widest mb-2">
-                    Ingénierie Académique
-                  </div>
-                  <h2 className="text-3xl font-black leading-tight">{simulation.journey.name}</h2>
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">{simulation.journey.hours}h · Objectif {simulation.journey.examTarget}</p>
-                </div>
-
-                <p className="text-xs text-slate-300 italic border-l-2 border-primary/50 pl-4 py-1">
-                  "{simulation.journey.objective}"
-                </p>
-
-                <div className="space-y-4 pt-6 border-t border-slate-800">
-                  <div className="flex justify-between items-center text-slate-400">
-                    <span className="text-sm font-semibold">Prix public de la formation</span>
-                    <span className="text-lg font-bold">{simulation.journey.publicPrice} €</span>
-                  </div>
-                  <div className="flex justify-between items-center text-emerald-400">
-                    <span className="text-sm font-semibold flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                      Tarif financé de référence
-                    </span>
-                    <span className="text-lg font-bold">-{simulation.totalAides} €</span>
-                  </div>
-                  <div className="flex justify-between items-end pt-4 border-t border-dashed border-slate-800">
-                    <div>
-                      <span className="text-slate-400 text-xs block mb-1">Reste à charge estimé</span>
-                      <span className="text-4xl font-black text-white">{simulation.rac} €</span>
-                    </div>
-                    {simulation.rac === 0 && (
-                      <div className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg text-[10px] font-black mb-2 tracking-wider uppercase flex items-center gap-1">
-                        <Check className="h-3.5 w-3.5 stroke-[3]" />
-                        Prise en charge totale
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <Button 
-                  disabled={!formData.status || submitMutation.isPending || !simulation}
-                  onClick={() => submitMutation.mutate()}
-                  className="w-full h-16 bg-primary hover:bg-primary/95 text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-3 shadow-xl transition-all active:scale-95 disabled:opacity-50"
-                >
-                  {submitMutation.isPending ? <Loader2 className="animate-spin h-6 w-6" /> : (
-                    <>
-                      Confirmer ma simulation
-                      <ArrowRight className="h-6 w-6" />
-                    </>
-                  )}
-                </Button>
-
-                <p className="text-[9px] text-slate-500 text-center leading-relaxed font-bold">
-                  [ESTIMATION NON CONTRACTUELLE] <br />
-                  Sous réserve de validation de vos droits CPF/OPCO et de l'analyse définitive de votre dossier.
-                </p>
-              </div>
+          <aside className="space-y-4">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="flex items-center gap-2 text-lg font-black text-slate-900">
+                <ShieldCheck className="h-5 w-5 text-primary" />
+                Consentements
+              </h2>
+              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-slate-600">
+                <input
+                  type="checkbox"
+                  checked={form.consentTraining}
+                  onChange={(event) => setField("consentTraining", event.target.checked)}
+                  className="mt-1 h-5 w-5 accent-primary"
+                />
+                <span>
+                  J'accepte d'etre recontacte pour ma formation et l'etude de mes pistes de financement.
+                  <strong className="text-primary"> *</strong>
+                </span>
+              </label>
+              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-slate-600">
+                <input
+                  type="checkbox"
+                  checked={form.consentPartner}
+                  onChange={(event) => setField("consentPartner", event.target.checked)}
+                  className="mt-1 h-5 w-5 accent-primary"
+                />
+                <span>
+                  J'accepte que notre partenaire financement recoive mon profil si l'etude de mes droits le necessite.
+                </span>
+              </label>
             </div>
 
-            {/* Alert Pédagogique */}
-            {testResult?.flags?.length > 0 && (
-              <div className="bg-orange-50 border border-orange-200 p-4 rounded-2xl flex gap-3">
-                <AlertTriangle className="h-5 w-5 text-orange-600 shrink-0" />
-                <p className="text-[10px] text-orange-800 leading-normal font-semibold">
-                  <strong>Validation requise :</strong> Des variations algorithmiques ont été détectées. Un conseiller validera votre niveau lors de l'appel d'intégration.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
+            <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-950">
+              Aucun upload de document ici. Nous verifions d'abord votre profil,
+              puis les pieces utiles seront precisees au bon moment.
+            </div>
 
+            {error ? (
+              <p className="rounded-2xl border border-error/30 bg-error-container/20 p-4 text-sm text-error">
+                {error}
+              </p>
+            ) : null}
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-lg font-black text-on-primary"
+            >
+              {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Wallet className="h-5 w-5" />}
+              Envoyer mon profil
+              {!loading ? <ArrowRight className="h-5 w-5" /> : null}
+            </Button>
+
+            <p className="text-xs leading-relaxed text-slate-500">
+              Les montants et dispositifs restent soumis a validation par les
+              organismes financeurs concernes.
+            </p>
+          </aside>
+        </form>
       </div>
-    </div>
+    </main>
   );
 }
 
-function BooleanToggle({ label, value, onChange }: { label: string, value: boolean | null, onChange: (v: boolean) => void }) {
+function TextField({
+  label,
+  type = "text",
+  value,
+  onChange,
+  required,
+}: {
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+}) {
   return (
-    <div className="flex items-center justify-between gap-4 p-3 hover:bg-slate-50 rounded-xl transition-colors">
-      <span className="text-xs font-semibold text-slate-700">{label}</span>
-      <div className="flex gap-1">
-        <button 
-          onClick={() => onChange(true)}
-          className={`px-4 py-2 rounded-lg text-[10px] font-black border-2 transition-all ${value === true ? 'bg-primary border-primary text-white' : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'}`}
-        >
-          OUI
-        </button>
-        <button 
-          onClick={() => onChange(false)}
-          className={`px-4 py-2 rounded-lg text-[10px] font-black border-2 transition-all ${value === false ? 'bg-slate-800 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'}`}
-        >
-          NON
-        </button>
-      </div>
-    </div>
+    <label className="block text-sm font-bold text-slate-900">
+      {label} {required ? <span className="text-primary">*</span> : null}
+      <input
+        type={type}
+        value={value}
+        required={required}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-1 h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+      />
+    </label>
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  required,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<[string, string]>;
+  required?: boolean;
+}) {
+  return (
+    <label className="block text-sm font-bold text-slate-900">
+      {label} {required ? <span className="text-primary">*</span> : null}
+      <select
+        value={value}
+        required={required}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-1 h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+      >
+        {options.map(([valueOption, labelOption]) => (
+          <option key={valueOption} value={valueOption}>
+            {labelOption}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function TextAreaField({
+  label,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+}) {
+  return (
+    <label className="block text-sm font-bold text-slate-900">
+      {label}
+      <textarea
+        rows={3}
+        value={value}
+        placeholder={placeholder}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+      />
+    </label>
   );
 }
