@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, CheckCircle2, Loader2, ShieldAlert, ShieldCheck, UserCheck, PhoneCall } from "lucide-react";
+import { Check, CheckCircle2, Loader2, ShieldAlert, ShieldCheck, UserCheck, PhoneCall, X } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { siteName } from "@/config/site";
 import { track } from "@/utils/tracking-plausible";
@@ -50,8 +50,15 @@ function AccompagnementAdministratifPage() {
     setChecklistData(data);
   };
 
+  const [dispenseModalOpen, setDispenseModalOpen] = useState(false);
+
   const handleDispenseClick = () => {
     setChecklistData(prev => prev ? { ...prev, dispense_demandee: true } : null);
+    setDispenseModalOpen(true);
+  };
+
+  const closeDispenseModal = () => {
+    setDispenseModalOpen(false);
     // Auto-scroll to the contact form to make submission seamless
     document.getElementById("lead-form-container")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -77,7 +84,7 @@ function AccompagnementAdministratifPage() {
 
     // Simple international phone format check
     if (!whatsapp.trim().startsWith("+") && !whatsapp.trim().startsWith("00")) {
-      setError("Veuillez saisir votre numéro au format international (ex: +33 6 12 34 56 78).");
+      setError("Format international requis, ex. +33 6 12 34 56 78");
       return;
     }
 
@@ -144,6 +151,59 @@ function AccompagnementAdministratifPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 md:px-8">
+      {dispenseModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dispense-modal-title"
+          onClick={closeDispenseModal}
+        >
+          <div
+            className="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <h3 id="dispense-modal-title" className="text-xl font-black text-slate-800">
+                Cas de dispense du justificatif de niveau de langue
+              </h3>
+              <button
+                type="button"
+                onClick={closeDispenseModal}
+                aria-label="Fermer"
+                className="text-slate-400 hover:text-slate-600 shrink-0"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Liste indicative</p>
+            <ul className="space-y-3 text-sm text-slate-700 font-semibold">
+              <li className="flex gap-2">
+                <Check className="h-5 w-5 text-emerald-600 shrink-0" />
+                Diplôme français (brevet, CAP/BEP, bac, supérieur) attestant du niveau requis
+              </li>
+              <li className="flex gap-2">
+                <Check className="h-5 w-5 text-emerald-600 shrink-0" />
+                État de santé (certificat médical) — dispense appréciée par la préfecture
+              </li>
+              <li className="flex gap-2">
+                <Check className="h-5 w-5 text-emerald-600 shrink-0" />
+                Âge : situations particulières appréciées au cas par cas
+              </li>
+            </ul>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              La décision appartient exclusivement à l'administration.
+            </p>
+            <button
+              type="button"
+              onClick={closeDispenseModal}
+              className="w-full h-12 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold rounded-xl transition-all text-sm"
+            >
+              Faire vérifier ma situation par le partenaire →
+            </button>
+          </div>
+        </div>
+      )}
       <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Left Column: Explanatory Content & Interactive Checklist */}
@@ -340,7 +400,7 @@ function AccompagnementAdministratifPage() {
 
                 <div>
                   <label className="block font-bold mb-2 text-slate-700 text-xs uppercase tracking-wider" htmlFor="admin-email">
-                    Adresse e-mail <span className="text-slate-400 normal-case tracking-normal">(optionnel)</span>
+                    Email <span className="text-slate-400 normal-case tracking-normal">(recommandé — pour recevoir la liste de vos pièces)</span>
                   </label>
                   <input
                     id="admin-email"
@@ -350,9 +410,6 @@ function AccompagnementAdministratifPage() {
                     placeholder="vous@exemple.com"
                     className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-[#ea580c] focus:bg-white transition-all font-bold text-sm"
                   />
-                  <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase tracking-wider leading-relaxed">
-                    Utile pour garder une trace ecrite en plus du rappel WhatsApp.
-                  </p>
                 </div>
 
                 <div className="pt-2 space-y-3">
