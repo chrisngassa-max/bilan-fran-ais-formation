@@ -4,7 +4,8 @@ import { siteName } from "@/config/site";
 export const Route = createFileRoute("/mentions-legales")({
   head: () => ({
     meta: [
-      { title: `${siteName} — Mentions Légales` },
+      { title: `Mentions légales — ${siteName}` },
+      { property: "og:title", content: `Mentions légales — ${siteName}` },
       { name: "robots", content: "index,follow" },
     ],
   }),

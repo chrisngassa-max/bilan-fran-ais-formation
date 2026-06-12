@@ -20,6 +20,15 @@ import { siteName } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: `${siteName} — Atteignez le niveau A2, B1 ou B2 exigé pour vos démarches` },
+      {
+        property: "og:title",
+        content: `${siteName} — Atteignez le niveau A2, B1 ou B2 exigé pour vos démarches`,
+      },
+    ],
+  }),
   component: IndexPage,
 });
 

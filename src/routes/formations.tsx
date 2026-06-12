@@ -15,6 +15,17 @@ import { trackEvent } from "@/lib/analytics";
 import { Tooltip } from "@/components/Tooltip";
 
 export const Route = createFileRoute("/formations")({
+  head: () => ({
+    meta: [
+      { title: "Parcours de formation français A2 · B1 · B2 — Bilan Français Formation" },
+      {
+        name: "description",
+        content:
+          "Quatre parcours de formation en petits groupes pour atteindre le niveau A2, B1 ou B2 : prix public, tarif financé de référence et financement possible selon votre situation.",
+      },
+      { property: "og:title", content: "Parcours de formation français A2 · B1 · B2 — Bilan Français Formation" },
+    ],
+  }),
   component: FormationsPage,
 });
 

@@ -27,6 +27,17 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute('/passer-test/$token')({
+  head: () => ({
+    meta: [
+      { title: "Diagnostic complet de français (30 min) — Bilan Français Formation" },
+      {
+        name: "description",
+        content:
+          "Diagnostic complet de votre niveau de français : compréhension et expression, écrites et orales. Bilan détaillé en 30 minutes.",
+      },
+      { property: "og:title", content: "Diagnostic complet de français (30 min) — Bilan Français Formation" },
+    ],
+  }),
   component: PasserTestPage,
   validateSearch: (search) => searchSchema.parse(search),
 });

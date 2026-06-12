@@ -82,30 +82,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: `${siteName} — Évaluez votre niveau et trouvez la formation adaptée` },
+      { title: `${siteName} — Atteignez le niveau A2, B1 ou B2 exigé pour vos démarches` },
       {
         name: "description",
         content:
-          "Préparation linguistique, carte de séjour, naturalisation et français professionnel. Faites le bilan de votre niveau de français et découvrez le parcours adapté.",
+          "Test de niveau gratuit en 3 minutes. Formations en petits groupes pour atteindre le niveau de français exigé : carte de séjour (A2), carte de résident (B1), naturalisation (B2).",
       },
       { property: "og:site_name", content: siteName },
       { property: "og:type", content: "website" },
       { property: "og:url", content: siteUrl },
-      { property: "og:title", content: `${siteName} — Bilan de français en ligne` },
+      {
+        property: "og:title",
+        content: `${siteName} — Atteignez le niveau A2, B1 ou B2 exigé pour vos démarches`,
+      },
       {
         property: "og:description",
         content:
-          "Évaluez votre niveau de français et trouvez la formation adaptée à votre projet (CECRL, carte de séjour, naturalisation, travail).",
+          "Test de niveau gratuit en 3 minutes. Formations en petits groupes pour atteindre le niveau de français exigé : carte de séjour (A2), carte de résident (B1), naturalisation (B2).",
       },
-      { name: "twitter:card", content: "summary" },
-      { title: "Lovable App" },
-      { property: "og:title", content: "Lovable App" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "description", content: "Site vitrine pour formations en français : prépare au TCF, aide à l'intégration administrative et au français professionnel." },
-      { property: "og:description", content: "Site vitrine pour formations en français : prépare au TCF, aide à l'intégration administrative et au français professionnel." },
-      { name: "twitter:description", content: "Site vitrine pour formations en français : prépare au TCF, aide à l'intégration administrative et au français professionnel." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2ac444bc-2f5c-43bf-b9eb-f9e75de9c317/id-preview-e29bf070--5c6d55c7-69d3-40c6-8b1d-5f2988367583.lovable.app-1778909856165.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2ac444bc-2f5c-43bf-b9eb-f9e75de9c317/id-preview-e29bf070--5c6d55c7-69d3-40c6-8b1d-5f2988367583.lovable.app-1778909856165.png" },
+      // [À COMPLÉTER : og-image.png à produire] — visuel de marque 1200×630 (logo + accroche)
+      // à déposer dans public/ puis référencer ici : { property: "og:image", content: `${siteUrl}/og-image.png` }
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

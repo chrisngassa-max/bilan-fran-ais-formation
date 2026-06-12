@@ -4,7 +4,13 @@ import { siteName } from "@/config/site";
 
 export const Route = createFileRoute("/niveaux")({
   head: () => ({
-    meta: [{ title: `${siteName} - Les niveaux A2, B1 et B2 expliqués` }],
+    meta: [
+      { title: `Niveaux A2, B1, B2 : quelle exigence pour quelle démarche ? — ${siteName}` },
+      {
+        property: "og:title",
+        content: `Niveaux A2, B1, B2 : quelle exigence pour quelle démarche ? — ${siteName}`,
+      },
+    ],
   }),
   component: NiveauxPage,
 });

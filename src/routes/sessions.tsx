@@ -6,13 +6,13 @@ import { supabase } from "@/lib/supabase";
 export const Route = createFileRoute("/sessions")({
   head: () => ({
     meta: [
-      { title: "Sessions de formation — Bilan Français Formation" },
+      { title: "Prochaines sessions de formation — Bilan Français Formation" },
       {
         name: "description",
         content:
           "Découvrez les prochaines sessions de formation au français. Réservez votre place dans un groupe à effectif limité.",
       },
-      { property: "og:title", content: "Sessions de formation — Bilan Français Formation" },
+      { property: "og:title", content: "Prochaines sessions de formation — Bilan Français Formation" },
       {
         property: "og:description",
         content:

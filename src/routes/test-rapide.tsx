@@ -9,8 +9,9 @@ import { siteName } from "@/config/site";
 export const Route = createFileRoute("/test-rapide")({
   head: () => ({
     meta: [
-      { title: `${siteName} — Test rapide de niveau français (2 min)` },
-      { name: "description", content: "Estimez votre niveau de français en 2 minutes. Test de positionnement gratuit et indicatif." },
+      { title: `Test de français gratuit en 3 minutes — ${siteName}` },
+      { name: "description", content: "Estimez votre niveau de français en 3 minutes. Test de positionnement gratuit et indicatif." },
+      { property: "og:title", content: `Test de français gratuit en 3 minutes — ${siteName}` },
     ],
   }),
   component: TestRapidePage,

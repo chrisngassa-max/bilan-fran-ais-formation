@@ -5,8 +5,9 @@ import { AlertCircle, Wallet, Building2, Users, Briefcase, Handshake, CreditCard
 export const Route = createFileRoute("/financement/")({
   head: () => ({
     meta: [
-      { title: `${siteName} — Financer votre formation de français` },
-      { name: "description", content: "CPF, OPCO, employeur, France Travail : découvrez toutes les solutions de financement pour votre formation." }
+      { title: `Financer votre formation : CPF, OPCO, France Travail — ${siteName}` },
+      { name: "description", content: "CPF, OPCO, employeur, France Travail : découvrez toutes les solutions de financement pour votre formation." },
+      { property: "og:title", content: `Financer votre formation : CPF, OPCO, France Travail — ${siteName}` }
     ],
   }),
   component: FinancementIndexPage,

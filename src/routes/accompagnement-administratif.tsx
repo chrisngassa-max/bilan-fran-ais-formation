@@ -13,7 +13,10 @@ const CONSENT_VERSION = "v1.0";
 
 export const Route = createFileRoute("/accompagnement-administratif")({
   head: () => ({
-    meta: [{ title: `${siteName} — Accompagnement Administratif Préfectoral` }],
+    meta: [
+      { title: `Aide au dossier préfecture — ${siteName}` },
+      { property: "og:title", content: `Aide au dossier préfecture — ${siteName}` },
+    ],
   }),
   component: AccompagnementAdministratifPage,
 });

@@ -3,7 +3,10 @@ import { siteName, contactInfo } from "@/config/site";
 
 export const Route = createFileRoute("/confidentialite")({
   head: () => ({
-    meta: [{ title: `${siteName} — Politique de Confidentialité` }],
+    meta: [
+      { title: `Politique de confidentialité — ${siteName}` },
+      { property: "og:title", content: `Politique de confidentialité — ${siteName}` },
+    ],
   }),
   component: ConfidentialitePage,
 });
