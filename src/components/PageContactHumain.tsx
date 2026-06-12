@@ -104,7 +104,7 @@ export function PageContactHumain({
           <Send className="h-10 w-10" />
         </div>
         <h2 className="text-3xl font-black text-slate-900">Demande confirmée</h2>
-        <p className="text-slate-600 text-lg">Merci, un conseiller pédagogique vous contactera sous 24h à 48h ouvrées.</p>
+        <p className="text-slate-600 text-lg">Merci, un conseiller pédagogique vous contactera sous 24 h ouvrées.</p>
       </div>
     )
   }
@@ -133,7 +133,7 @@ export function PageContactHumain({
         <div className="space-y-4">
           <h2 className="text-3xl font-black text-slate-900 leading-tight">Votre test a bien été enregistré.</h2>
           <p className="text-base text-slate-600 leading-relaxed">
-            Un conseiller expert en formation analysera vos résultats sous 24h à 48h ouvrées pour faire le point sur votre situation et vos options de formation.
+            Un conseiller expert en formation analysera vos résultats sous 24 h ouvrées pour faire le point sur votre situation et vos options de formation.
           </p>
         </div>
 

@@ -130,7 +130,7 @@ export async function envoyerEmailBilan(lead: Lead): Promise<void> {
 
           ${lead.consent_partner ? `
           <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; color: #065f46; font-size: 13px; font-weight: 600; margin-top: 25px;">
-            💼 <strong>Accompagnement préfecture :</strong> Vous avez demandé la vérification gratuite de vos pièces. Un conseiller expert prendra contact avec vous sous 24h à 48h ouvrées par téléphone ou WhatsApp.
+            💼 <strong>Accompagnement préfecture :</strong> Vous avez demandé la vérification gratuite de vos pièces. Un conseiller expert prendra contact avec vous sous 24 h ouvrées par téléphone ou WhatsApp.
           </div>
           ` : ""}
 

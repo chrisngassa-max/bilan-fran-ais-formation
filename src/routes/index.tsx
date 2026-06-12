@@ -59,7 +59,7 @@ function IndexPage() {
                 className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md text-white"
                 style={{ backgroundColor: "#f97316" }}
               >
-                Estimer mon niveau en 2 min
+                Estimer mon niveau — 3 min, gratuit
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
@@ -91,7 +91,7 @@ function IndexPage() {
             CPF, France Travail, OPCO, employeur : vérification possible après votre test.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6 text-xs text-on-surface-variant">
-            <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> ≈ 5 min</span>
+            <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> ≈ 3 min</span>
             <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Données protégées</span>
             <span className="inline-flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" /> Bilan envoyé par email</span>
           </div>
@@ -245,7 +245,7 @@ function IndexPage() {
               <div className="bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Clock className="w-8 h-8" />
               </div>
-              <div className="text-xs font-bold text-primary uppercase tracking-wider mb-2">⚡ 2 minutes</div>
+              <div className="text-xs font-bold text-primary uppercase tracking-wider mb-2">⚡ 3 minutes</div>
               <h3 className="text-xl font-bold mb-2">Test rapide</h3>
               <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
                 10 questions ciblées. Estimation de niveau + formule adaptée à votre délai.

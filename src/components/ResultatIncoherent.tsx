@@ -100,7 +100,7 @@ export function ResultatIncoherent({
         <CheckCircle className="h-16 w-16 text-emerald-500 mx-auto animate-bounce" />
         <h2 className="text-3xl font-black text-slate-900">Demande enregistrée</h2>
         <p className="text-slate-600 text-lg">
-          Merci, un conseiller expert a été notifié et vous recontactera sous 24h à 48h ouvrées.
+          Merci, un conseiller expert a été notifié et vous recontactera sous 24 h ouvrées.
         </p>
       </div>
     )
@@ -139,7 +139,7 @@ export function ResultatIncoherent({
           <div className="bg-slate-50 p-6 rounded-2xl flex items-start gap-4 border border-slate-150">
             <UserCheck className="h-8 w-8 text-primary shrink-0" />
             <p className="text-slate-600 text-sm leading-relaxed">
-              Un conseiller expert de notre partenaire spécialisé prendra contact sous 24h à 48h ouvrées pour faire le point sur votre situation et vos démarches administratives.
+              Un conseiller expert de notre partenaire spécialisé prendra contact sous 24 h ouvrées pour faire le point sur votre situation et vos démarches administratives.
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export function ResultatIncoherent({
               <Loader2 className="h-6 w-6 animate-spin text-white" />
             ) : (
               <>
-                Être recontacté sous 24h à 48h
+                Être recontacté sous 24 h ouvrées
                 <ArrowRight className="h-6 w-6" />
               </>
             )}

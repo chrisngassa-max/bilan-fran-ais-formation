@@ -179,7 +179,7 @@ function SessionsPage() {
             Réservez votre place dans une session
           </h1>
           <p className="text-slate-600">
-            Groupes limités à 5 personnes pour un suivi de qualité. Ouvertes à
+            Groupes limités à 6 élèves pour un suivi de qualité. Ouvertes à
             l'inscription dès maintenant.
           </p>
         </div>

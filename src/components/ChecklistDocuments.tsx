@@ -26,7 +26,7 @@ export const DOCUMENTS_BY_DEMARCHE = {
       { id: "acte_nais", label: "Acte de naissance + traduction assermentée", desc: "Traduit en français par un traducteur agréé auprès d'une cour d'appel", statut: "obligatoire" },
       { id: "timbre", label: "Timbre fiscal (montant variable)", desc: "Achetable en ligne sur le site officiel de l'administration", statut: "obligatoire" },
       { id: "cerfa", label: "Formulaire CERFA adapté", desc: "Dossier de demande officiel dûment rempli et signé", statut: "obligatoire" },
-      { id: "attestation", label: "Attestation officielle TCF ou DELF niveau A2", desc: "Attestation officielle TCF/DELF niveau A2 de moins de 2 ans. Requis pour la carte de séjour pluriannuelle (2-4 ans).", statut: "obligatoire", highlight: true },
+      { id: "attestation", label: "Justificatif officiel de niveau A2", desc: "Justificatif officiel de niveau A2 : attestation TCF ou TEF de moins de 2 ans, ou diplôme DELF (sans limite de validité). Requis pour la carte de séjour pluriannuelle (2-4 ans).", statut: "obligatoire", highlight: true },
     ],
     selon_situation: {
       salarie: [

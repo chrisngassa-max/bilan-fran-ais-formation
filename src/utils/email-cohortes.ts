@@ -84,7 +84,7 @@ export async function envoyerEmailConfirmationReservation(
       <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:14px 18px; border-radius:12px; color:#065f46; font-size:13px; margin-bottom:18px;">
         <strong>Mode de financement choisi :</strong> ${data.payment_mode}
         ${["cpf", "opco", "france_travail"].includes(data.payment_mode)
-          ? "<br><span style=\"font-size:12px;\">Un conseiller vous contactera sous 48h pour le montage de votre dossier de financement.</span>"
+          ? "<br><span style=\"font-size:12px;\">Un conseiller vous contactera sous 24 h ouvrées pour le montage de votre dossier de financement.</span>"
           : ""}
       </div>`;
 

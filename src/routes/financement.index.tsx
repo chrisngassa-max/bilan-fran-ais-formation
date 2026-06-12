@@ -127,7 +127,7 @@ function FinancementIndexPage() {
             </button>
           </Link>
           <p className="text-sm text-on-surface-variant mt-4">
-            Réponse personnalisée sous 48h par nos conseillers.
+            Réponse personnalisée sous 24 h ouvrées par nos conseillers.
           </p>
         </div>
       </main>

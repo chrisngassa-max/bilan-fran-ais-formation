@@ -186,14 +186,23 @@ function NiveauxPage() {
           <section className="mt-12 p-10 bg-secondary-container rounded-2xl text-center shadow-inner">
             <h2 className="text-2xl font-bold text-on-secondary-container mb-3">Vous n'êtes pas sûr(e) de votre niveau ?</h2>
             <p className="text-on-secondary-container/80 mb-8 max-w-[500px] mx-auto">
-              Répondez à quelques questions pour estimer rapidement votre niveau (2 min). Pour un bilan complet,
+              Répondez à quelques questions pour estimer rapidement votre niveau (3 min). Pour un bilan complet,
               un test approfondi est disponible.
             </p>
-            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+            <Link to="/test-rapide">
               <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
-                Démarrer (2 min, gratuit)
+                Estimer mon niveau — 3 min, gratuit
               </button>
             </Link>
+            <p className="mt-4 text-sm">
+              <Link
+                to="/passer-test/$token"
+                params={{ token: "latest" }}
+                className="underline text-on-secondary-container/80 hover:text-on-secondary-container"
+              >
+                ou passer le diagnostic complet (30 min)
+              </Link>
+            </p>
             <p className="mt-4 text-sm text-on-secondary-container/60">
               Service gratuit, sans engagement et conforme RGPD.
             </p>

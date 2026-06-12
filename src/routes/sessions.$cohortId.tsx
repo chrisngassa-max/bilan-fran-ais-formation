@@ -21,7 +21,7 @@ export const Route = createFileRoute("/sessions/$cohortId")({
       {
         name: "description",
         content:
-          "Réservez votre place dans une session de formation au français. Groupes limités à 5 personnes.",
+          "Réservez votre place dans une session de formation au français. Groupes limités à 6 élèves.",
       },
     ],
   }),
@@ -217,7 +217,7 @@ function SessionDetailPage() {
 
         <Accordion title="Structure du parcours">
           <ul className="space-y-2 text-slate-700">
-            <li>📚 Séances de 3h en groupe restreint (5 personnes maximum)</li>
+            <li>📚 Séances de 3h en groupe restreint (6 élèves maximum)</li>
             <li>📝 3 examens blancs aux jalons 50%, 75% et 100%</li>
             <li>👩‍🏫 Un formateur référent tout au long du parcours</li>
             <li>💬 Suivi WhatsApp entre les séances</li>
