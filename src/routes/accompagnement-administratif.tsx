@@ -418,7 +418,7 @@ function AccompagnementAdministratifPage() {
 
                 <p className="text-[10px] text-slate-400 font-semibold text-center flex items-center justify-center gap-1.5 leading-relaxed pt-2">
                   <ShieldCheck className="h-4 w-4 text-[#ea580c] shrink-0" />
-                  Données chiffrées de bout en bout et protégées selon le RGPD.
+                  Connexion sécurisée (HTTPS). Données protégées conformément au RGPD.
                 </p>
               </form>
             </div>

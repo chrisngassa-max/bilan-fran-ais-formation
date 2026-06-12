@@ -116,7 +116,13 @@ function NiveauxPage() {
                 lors de tâches simples et habituelles.
               </p>
               <p className="text-sm text-on-surface-variant mb-2"><strong>Objectif administratif :</strong> requis pour la carte de séjour pluriannuelle (2-4 ans).</p>
-              <p className="text-xs text-outline italic">Source légale : décret applicable au 1er janvier 2026 — service-public.gouv.fr</p>
+              {/* [À COMPLÉTER : vérifier l'URL exacte de la fiche service-public pour A2/carte pluriannuelle avant mise en ligne] */}
+              <p className="text-xs text-outline italic">
+                Source : loi n° 2024-42 du 26 janvier 2024, applicable au 1er janvier 2026 —{" "}
+                <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
+                {" "}et{" "}
+                <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noreferrer" className="underline">legifrance.gouv.fr</a>
+              </p>
             </div>
 
             {/* B1 */}
@@ -137,7 +143,13 @@ function NiveauxPage() {
                 des situations de la vie courante.
               </p>
               <p className="text-sm text-on-surface-variant mb-2"><strong>Objectif administratif :</strong> requis pour la carte de résident 10 ans.</p>
-              <p className="text-xs text-outline italic">Source légale : décret applicable au 1er janvier 2026 — loire.gouv.fr</p>
+              {/* [À COMPLÉTER : vérifier l'URL exacte de la fiche service-public pour B1/carte de résident avant mise en ligne] */}
+              <p className="text-xs text-outline italic">
+                Source : loi n° 2024-42 du 26 janvier 2024, applicable au 1er janvier 2026 —{" "}
+                <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
+                {" "}et{" "}
+                <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noreferrer" className="underline">legifrance.gouv.fr</a>
+              </p>
             </div>
 
             {/* B2 */}
@@ -157,7 +169,13 @@ function NiveauxPage() {
                 Vous pouvez communiquer avec spontanéité et aisance avec un locuteur natif.
               </p>
               <p className="text-sm text-on-surface-variant mb-2"><strong>Objectif administratif :</strong> requis pour la nationalité française (naturalisation ou mariage).</p>
-              <p className="text-xs text-outline italic mb-3">Source légale : décret applicable aux dossiers 2026 — diplomatie.gouv.fr</p>
+              {/* [À COMPLÉTER : vérifier l'URL exacte de la fiche service-public pour B2/naturalisation avant mise en ligne] */}
+              <p className="text-xs text-outline italic mb-3">
+                Source : loi n° 2024-42 du 26 janvier 2024, applicable au 1er janvier 2026 —{" "}
+                <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
+                {" "}et{" "}
+                <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noreferrer" className="underline">legifrance.gouv.fr</a>
+              </p>
               <div className="p-4 rounded-lg border border-amber-300 bg-amber-50 text-sm text-amber-900">
                 <strong>⚠️ Important :</strong> depuis 2026, la naturalisation exige le niveau B2
                 (et non plus B1). Assurez-vous de viser le bon niveau.
