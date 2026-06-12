@@ -23,19 +23,16 @@ function MentionsLegalesPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-on-surface border-b pb-2">1. Éditeur du site</h2>
             <p>
-              Le site <strong>{siteName}</strong> est édité par la société :
+              Le site <strong>{siteName}</strong> est édité par :
             </p>
             <div className="bg-surface-container p-4 rounded-xl space-y-1 font-semibold text-xs border border-outline-variant/30">
-              <p>« TODO-LEGAL-EDITEUR-NOM » : [Nom de la Société / Raison sociale]</p>
-              <p>« TODO-LEGAL-EDITEUR-FORME » : [Forme juridique, e.g., SAS / SARL] au capital de [Montant] €</p>
-              <p>« TODO-LEGAL-EDITEUR-SIRET » : SIRET : [Numéro SIRET] - RCS : [Ville d'immatriculation]</p>
-              <p>« TODO-LEGAL-EDITEUR-ADRESSE » : Siège social : [Adresse complète]</p>
-              <p>« TODO-LEGAL-EDITEUR-TVA » : TVA Intracommunautaire : [Numéro TVA]</p>
-              <p>« TODO-LEGAL-EDITEUR-DIRECTEUR » : Directeur de la publication : [Nom du Directeur]</p>
+              <p>[À COMPLÉTER : Raison sociale], [À COMPLÉTER : forme juridique] au capital de [À COMPLÉTER] €</p>
+              <p>SIRET : [À COMPLÉTER] — RCS : [À COMPLÉTER : ville]</p>
+              <p>Siège social : [À COMPLÉTER : adresse complète]</p>
+              <p>TVA intracommunautaire : [À COMPLÉTER]</p>
+              <p>Directeur de la publication : [À COMPLÉTER : nom]</p>
+              <p>Contact : contact@bilanfrancaisformation.fr — [À COMPLÉTER : téléphone]</p>
             </div>
-            <p className="text-xs">
-              « TODO-LEGAL-DREETS » : Déclaration d'activité de prestataire de formation enregistrée sous le numéro <strong>[Numéro de Déclaration d'Activité (NDA)]</strong> auprès du Préfet de région <strong>[Région]</strong> (cet enregistrement ne vaut pas agrément de l'État).
-            </p>
           </section>
 
           {/* Section 2: Hébergement & CDN */}
@@ -50,7 +47,7 @@ function MentionsLegalesPage() {
                 <p>Contact : https://vercel.com</p>
               </div>
               <div className="bg-surface-container p-4 rounded-xl border border-outline-variant/30 text-xs">
-                <p className="font-bold mb-1">« TODO-LEGAL-CDN » : Réseau de diffusion de contenu (CDN) :</p>
+                <p className="font-bold mb-1">Réseau de diffusion de contenu (CDN) :</p>
                 <p>Cloudflare, Inc.</p>
                 <p>101 Townsend St</p>
                 <p>San Francisco, CA 94107, États-Unis</p>
@@ -63,10 +60,16 @@ function MentionsLegalesPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-on-surface border-b pb-2">3. Certification Qualiopi</h2>
             <p className="text-xs">
-              « TODO-LEGAL-QUALIOP » : Nos parcours de formation linguistique sont dispensés en partenariat avec des organismes de formation certifiés <strong>Qualiopi</strong> au titre de la catégorie d'actions suivantes : <strong>Actions de formation</strong>. 
+              Les actions de formation présentées sur ce site sont dispensées en partenariat avec
+              [À COMPLÉTER : raison sociale Stafy], organisme de formation certifié <strong>Qualiopi</strong> au titre
+              de la catégorie « Actions de formation », déclaration d'activité enregistrée sous le
+              numéro [À COMPLÉTER : NDA Stafy] auprès du Préfet de la région [À COMPLÉTER]
+              (cet enregistrement ne vaut pas agrément de l'État).
             </p>
             <p className="text-xs">
-              Cette collaboration garantit l'éligibilité de nos formations aux financements publics (CPF, OPCO, France Travail) sous réserve du respect des conditions réglementaires applicables.
+              Ce partenariat permet, sous réserve du respect des conditions réglementaires
+              applicables et de l'accord du financeur, l'éligibilité des formations aux dispositifs
+              de financement (CPF, OPCO, France Travail).
             </p>
           </section>
 
@@ -74,12 +77,12 @@ function MentionsLegalesPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-on-surface border-b pb-2">4. Médiateur de la consommation</h2>
             <p className="text-xs">
-              « TODO-LEGAL-MEDIATEUR » : Conformément aux dispositions des articles L. 611-1 et suivants du Code de la consommation, en cas de litige de consommation non résolu par notre service client, vous pouvez recourir gratuitement au médiateur de la consommation agréé suivant :
+              Conformément aux articles L.611-1 et suivants du Code de la consommation, en cas de
+              litige non résolu, vous pouvez recourir gratuitement au médiateur de la consommation :
             </p>
             <div className="bg-surface-container p-4 rounded-xl text-xs border border-outline-variant/30">
-              <p><strong>[Nom du Médiateur de la consommation]</strong></p>
-              <p>Adresse : [Adresse postale du Médiateur]</p>
-              <p>Site internet : [URL du Médiateur pour dépôt de dossier en ligne]</p>
+              <p><strong>[À COMPLÉTER : nom du médiateur auquel l'éditeur a adhéré]</strong></p>
+              <p>[À COMPLÉTER : adresse postale] — [À COMPLÉTER : URL de saisine en ligne]</p>
             </div>
           </section>
 
@@ -87,12 +90,12 @@ function MentionsLegalesPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-on-surface border-b pb-2">5. Délégué à la Protection des Données (DPO)</h2>
             <p className="text-xs">
-              « TODO-LEGAL-DPO » : Pour toute question relative à la protection de vos données personnelles ou pour exercer vos droits (accès, rectification, suppression, opposition, limitation et portabilité) issus du Règlement Général sur la Protection des Données (RGPD), vous pouvez contacter notre Délégué à la Protection des Données :
+              Pour toute question relative à la protection de vos données personnelles ou pour exercer vos droits (accès, rectification, suppression, opposition, limitation et portabilité) issus du Règlement Général sur la Protection des Données (RGPD), vous pouvez contacter notre Délégué à la protection des données :
             </p>
             <div className="bg-surface-container p-4 rounded-xl text-xs border border-outline-variant/30">
-              <p><strong>DPO {siteName}</strong></p>
-              <p>Email : [Email dédié DPO, e.g., dpo@bilanfrancais.fr]</p>
-              <p>Adresse : [Adresse postale du DPO / Siège social]</p>
+              <p><strong>Délégué à la protection des données : [À COMPLÉTER : nom ou « le représentant légal »]</strong></p>
+              <p>Email : dpo@bilanfrancaisformation.fr</p>
+              <p>Adresse : [À COMPLÉTER : adresse postale du DPO / siège social]</p>
             </div>
           </section>
 
