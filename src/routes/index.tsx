@@ -13,7 +13,6 @@ import {
   Calculator,
   Mail,
   ShieldCheck,
-  Lock,
   Clock,
 } from "lucide-react";
 import { siteName } from "@/config/site";
@@ -40,16 +39,16 @@ function IndexPage() {
         <div className="max-w-[850px] mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold uppercase tracking-wider mb-5">
             <Sparkles className="h-3.5 w-3.5" />
-            Votre français, votre rythme, un suivi pédagogique dédié.
+            Formation de français pour vos démarches en France
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-on-background mb-4 leading-tight">
-            Petits groupes de 6 élèves maximum. <br />
-            <span className="text-primary">Un formateur référent à chaque étape.</span>
+            Atteignez le niveau de français exigé pour votre{" "}
+            <span className="text-primary">titre de séjour, votre carte de résident ou votre naturalisation.</span>
           </h1>
           <p className="text-lg md:text-xl font-bold text-on-surface-variant mb-8">
-            Formations à partir de 2 400 € · Financement possible selon votre situation.
+            Petits groupes de 6 élèves maximum. Un formateur référent à chaque étape.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+          <div className="flex justify-center">
             <Link
               to="/test-rapide"
               onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
@@ -63,38 +62,17 @@ function IndexPage() {
                 <ArrowRight className="w-5 h-5" />
               </button>
             </Link>
-            
-            <Link 
-              to="/formations" 
-              className="w-full md:w-auto"
-            >
-              <button
-                className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-95 transition-all shadow-md"
-                style={{ backgroundColor: "#1e3a8a" }}
-              >
-                Voir les parcours disponibles
-              </button>
-            </Link>
-
-            <Link 
-              to="/accompagnement-administratif"
-              className="w-full md:w-auto"
-            >
-              <button
-                className="h-[58px] w-full md:w-auto border-2 px-8 rounded-lg font-bold flex items-center justify-center hover:bg-primary/5 active:scale-95 transition-all text-slate-800 border-slate-800"
-              >
-                Besoin d'aide pour mes papiers
-              </button>
-            </Link>
           </div>
-          <p className="mt-4 text-xs font-bold text-slate-500">
-            CPF, France Travail, OPCO, employeur : vérification possible après votre test.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mt-6 text-xs text-on-surface-variant">
-            <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> ≈ 3 min</span>
-            <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> Données protégées</span>
+          <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs text-on-surface-variant">
+            <span>Gratuit</span>
+            <span>·</span>
+            <span>Sans engagement</span>
+            <span>·</span>
             <span className="inline-flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" /> Bilan envoyé par email</span>
           </div>
+          <p className="mt-4 text-xs font-bold text-slate-500">
+            CPF, France Travail, OPCO, employeur : votre éligibilité est vérifiée après le test.
+          </p>
         </div>
 
         <div className="mt-12 max-w-[1000px] mx-auto rounded-xl overflow-hidden shadow-sm border border-outline-variant">
@@ -103,6 +81,14 @@ function IndexPage() {
             className="w-full h-[300px] md:h-[450px] object-cover"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzYQMSLme1QuqbxfGCtlkQdEwrsTAawK3v1CJ4VpHQNRvuwta1hEDoFjoM-BZPTfFIZNzcmX_aMyA3Own7y38Ms33q4fs7KaMl28oax7RGNn2V11qZu6VdNiyVzHNUHXlO8RFh13pxqAn8aTop1XWq5XcpETWVmHoqRbtzbHSlrt4gNrgi8nb3YiWwMffyu3byArf13QUcVl5WU-UrHnvZpYtVyYiKj9Bl0_EDkHGXkejkyIBfhtFN4e3owE2jSVwHbL9rKsBM39c"
           />
+        </div>
+      </section>
+
+      {/* Bandeau alerte 2026 — remonté sous le hero */}
+      <section className="px-4">
+        <div className="max-w-[800px] mx-auto p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
+          <strong>⚠️ Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source :{" "}
+          <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
         </div>
       </section>
 
@@ -146,11 +132,6 @@ function IndexPage() {
               <Flag className="ml-auto text-outline w-8 h-8 opacity-50 shrink-0 hidden sm:block" />
             </div>
           </div>
-
-          <div className="mt-6 p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
-            <strong>⚠️ Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source :{" "}
-            <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
-          </div>
         </div>
       </section>
 
@@ -161,6 +142,9 @@ function IndexPage() {
           <p className="text-on-surface-variant mt-4">
             Selon votre situation, votre parcours peut être financé en tout ou partie. Le bilan que vous recevez
             par email identifie les pistes adaptées à votre profil.
+          </p>
+          <p className="mt-4 text-sm font-bold text-on-surface">
+            Prix public à partir de 2 400 € · peut être financée selon votre situation.
           </p>
         </div>
         <div className="max-w-[800px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
