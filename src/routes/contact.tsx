@@ -26,21 +26,38 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const schema = z.object({
-  firstName: z.string().trim().min(1, "Prénom requis").max(80),
-  lastName: z.string().trim().max(80).optional().or(z.literal("")),
-  email: z.string().trim().email("Email invalide").max(255),
-  phone: z.string().trim().min(6, "Téléphone requis").max(30),
-  city: z.string().trim().max(120).optional().or(z.literal("")),
-  goal: z.string().trim().max(120).optional().or(z.literal("")),
-  message: z.string().trim().max(1000).optional().or(z.literal("")),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "Le consentement est requis" }),
-  }),
-});
+const schema = z
+  .object({
+    firstName: z.string().trim().min(1, "Prénom requis").max(80),
+    lastName: z.string().trim().max(80).optional().or(z.literal("")),
+    email: z.string().trim().email("Email invalide").max(255),
+    phone: z.string().trim().max(30).optional().or(z.literal("")),
+    preferredChannel: z.enum(["email", "telephone", "whatsapp"], {
+      errorMap: () => ({ message: "Choisissez un canal de contact" }),
+    }),
+    city: z.string().trim().max(120).optional().or(z.literal("")),
+    goal: z.string().trim().max(120).optional().or(z.literal("")),
+    message: z.string().trim().max(1000).optional().or(z.literal("")),
+    consent: z.literal(true, {
+      errorMap: () => ({ message: "Le consentement est requis" }),
+    }),
+  })
+  .refine(
+    (d) => d.preferredChannel === "email" || (d.phone && d.phone.length >= 6),
+    {
+      message: "Indiquez un numéro pour être recontacté(e) par téléphone ou WhatsApp",
+      path: ["phone"],
+    },
+  );
+
+const CHANNEL_LABELS: Record<string, string> = {
+  email: "par email",
+  telephone: "par téléphone",
+  whatsapp: "sur WhatsApp",
+};
 
 function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState<{ firstName: string; preferredChannel: string } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,6 +68,7 @@ function ContactPage() {
       lastName: String(fd.get("lastName") || ""),
       email: String(fd.get("email") || ""),
       phone: String(fd.get("phone") || ""),
+      preferredChannel: String(fd.get("preferredChannel") || "email"),
       city: String(fd.get("city") || ""),
       goal: String(fd.get("goal") || ""),
       message: String(fd.get("message") || ""),
@@ -75,7 +93,7 @@ function ContactPage() {
        (Cloudflare Workers function /functions/brevo-contact.ts).
        La clé API Brevo reste côté serveur, JAMAIS dans le frontend. */
     trackEvent("contact_form_submitted", { from: "contact_page" });
-    setSubmitted(true);
+    setSubmitted({ firstName: parsed.data.firstName, preferredChannel: parsed.data.preferredChannel });
   };
 
   return (
@@ -84,7 +102,7 @@ function ContactPage() {
         <header className="text-center">
           <h1 className="headline-lg">Échangez avec notre équipe</h1>
           <p className="mt-3 body-lg text-on-surface-variant">
-            Vous avez un doute sur votre niveau ou sur les financements possibles ? Laissez-nous vos coordonnées, notre équipe vous répond sous 24h pour faire le point.
+            Vous avez un doute sur votre niveau ou sur les financements possibles ? Laissez-nous vos coordonnées, notre équipe vous répond sous 24 h ouvrées pour faire le point.
           </p>
         </header>
 
@@ -97,7 +115,7 @@ function ContactPage() {
                 onClick={() => trackEvent("phone_clicked", { from: "contact_page" })}
                 className="text-primary hover:underline"
               >
-                Téléphone : {contactInfo.phone}
+                Téléphone : +33 1 89 71 23 45
               </a>
             </li>
             <li>
@@ -123,7 +141,8 @@ function ContactPage() {
           <Card>
             <h2 className="headline-md">Demande reçue</h2>
             <p className="mt-2 body-md text-on-surface-variant">
-              Merci, nous vous recontactons rapidement.
+              Merci {submitted.firstName} ! Nous revenons vers vous sous 24 h ouvrées,{" "}
+              {CHANNEL_LABELS[submitted.preferredChannel] ?? "par email"}.
             </p>
           </Card>
         ) : (
@@ -136,8 +155,36 @@ function ContactPage() {
               <F name="firstName" label="Prénom" required error={errors.firstName} />
               <F name="lastName" label="Nom" />
               <F name="email" label="Email" type="email" required error={errors.email} />
-              <F name="phone" label="Téléphone" type="tel" required error={errors.phone} />
-              <F name="city" label="Ville" />
+              <F name="phone" label="Téléphone (optionnel)" type="tel" error={errors.phone} />
+
+              <fieldset>
+                <legend className="block label-caps text-on-surface-variant">
+                  Comment préférez-vous être recontacté(e) ?
+                </legend>
+                <div className="mt-2 flex flex-wrap gap-4">
+                  {[
+                    { value: "email", label: "Email" },
+                    { value: "telephone", label: "Téléphone" },
+                    { value: "whatsapp", label: "WhatsApp" },
+                  ].map((opt) => (
+                    <label key={opt.value} className="flex items-center gap-2 body-md">
+                      <input
+                        type="radio"
+                        name="preferredChannel"
+                        value={opt.value}
+                        defaultChecked={opt.value === "email"}
+                        className="h-5 w-5 accent-primary"
+                      />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+                {errors.preferredChannel && (
+                  <p className="mt-1 body-md text-destructive">{errors.preferredChannel}</p>
+                )}
+              </fieldset>
+
+              <F name="city" label="Ville (pour les sessions en présentiel)" />
               <F name="goal" label="Votre objectif (en quelques mots)" />
               <F name="message" label="Message" textarea />
 
