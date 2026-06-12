@@ -51,23 +51,64 @@ function differenceEnJours(dateStr: string): number {
   return Math.max(0, Math.round((rdv.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
 }
 
-// ─── Phase : Test ─────────────────────────────────────────────────────────────
-function PhaseTest({ onFinish }: { onFinish: (score: number, duration: number) => void }) {
-  const [current, setCurrent] = useState(0);
-  const [answers, setAnswers] = useState<number[]>([]);
-  const [elapsed, setElapsed] = useState(0);
-  const startRef = useRef(Date.now());
+// ─── Phase : Intro ────────────────────────────────────────────────────────────
+function PhaseIntro({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md space-y-6">
+        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
+          <h1 className="text-2xl font-black text-slate-900 text-center">Estimez votre niveau de français</h1>
+          <ul className="space-y-3 text-sm font-semibold text-slate-700">
+            <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> 10 questions — environ 3 minutes</li>
+            <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> Les 4 compétences sont survolées</li>
+            <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> À la fin : votre niveau estimé + votre bilan complet par email</li>
+            <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> Résultat indicatif, sans valeur officielle</li>
+          </ul>
+          <button
+            onClick={onStart}
+            className="w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md"
+          >
+            Commencer le test <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
+// ─── Phase : Test ─────────────────────────────────────────────────────────────
+const TEST_PROGRESS_KEY = "bff_quickscan_progress";
+
+function PhaseTest({ onFinish }: { onFinish: (score: number, duration: number) => void }) {
+  // Reprise sur reload : on restaure la progression depuis sessionStorage
+  const restored = (() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const saved = sessionStorage.getItem(TEST_PROGRESS_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const [current, setCurrent] = useState<number>(restored?.current ?? 0);
+  const [answers, setAnswers] = useState<number[]>(restored?.answers ?? []);
+  const startRef = useRef(restored?.startedAt ?? Date.now());
+
+  // Persiste la progression à chaque changement (reprise à la question en cours)
   useEffect(() => {
-    const t = setInterval(() => setElapsed(Math.round((Date.now() - startRef.current) / 1000)), 1000);
-    return () => clearInterval(t);
-  }, []);
+    sessionStorage.setItem(
+      TEST_PROGRESS_KEY,
+      JSON.stringify({ current, answers, startedAt: startRef.current })
+    );
+  }, [current, answers]);
 
   const handleAnswer = (idx: number) => {
     const newAnswers = [...answers, idx];
     if (current + 1 >= QUESTIONS.length) {
       const score = newAnswers.filter((a, i) => a === QUESTIONS[i].correct).length;
       const duration = Math.round((Date.now() - startRef.current) / 1000);
+      sessionStorage.removeItem(TEST_PROGRESS_KEY);
       onFinish(score, duration);
     } else {
       setAnswers(newAnswers);
@@ -77,15 +118,13 @@ function PhaseTest({ onFinish }: { onFinish: (score: number, duration: number) =
 
   const q = QUESTIONS[current];
   const progress = ((current) / QUESTIONS.length) * 100;
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-xl space-y-6">
         <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
           <span>Question {current + 1} / {QUESTIONS.length}</span>
-          <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {mins}:{String(secs).padStart(2, "0")}</span>
+          <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> ~3 min</span>
         </div>
         <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
           <div className="h-full bg-primary transition-all duration-300 rounded-full" style={{ width: `${progress}%` }} />
@@ -117,6 +156,7 @@ function PhaseCapture({ onSubmit }: {
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [rdvPrevu, setRdvPrevu] = useState<boolean | null>(null);
+  const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Pré-remplir depuis sessionStorage
@@ -133,8 +173,10 @@ function PhaseCapture({ onSubmit }: {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prenom.trim() || !email.trim()) { setError("Prénom et email sont obligatoires."); return; }
+    if (!prenom.trim()) { setError("Le prénom est obligatoire."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setError("Veuillez saisir une adresse email valide."); return; }
     if (rdvPrevu === null) { setError("Veuillez indiquer si vous avez un rendez-vous prévu."); return; }
+    if (!consent) { setError("Vous devez accepter la politique de confidentialité pour recevoir votre bilan."); return; }
     setError(null);
     onSubmit({ prenom: prenom.trim(), email: email.trim(), whatsapp: whatsapp.trim(), rdv_prevu: rdvPrevu });
   };
@@ -144,8 +186,8 @@ function PhaseCapture({ onSubmit }: {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto" />
-          <h1 className="text-2xl font-black text-slate-900">Test terminé !</h1>
-          <p className="text-slate-500 text-sm font-semibold">Recevez votre estimation de niveau et votre plan de formation.</p>
+          <h1 className="text-2xl font-black text-slate-900">Votre niveau estimé est prêt ✅</h1>
+          <p className="text-slate-500 text-sm font-semibold">Indiquez votre email pour recevoir votre bilan détaillé.</p>
         </div>
         <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-5">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -179,12 +221,22 @@ function PhaseCapture({ onSubmit }: {
               </div>
             </div>
 
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-5 w-5 accent-primary shrink-0"
+              />
+              <span className="text-[11px] text-slate-500 font-semibold leading-relaxed">
+                J'accepte de recevoir mon bilan par email et la{" "}
+                <Link to="/confidentialite" className="underline text-primary">politique de confidentialité</Link>.
+                Vos données ne sont jamais vendues à des tiers.
+              </span>
+            </label>
+
             {error && <p className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl p-3">{error}</p>}
 
-            <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
-              En soumettant, vous acceptez notre <Link to="/confidentialite" className="underline text-primary">politique de confidentialité</Link>.
-              Vos données ne sont jamais vendues à des tiers.
-            </p>
             <button type="submit"
               className="w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md">
               Voir mon estimation <ArrowRight className="h-4 w-4" />
@@ -352,15 +404,20 @@ function PhaseResultatNiveau({ score, prenom, whatsapp, onCaptureLead }: {
 }
 
 // ─── Composant principal ──────────────────────────────────────────────────────
-type Phase = "test" | "capture" | "express" | "niveau";
+type Phase = "intro" | "test" | "capture" | "express" | "niveau";
 
 function TestRapidePage() {
-  const [phase, setPhase] = useState<Phase>("test");
+  // Reprise sur reload : si une progression existe, on saute l'intro
+  const hasProgress = typeof window !== "undefined" && !!sessionStorage.getItem(TEST_PROGRESS_KEY);
+  const [phase, setPhase] = useState<Phase>(hasProgress ? "test" : "intro");
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
   const [contact, setContact] = useState({ prenom: "", email: "", whatsapp: "", rdv_prevu: false });
 
-  useEffect(() => { trackEvent("test_rapide_started"); }, []);
+  const handleStart = () => {
+    trackEvent("test_rapide_started");
+    setPhase("test");
+  };
 
   const handleTestFinish = (s: number, d: number) => {
     setScore(s);
@@ -399,6 +456,7 @@ function TestRapidePage() {
     }
   };
 
+  if (phase === "intro") return <PhaseIntro onStart={handleStart} />;
   if (phase === "test") return <PhaseTest onFinish={handleTestFinish} />;
   if (phase === "capture") return <PhaseCapture onSubmit={handleCapture} />;
   if (phase === "express") return <PhaseFormuleExpress score={score} prenom={contact.prenom} email={contact.email} whatsapp={contact.whatsapp} onCaptureLead={handleCaptureLead} />;
