@@ -69,7 +69,7 @@ export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magic
     intro = `Bonjour ${lead.first_name}, <br><br>Un document manquant ou mal rempli en préfecture peut retarder votre demande de carte de séjour ou de naturalisation de plusieurs mois.`;
     body = `
       <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin: 20px 0;">
-        <h4 style="margin-top:0; color:#0f172a;">📋 Vos pièces justificatives</h4>
+        <h4 style="margin-top:0; color:#0f172a;">Vos pièces justificatives</h4>
         <p style="font-size:13px; color:#475569; margin-bottom:10px;">
           Votre niveau estimé <strong>${level}</strong> correspond au parcours <strong>${journey.name}</strong>. Avez-vous rassemblé les pièces suivantes ?
         </p>
@@ -84,13 +84,13 @@ export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magic
         Nos partenaires administratifs peuvent analyser vos pièces justificatives afin d'éviter tout rejet de votre dossier en préfecture.
       </p>
     `;
-    ctaLabel = "🔎 Faire vérifier mon dossier administrativement";
+    ctaLabel = "Faire vérifier mon dossier administrativement";
   } else if (jour === 7) {
     title = "Simulation de votre financement & Reste à charge";
     intro = `Bonjour ${lead.first_name}, <br><br>Le prix public du parcours <strong>${journey.name}</strong> est de ${journey.publicPrice} €. Cependant, de nombreux financements existent pour alléger ce coût.`;
     body = `
       <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 20px; border-radius: 12px; margin: 20px 0; color: #065f46;">
-        <h4 style="margin-top:0; color:#047857;">💰 Financements Mobilisables</h4>
+        <h4 style="margin-top:0; color:#047857;">Financements mobilisables</h4>
         <p style="font-size:13px; margin-bottom:10px;">
           Selon votre situation professionnelle (salarié, demandeur d'emploi, indépendant), le <strong>tarif financé de référence</strong> peut être abaissé à <strong>${journey.financedReferencePrice} €</strong>, avec une prise en charge possible de vos droits CPF.
         </p>
@@ -102,14 +102,14 @@ export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magic
         Remplissez notre court simulateur pour recevoir votre reste à charge exact calculé en fonction de vos droits CPF actuels.
       </p>
     `;
-    ctaLabel = "💵 Calculer mon reste à charge exact";
+    ctaLabel = "Calculer mon reste à charge exact";
   } else {
     // J+14
     title = "Dernière chance pour réserver votre formateur référent";
     intro = `Bonjour ${lead.first_name}, <br><br>Afin de garantir une qualité d'apprentissage optimale, nos groupes sont strictement limités à <strong>6 élèves maximum</strong>.`;
     body = `
       <div style="background-color: #fffbeb; border: 1px solid #fde68a; padding: 20px; border-radius: 12px; margin: 20px 0; color: #92400e;">
-        <h4 style="margin-top:0; color:#b45309;">⚠️ Clôture de session imminente</h4>
+        <h4 style="margin-top:0; color:#b45309;">Clôture de session imminente</h4>
         <p style="font-size:13px; margin-bottom:10px;">
           Les places pour le parcours <strong>${journey.name}</strong> de ce mois-ci sont presque toutes réservées. Il ne reste plus que 2 créneaux d'accompagnement individuel disponibles avec nos formateurs référents.
         </p>
@@ -121,7 +121,7 @@ export async function buildSequenceEmailHtml(jour: 3 | 7 | 14, lead: Lead, magic
         Sécurisez votre place aujourd'hui sans avancer aucun frais avant validation de votre éligibilité.
       </p>
     `;
-    ctaLabel = "🎯 Sécuriser ma place au cours de français";
+    ctaLabel = "Sécuriser ma place au cours de français";
   }
 
   return `

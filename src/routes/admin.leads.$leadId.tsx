@@ -23,7 +23,8 @@ import {
   UserCheck,
   ChevronDown,
   Building,
-  HelpCircle
+  HelpCircle,
+  AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -258,7 +259,7 @@ export function LeadDetailAdmin() {
 
               <div className="space-y-1">
                 <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Niveau estimé</span>
-                <p className="font-black text-[#9d4222]">
+                <p className="font-black text-primary">
                   {lead.estimated_level || "À vérifier"}
                 </p>
               </div>
@@ -301,7 +302,7 @@ export function LeadDetailAdmin() {
               {lead.attempt_id && (
                 <div className="space-y-1 sm:col-span-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">ID Session d'évaluation</span>
-                  <p className="font-mono text-xs text-on-surface bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 w-fit">
+                  <p className="font-mono text-xs text-on-surface bg-surface-container-low px-3 py-1.5 rounded-xl border border-outline-variant w-fit">
                     {lead.attempt_id}
                   </p>
                 </div>
@@ -321,13 +322,13 @@ export function LeadDetailAdmin() {
               )}
 
               {lead.metadata?.reliability_by_level && Object.keys(lead.metadata.reliability_by_level).length > 0 && (
-                <div className="sm:col-span-2 space-y-1 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Indices de Fiabilité Pédagogique par Compétence</span>
+                <div className="sm:col-span-2 space-y-1 bg-surface-container-low p-4 rounded-2xl border border-outline-variant">
+                  <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Indices de Fiabilité Pédagogique par Compétence</span>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2 text-xs">
                     {Object.entries(lead.metadata.reliability_by_level).map(([lvl, score]: [string, any]) => (
-                      <div key={lvl} className="bg-white p-2.5 rounded-lg border border-slate-100 text-center shadow-sm">
-                        <span className="font-bold text-slate-500 uppercase">{lvl}</span>
-                        <p className="font-extrabold text-slate-900 mt-0.5">{Math.round(score * 100)}%</p>
+                      <div key={lvl} className="bg-white p-2.5 rounded-lg border border-outline-variant/50 text-center shadow-sm">
+                        <span className="font-bold text-outline uppercase">{lvl}</span>
+                        <p className="font-extrabold text-on-surface mt-0.5">{Math.round(score * 100)}%</p>
                       </div>
                     ))}
                   </div>
@@ -361,7 +362,7 @@ export function LeadDetailAdmin() {
 
                   <div className="rounded-xl border border-emerald-200 bg-white p-3">
                     <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Pilotage transmission</p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                    <p className="mt-1 text-xs leading-relaxed text-on-surface-variant">
                       L'export financement reprend uniquement les demandes consentantes marquees pretes a transmettre.
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -389,7 +390,7 @@ export function LeadDetailAdmin() {
                   <div className="space-y-4 rounded-xl border border-emerald-200 bg-white p-3">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Qualification manuelle</p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                      <p className="mt-1 text-xs leading-relaxed text-on-surface-variant">
                         Notes internes et prochaine action pour garder le suivi financement lisible avant export.
                       </p>
                     </div>
@@ -400,7 +401,7 @@ export function LeadDetailAdmin() {
                         <select
                           value={fundingNextAction}
                           onChange={(event) => setFundingNextAction(event.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-on-surface outline-none focus:border-emerald-500"
                         >
                           <option value="">A definir</option>
                           <option value="call_candidate">Rappeler le candidat</option>
@@ -417,7 +418,7 @@ export function LeadDetailAdmin() {
                           type="datetime-local"
                           value={fundingFollowupAt}
                           onChange={(event) => setFundingFollowupAt(event.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                          className="mt-1 h-10 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold normal-case tracking-normal text-on-surface outline-none focus:border-emerald-500"
                         />
                       </label>
                     </div>
@@ -429,7 +430,7 @@ export function LeadDetailAdmin() {
                         value={fundingInternalNotes}
                         onChange={(event) => setFundingInternalNotes(event.target.value)}
                         placeholder="Ex : candidat disponible le soir, solde CPF a confirmer, rappeler apres RDV employeur..."
-                        className="mt-1 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"
+                        className="mt-1 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium normal-case tracking-normal text-on-surface outline-none focus:border-emerald-500"
                       />
                     </label>
 
@@ -470,10 +471,10 @@ export function LeadDetailAdmin() {
                   </div>
 
                   {lead.metadata?.funding_profile?.recommended_journey && (
-                    <div className="rounded-xl border border-emerald-200 bg-white p-3 text-sm text-slate-800">
+                    <div className="rounded-xl border border-emerald-200 bg-white p-3 text-sm text-on-surface">
                       <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Parcours rattache</p>
                       <p className="mt-1 font-black">{lead.metadata.funding_profile.recommended_journey.name}</p>
-                      <p className="mt-1 text-xs text-slate-600">
+                      <p className="mt-1 text-xs text-on-surface-variant">
                         {lead.metadata.funding_profile.recommended_journey.hours}h - {lead.metadata.funding_profile.recommended_journey.exam_target} - {formatCurrency(lead.metadata.funding_profile.recommended_journey.public_price)}
                       </p>
                     </div>
@@ -485,7 +486,7 @@ export function LeadDetailAdmin() {
 
           {/* Wizard Manual Transmission */}
           <section className="bg-white rounded-3xl border border-outline-variant/30 shadow-sm overflow-hidden">
-            <header className="bg-gradient-to-r from-[#2c1d1a] to-[#56423c] p-6 text-white flex items-center justify-between">
+            <header className="bg-gradient-to-r from-sidebar-bg to-on-surface-variant p-6 text-white flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-primary-container">RGPD & Partenaire</p>
                 <h2 className="text-xl font-bold flex items-center gap-2">
@@ -535,12 +536,12 @@ export function LeadDetailAdmin() {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-on-surface-variant">Niveau estimé :</span>
-                      <span className="font-bold text-[#9d4222]">{lead.estimated_level || "A1 (par défaut)"}</span>
+                      <span className="font-bold text-primary">{lead.estimated_level || "A1 (par défaut)"}</span>
                     </div>
                   </div>
                   <button
                     onClick={() => setWizardStep(2)}
-                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-[#2c1d1a] px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
+                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-sidebar-bg px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
                   >
                     Valider le profil & Suivant
                     <ChevronRight size={16} />
@@ -585,7 +586,7 @@ export function LeadDetailAdmin() {
                     </button>
                     <button
                       onClick={() => setWizardStep(3)}
-                      className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-[#2c1d1a] px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
+                      className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-sidebar-bg px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
                     >
                       RGPD Conforme & Suivant
                       <ChevronRight size={16} />
@@ -629,7 +630,7 @@ export function LeadDetailAdmin() {
                     </button>
                     <button
                       onClick={() => setWizardStep(4)}
-                      className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-[#2c1d1a] px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
+                      className="inline-flex h-11 items-center justify-center gap-1.5 rounded-lg bg-sidebar-bg px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
                     >
                       Suivant
                       <ChevronRight size={16} />
@@ -646,8 +647,9 @@ export function LeadDetailAdmin() {
                   </p>
 
                   {partners.length === 0 ? (
-                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-100 text-sm text-amber-800">
-                      ⚠️ Aucun partenaire actif et conforme n'est enregistré. Créez et activez un partenaire dans la section correspondante.
+                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-100 text-sm text-amber-800 flex items-start gap-2">
+                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                      Aucun partenaire actif et conforme n'est enregistré. Créez et activez un partenaire dans la section correspondante.
                     </div>
                   ) : (
                     <div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
@@ -725,7 +727,7 @@ export function LeadDetailAdmin() {
                       setSelectedPartnerId("");
                       setWizardNotes("");
                     }}
-                    className="inline-flex h-10 items-center justify-center rounded-xl bg-[#2c1d1a] px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
+                    className="inline-flex h-10 items-center justify-center rounded-xl bg-sidebar-bg px-6 font-bold text-white shadow hover:opacity-90 transition-all text-sm"
                   >
                     Fermer l'assistant
                   </button>
@@ -877,7 +879,7 @@ function FundingInfo({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="rounded-xl border border-emerald-100 bg-white p-3">
       <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">{label}</span>
-      <p className="mt-1 font-bold text-slate-900">{displayValue(value)}</p>
+      <p className="mt-1 font-bold text-on-surface">{displayValue(value)}</p>
     </div>
   );
 }

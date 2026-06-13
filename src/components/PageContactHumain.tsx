@@ -1,6 +1,8 @@
 import { Clock, Send, Loader2, WifiOff } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "./bff/Button"
+import { Input } from "./ui/Input"
+import { Alert } from "./ui/Alert"
 
 interface Props {
   prenom?: string;
@@ -26,7 +28,6 @@ export function PageContactHumain({
   const [whatsapp, setWhatsapp] = useState(initialWhatsapp)
   const [status, setStatus] = useState<StatusState>('idle')
 
-  // Auto-retry offline lead
   useEffect(() => {
     const retryPendingLead = async () => {
       try {
@@ -99,40 +100,40 @@ export function PageContactHumain({
 
   if (status === 'sent') {
     return (
-      <div className="max-w-xl mx-auto py-20 px-4 text-center space-y-6 bg-white rounded-3xl border border-slate-100 shadow-xl animate-fade-in">
-        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto animate-bounce">
+      <div className="max-w-xl mx-auto py-20 px-4 text-center space-y-6 bg-surface-bright rounded-3xl border border-outline-variant shadow-xl animate-fade-in">
+        <div className="w-20 h-20 bg-eval-success/10 text-eval-success rounded-full flex items-center justify-center mx-auto animate-bounce">
           <Send className="h-10 w-10" />
         </div>
-        <h2 className="text-3xl font-black text-slate-900">Demande confirmée</h2>
-        <p className="text-slate-600 text-lg">Merci, un conseiller pédagogique vous contactera sous 24 h ouvrées.</p>
+        <h2 className="text-3xl font-black text-on-surface">Demande confirmée</h2>
+        <p className="text-on-surface-variant text-lg">Merci, un conseiller pédagogique vous contactera sous 24 h ouvrées.</p>
       </div>
     )
   }
 
   if (status === 'pending_offline') {
     return (
-      <div className="max-w-xl mx-auto py-20 px-4 text-center space-y-6 bg-white rounded-3xl border border-amber-100 shadow-xl animate-fade-in">
+      <div className="max-w-xl mx-auto py-20 px-4 text-center space-y-6 bg-surface-bright rounded-3xl border border-amber-200 shadow-xl animate-fade-in">
         <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto animate-pulse">
           <WifiOff className="h-10 w-10" />
         </div>
-        <h2 className="text-3xl font-black text-slate-900">Demande enregistrée localement</h2>
-        <p className="text-slate-600 text-lg leading-relaxed">
+        <h2 className="text-3xl font-black text-on-surface">Demande enregistrée localement</h2>
+        <p className="text-on-surface-variant text-lg leading-relaxed">
           Connexion internet instable. Vos coordonnées ont été enregistrées en toute sécurité sur votre appareil (<span className="font-mono text-xs font-bold text-amber-600">savedAt: {new Date().toLocaleTimeString()}</span>).
         </p>
-        <p className="text-amber-700 bg-amber-50 rounded-xl p-4 text-sm font-semibold max-w-md mx-auto border border-amber-200">
-          ⚠️ Vos informations seront transmises automatiquement dès que votre connexion sera rétablie. Vous pouvez laisser cette page ouverte.
-        </p>
+        <Alert variant="warning" className="max-w-md mx-auto text-left">
+          Vos informations seront transmises automatiquement dès que votre connexion sera rétablie. Vous pouvez laisser cette page ouverte.
+        </Alert>
       </div>
     )
   }
 
   return (
     <div className="max-w-xl mx-auto py-20 px-4">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 md:p-12 text-center space-y-8">
+      <div className="bg-surface-bright rounded-3xl border border-outline-variant shadow-xl p-8 md:p-12 text-center space-y-8">
         <Clock className="h-16 w-16 text-primary mx-auto animate-pulse" />
         <div className="space-y-4">
-          <h2 className="text-3xl font-black text-slate-900 leading-tight">Votre test a bien été enregistré.</h2>
-          <p className="text-base text-slate-600 leading-relaxed">
+          <h2 className="text-3xl font-black text-on-surface leading-tight">Votre test a bien été enregistré.</h2>
+          <p className="text-base text-on-surface-variant leading-relaxed">
             Un conseiller expert en formation analysera vos résultats sous 24 h ouvrées pour faire le point sur votre situation et vos options de formation.
           </p>
         </div>
@@ -140,38 +141,38 @@ export function PageContactHumain({
         <form onSubmit={handleSubmit} className="space-y-4 text-left">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label htmlFor="firstname" className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Votre prénom</label>
-              <input 
+              <label htmlFor="firstname" className="text-xs font-bold text-on-surface-variant uppercase tracking-wider block mb-1">Votre prénom</label>
+              <Input 
                 id="firstname"
                 type="text" 
                 required 
                 placeholder="Votre prénom" 
                 value={prenom}
                 onChange={(e) => setPrenom(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-slate-50 border border-slate-200 font-semibold"
+                className="h-14 px-6"
               />
             </div>
             <div>
-              <label htmlFor="email" className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Votre e-mail</label>
-              <input 
+              <label htmlFor="email" className="text-xs font-bold text-on-surface-variant uppercase tracking-wider block mb-1">Votre e-mail</label>
+              <Input 
                 id="email"
                 type="email" 
                 required 
                 placeholder="Votre email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-slate-50 border border-slate-200 font-semibold"
+                className="h-14 px-6"
               />
             </div>
             <div>
-              <label htmlFor="whatsapp" className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Votre WhatsApp (optionnel)</label>
-              <input 
+              <label htmlFor="whatsapp" className="text-xs font-bold text-on-surface-variant uppercase tracking-wider block mb-1">Votre WhatsApp (optionnel)</label>
+              <Input 
                 id="whatsapp"
                 type="tel" 
                 placeholder="Votre WhatsApp (optionnel)" 
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
-                className="w-full h-14 px-6 rounded-xl bg-slate-50 border border-slate-200 font-semibold"
+                className="h-14 px-6"
               />
             </div>
           </div>

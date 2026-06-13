@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { siteName, contactInfo } from "@/config/site";
+import { createFileRoute } from '@tanstack/react-router'
+import { siteName } from "@/config/site";
+import { Alert } from "@/components/ui/Alert";
 
 export const Route = createFileRoute("/confidentialite")({
   head: () => ({
@@ -88,9 +89,9 @@ function ConfidentialitePage() {
             <p>
               Vos données de contact et de niveau linguistique peuvent être transmises à notre <strong>partenaire spécialisé en accompagnement administratif</strong> (cabinet conseil externe sélectionné) dans le seul but de vous aider dans la constitution de votre dossier préfectoral.
             </p>
-            <p className="bg-surface-container p-4 rounded-xl border border-outline-variant italic">
-              <strong>⚠️ Règle absolue de consentement :</strong> Aucune donnée n'est transmise à un partenaire sans votre consentement explicite, libre et séparé, recueilli via la case d'opt-in correspondant à votre demande.
-            </p>
+            <Alert variant="warning" title="Règle absolue de consentement">
+              Aucune donnée n'est transmise à un partenaire sans votre consentement explicite, libre et séparé, recueilli via la case d'opt-in correspondant à votre demande.
+            </Alert>
           </section>
 
           <section className="space-y-3">

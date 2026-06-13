@@ -28,7 +28,7 @@ const STATUT_COULEURS: Record<Statut, string> = {
   nouveau: "bg-blue-100 text-blue-700 border-blue-200",
   en_cours: "bg-orange-100 text-orange-700 border-orange-200",
   traite: "bg-green-100 text-green-700 border-green-200",
-  sans_suite: "bg-gray-100 text-gray-600 border-gray-200",
+  sans_suite: "bg-surface-container text-on-surface-variant border-outline-variant",
 }
 const STATUT_LABELS: Record<Statut, string> = {
   nouveau: "Nouveau",

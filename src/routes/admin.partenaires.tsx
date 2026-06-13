@@ -196,7 +196,7 @@ export function AdminPartners() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${STATUS_BADGES[partner.status] || "bg-gray-100 text-gray-800"}`}>
+                        <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${STATUS_BADGES[partner.status] || "bg-surface-container text-on-surface"}`}>
                           {STATUS_LABELS[partner.status] || partner.status}
                         </span>
                       </td>

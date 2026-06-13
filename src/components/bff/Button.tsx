@@ -1,7 +1,8 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost";
+type Variant = "primary" | "secondary" | "outline" | "ghost" | "cta" | "danger" | "whatsapp";
 type Size = "md" | "lg";
 
 const base =
@@ -9,10 +10,13 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary: "bg-primary text-on-primary hover:bg-primary-container",
-  secondary: "bg-secondary text-on-primary hover:opacity-90",
+  secondary: "bg-secondary text-on-secondary hover:opacity-90",
   outline:
     "bg-surface-bright text-on-surface border border-outline-variant hover:bg-surface-container",
   ghost: "bg-transparent text-on-surface hover:bg-surface-container",
+  cta: "bg-eval-orange text-white hover:opacity-95 active:scale-95 shadow-md",
+  danger: "bg-error text-white hover:opacity-90",
+  whatsapp: "bg-whatsapp text-white hover:bg-whatsapp-hover shadow-md",
 };
 
 const sizes: Record<Size, string> = {
@@ -23,6 +27,7 @@ const sizes: Record<Size, string> = {
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
+  asChild?: boolean;
   children: ReactNode;
 }
 
@@ -30,12 +35,15 @@ export function Button({
   variant = "primary",
   size = "lg",
   className,
+  asChild = false,
   children,
   ...rest
 }: Props) {
+  const Comp = asChild ? Slot : "button";
+
   return (
-    <button className={cn(base, variants[variant], sizes[size], className)} {...rest}>
+    <Comp className={cn(base, variants[variant], sizes[size], className)} {...rest}>
       {children}
-    </button>
+    </Comp>
   );
 }

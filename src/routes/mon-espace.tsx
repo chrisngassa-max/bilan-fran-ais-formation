@@ -164,7 +164,7 @@ function MonEspacePage() {
 
   if (phase === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fcfaf7]">
+      <div className="min-h-screen flex items-center justify-center bg-surface-app">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -172,15 +172,15 @@ function MonEspacePage() {
 
   if (phase === "erreur") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fcfaf7] px-4">
+      <div className="min-h-screen flex items-center justify-center bg-surface-app px-4">
         <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-sm text-center">
           <div className="mx-auto w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-4">
             <Lock className="w-7 h-7 text-amber-700" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl font-bold text-on-surface mb-2">
             Lien expiré ou invalide
           </h1>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-on-surface-variant mb-6">
             Ce lien d'accès a déjà été utilisé ou a dépassé sa durée de validité
             (30 jours). Pour récupérer un nouvel accès à votre espace, refaites
             le test — un nouveau lien vous sera envoyé par email.
@@ -210,7 +210,7 @@ function MonEspacePage() {
     FINANCEMENT_INFO[lead.situation_pro ?? ""] ?? FINANCEMENT_INFO.salarie;
 
   return (
-    <div className="min-h-screen bg-[#fcfaf7] py-10 px-4">
+    <div className="min-h-screen bg-surface-app py-10 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-primary text-primary-foreground rounded-2xl p-6 shadow-sm">
@@ -225,11 +225,11 @@ function MonEspacePage() {
         {/* Dernier résultat */}
         {session && (
           <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">
               Mon dernier résultat
             </h2>
             {session.created_at && (
-              <p className="text-xs text-gray-500 mb-2">
+              <p className="text-xs text-outline mb-2">
                 Test passé le {formatDateFr(session.created_at)}
               </p>
             )}
@@ -237,7 +237,7 @@ function MonEspacePage() {
               <span className="text-4xl font-extrabold text-primary">
                 {session.niveau_estime ?? "—"}
               </span>
-              <span className="text-sm text-gray-600">niveau estimé</span>
+              <span className="text-sm text-on-surface-variant">niveau estimé</span>
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-xs font-medium text-amber-900 mb-4">
               <AlertTriangle className="w-3.5 h-3.5" />
@@ -257,10 +257,10 @@ function MonEspacePage() {
 
         {/* Dossier administratif */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">
             Mon dossier administratif
           </h2>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-on-surface-variant mb-2">
             <span className="font-semibold">Démarche :</span>{" "}
             {DEMARCHE_LABEL[lead.type_demarche ?? ""] ?? "Non précisée"}
           </p>
@@ -281,7 +281,12 @@ function MonEspacePage() {
                   {jrs <= 0
                     ? "Le rendez-vous est passé."
                     : jrs <= 14
-                      ? `⚠️ Plus que ${jrs} jour${jrs > 1 ? "s" : ""} — préparez votre dossier en priorité.`
+                      ? (
+                          <span className="inline-flex items-center gap-1">
+                            <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                            Plus que {jrs} jour{jrs > 1 ? "s" : ""} — préparez votre dossier en priorité.
+                          </span>
+                        )
                       : `${jrs} jours restants`}
                 </p>
               )}
@@ -298,13 +303,13 @@ function MonEspacePage() {
                     type="button"
                     onClick={() => toggleChecklist(item.id)}
                     disabled={saving}
-                    className="w-full flex items-center gap-3 text-left p-2 -mx-2 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-60"
+                    className="w-full flex items-center gap-3 text-left p-2 -mx-2 rounded-lg hover:bg-surface-container-low transition-colors disabled:opacity-60"
                   >
                     <Icon
-                      className={`w-5 h-5 shrink-0 ${done ? "text-primary" : "text-gray-400"}`}
+                      className={`w-5 h-5 shrink-0 ${done ? "text-primary" : "text-outline"}`}
                     />
                     <span
-                      className={`text-sm ${done ? "text-gray-500 line-through" : "text-gray-800"}`}
+                      className={`text-sm ${done ? "text-outline line-through" : "text-on-surface"}`}
                     >
                       {item.label}
                     </span>
@@ -314,20 +319,20 @@ function MonEspacePage() {
             })}
           </ul>
 
-          <p className="mt-4 text-xs font-semibold text-gray-600">
+          <p className="mt-4 text-xs font-semibold text-on-surface-variant">
             {nbCoches} / {checklistItems.length} cochés
           </p>
         </section>
 
         {/* Financement */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">
             Mon financement
           </h2>
-          <p className="text-base font-semibold text-gray-900 mb-1">
+          <p className="text-base font-semibold text-on-surface mb-1">
             {financement.dispositif}
           </p>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-on-surface-variant mb-4">
             {financement.description}
           </p>
           <Link
@@ -340,71 +345,71 @@ function MonEspacePage() {
 
         {/* Prochaines étapes */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">
             Mes prochaines étapes
           </h2>
           <div className="grid sm:grid-cols-3 gap-3">
             <Link
               to="/passer-test/$token"
               params={{ token: "latest" }}
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Refaire le test</p>
-              <p className="text-xs text-gray-500 mt-1">Mettre à jour mon niveau</p>
+              <p className="text-sm font-semibold text-on-surface">Refaire le test</p>
+              <p className="text-xs text-outline mt-1">Mettre à jour mon niveau</p>
             </Link>
             <Link
               to="/niveaux"
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Voir les formations</p>
-              <p className="text-xs text-gray-500 mt-1">Trouver la bonne formule</p>
+              <p className="text-sm font-semibold text-on-surface">Voir les formations</p>
+              <p className="text-xs text-outline mt-1">Trouver la bonne formule</p>
             </Link>
             <Link
               to="/contact"
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Parler à un conseiller</p>
-              <p className="text-xs text-gray-500 mt-1">Échanger sur mon projet</p>
+              <p className="text-sm font-semibold text-on-surface">Parler à un conseiller</p>
+              <p className="text-xs text-outline mt-1">Échanger sur mon projet</p>
             </Link>
           </div>
         </section>
 
         {/* Accès Espace apprenant */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">
             Espace apprenant
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-on-surface-variant mb-4">
             Vous êtes inscrit(e) à une formation ? Suivez votre cohorte, vos séances et vos documents.
           </p>
           <div className="grid sm:grid-cols-3 gap-3">
             <Link
               to="/mon-espace/ma-cohorte"
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Ma cohorte</p>
-              <p className="text-xs text-gray-500 mt-1">Formation, créneaux, financement</p>
+              <p className="text-sm font-semibold text-on-surface">Ma cohorte</p>
+              <p className="text-xs text-outline mt-1">Formation, créneaux, financement</p>
             </Link>
             <Link
               to="/mon-espace/mes-seances"
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Mes séances</p>
-              <p className="text-xs text-gray-500 mt-1">Planning et émargement</p>
+              <p className="text-sm font-semibold text-on-surface">Mes séances</p>
+              <p className="text-xs text-outline mt-1">Planning et émargement</p>
             </Link>
             <Link
               to="/mon-espace/mes-documents"
-              className="block p-4 rounded-xl border border-gray-200 hover:border-primary hover:bg-primary/5 transition"
+              className="block p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition"
             >
-              <p className="text-sm font-semibold text-gray-900">Mes documents</p>
-              <p className="text-xs text-gray-500 mt-1">Supports et attestations</p>
+              <p className="text-sm font-semibold text-on-surface">Mes documents</p>
+              <p className="text-xs text-outline mt-1">Supports et attestations</p>
             </Link>
           </div>
         </section>
 
-        <p className="text-center text-xs text-gray-500 pt-2">
-          🔒 Vos données sont protégées. Aucun autre utilisateur ne peut accéder
-          à cet espace.
+        <p className="text-center text-xs text-outline pt-2 inline-flex items-center justify-center gap-1.5 w-full">
+          <Lock className="h-3.5 w-3.5 shrink-0" />
+          Vos données sont protégées. Aucun autre utilisateur ne peut accéder à cet espace.
         </p>
       </div>
     </div>

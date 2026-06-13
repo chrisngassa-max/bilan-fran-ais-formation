@@ -56,19 +56,19 @@ function UnsubscribePage() {
       <div className="mx-auto max-w-md w-full space-y-6">
         {submitted ? (
           <Card className="text-center p-8 space-y-4">
-            <h1 className="headline-md font-bold text-slate-900">Désinscription validée</h1>
-            <p className="body-md text-slate-600 leading-relaxed">
+            <h1 className="headline-md font-bold text-on-surface">Désinscription validée</h1>
+            <p className="body-md text-on-surface-variant leading-relaxed">
               L'adresse e-mail <strong>{email}</strong> a été désinscrite avec succès de nos communications par e-mail et WhatsApp.
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-outline">
               Conformément aux directives de la CNIL et du RGPD, vos préférences ont été enregistrées en base de données.
             </p>
           </Card>
         ) : (
           <Card className="p-8 space-y-6">
             <div className="text-center space-y-2">
-              <h1 className="headline-md font-bold text-slate-900">Se désinscrire</h1>
-              <p className="body-md text-slate-600">
+              <h1 className="headline-md font-bold text-on-surface">Se désinscrire</h1>
+              <p className="body-md text-on-surface-variant">
                 Saisissez votre e-mail pour ne plus recevoir nos communications automatiques (résultats de tests, relances, etc.).
               </p>
             </div>
@@ -109,7 +109,7 @@ function UnsubscribePage() {
               </Button>
             </form>
 
-            <p className="text-xs text-center text-slate-400">
+            <p className="text-xs text-center text-outline">
               Cette action est immédiate et irréversible. Pour vous réabonner, vous devrez soumettre une nouvelle demande.
             </p>
           </Card>

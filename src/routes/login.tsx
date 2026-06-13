@@ -1,7 +1,10 @@
-import { BadgeEuro, LineChart, ShieldCheck, LogIn, ArrowRight } from "lucide-react";
+import { BadgeEuro, LineChart, ShieldCheck, LogIn, ArrowRight, Lock } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../hooks/useAuth";
+import { Button } from "@/components/bff/Button";
+import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/ui/Alert";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -54,7 +57,7 @@ export function Login() {
   return (
     <main className="min-h-[85vh] flex flex-col lg:flex-row bg-surface">
       {/* Left side: Branding */}
-      <section className="flex-1 bg-gradient-to-br from-[#56423c] to-[#2c1d1a] text-white p-8 lg:p-16 flex flex-col justify-between relative overflow-hidden min-h-[300px] lg:min-h-0">
+      <section className="flex-1 bg-gradient-to-br from-on-surface-variant to-sidebar-bg text-white p-8 lg:p-16 flex flex-col justify-between relative overflow-hidden min-h-[300px] lg:min-h-0">
         {/* Decorative background element */}
         <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl opacity-50" aria-hidden="true" />
         
@@ -79,7 +82,7 @@ export function Login() {
       </section>
 
       {/* Right side: Login Form */}
-      <section className="flex-1 flex items-center justify-center p-6 lg:p-16 bg-[#fffbf9]">
+      <section className="flex-1 flex items-center justify-center p-6 lg:p-16 bg-surface-container-lowest">
         <div className="w-full max-w-md flex flex-col gap-8 rounded-3xl bg-white p-8 sm:p-10 shadow-xl border border-outline-variant/30 relative">
           
           <header className="flex flex-col gap-2 text-center items-center">
@@ -93,41 +96,39 @@ export function Login() {
           </header>
 
           {configError && (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 text-center font-semibold">
-              {configError}
-            </div>
+            <Alert variant="error">{configError}</Alert>
           )}
 
           <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-bold text-on-surface">Adresse email</span>
-              <input 
-                type="email" 
-                required 
-                className="h-11 rounded-lg border border-outline-variant bg-surface px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+              <Input
+                type="email"
+                required
+                className="h-11 rounded-lg border border-outline-variant bg-surface text-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="nom.prenom@exemple.com"
               />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-bold text-on-surface">Mot de passe</span>
-              <input 
-                type="password" 
-                required 
-                className="h-11 rounded-lg border border-outline-variant bg-surface px-4 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+              <Input
+                type="password"
+                required
+                className="h-11 rounded-lg border border-outline-variant bg-surface text-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
               />
             </label>
             
-            {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100 font-medium">{error}</p>}
+            {error && <Alert variant="error">{error}</Alert>}
             
-            <button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={busy || Boolean(configError)}
-              className="mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 font-bold text-on-primary shadow-sm hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
+              className="mt-2 h-11 w-full"
             >
               {busy ? (
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
@@ -137,12 +138,13 @@ export function Login() {
                   <ArrowRight size={18} />
                 </>
               )}
-            </button>
+            </Button>
           </form>
 
           <div className="flex flex-col items-center gap-1.5 pt-4 border-t border-outline-variant/30 text-center">
-            <p className="text-xs text-on-surface-variant">
-              🔒 Vos données d'administration sont strictement confidentielles.
+            <p className="text-xs text-on-surface-variant inline-flex items-center gap-1.5">
+              <Lock size={12} className="shrink-0" />
+              Vos données d'administration sont strictement confidentielles.
             </p>
           </div>
 

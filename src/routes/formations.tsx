@@ -12,6 +12,7 @@ import {
 import { trackEvent } from "@/lib/analytics";
 import { waHref } from "@/config/site";
 import { Tooltip } from "@/components/Tooltip";
+import { Button } from "@/components/bff/Button";
 
 export const Route = createFileRoute("/formations")({
   head: () => ({
@@ -34,7 +35,7 @@ function FormationsPage() {
   const degraded = data?.degraded ?? false;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-[1000px] mx-auto space-y-12">
 
         {/* Header Section */}
@@ -43,11 +44,11 @@ function FormationsPage() {
             <GraduationCap className="h-4 w-4" />
             Parcours de Formation Certifiants
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-on-surface leading-tight">
             Choisissez votre parcours de français
           </h1>
-          <div className="text-base md:text-lg text-slate-600 space-y-2 leading-relaxed">
-            <p className="font-semibold text-slate-800">
+          <div className="text-base md:text-lg text-on-surface-variant space-y-2 leading-relaxed">
+            <p className="font-semibold text-on-surface">
               Nous vous positionnons au niveau réellement sécurisé, pas au niveau espéré.
             </p>
             <p>
@@ -66,7 +67,7 @@ function FormationsPage() {
               target="_blank"
               rel="noreferrer"
               onClick={() => trackEvent("whatsapp_clicked", { from: "formations_degraded" })}
-              className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba56] text-white px-4 py-2 rounded-lg font-bold text-sm transition-all"
+              className="inline-flex items-center gap-1.5 bg-whatsapp hover:bg-whatsapp-hover text-white px-4 py-2 rounded-lg font-bold text-sm transition-all"
             >
               <MessageCircle className="h-4 w-4" /> Contactez-nous sur WhatsApp
             </a>
@@ -76,11 +77,11 @@ function FormationsPage() {
         {(
           <div className="space-y-12">
             {/* Tableau Comparatif - Desktop uniquement */}
-            <div className="hidden md:block bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="hidden md:block bg-surface-bright rounded-3xl border border-outline-variant overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900 text-white">
+                <tr className="bg-on-surface text-white">
                   <th className="p-6 font-bold text-sm uppercase tracking-wider">Parcours</th>
                   <th className="p-6 font-bold text-sm uppercase tracking-wider">Durée</th>
                   <th className="p-6 font-bold text-sm uppercase tracking-wider">
@@ -91,29 +92,29 @@ function FormationsPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-outline-variant/50">
                 {displayJourneys.map((j) => (
-                  <tr key={j.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={j.id} className="hover:bg-surface/50 transition-colors">
                     <td className="p-6">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-slate-900 text-base">{j.name}</span>
+                          <span className="font-extrabold text-on-surface text-base">{j.name}</span>
                           {j.isMostRequested && (
                             <span className="px-2.5 py-0.5 bg-secondary/10 text-secondary text-[10px] font-black uppercase tracking-wider rounded-full">
                               Le Plus Demandé
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-slate-500 block">{j.examTarget}</span>
+                        <span className="text-xs text-on-surface-variant block">{j.examTarget}</span>
                       </div>
                     </td>
                     <td className="p-6">
-                      <div className="flex items-center gap-1.5 text-slate-700 font-bold text-sm">
-                        <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                      <div className="flex items-center gap-1.5 text-on-surface-variant font-bold text-sm">
+                        <Clock className="h-4 w-4 text-outline shrink-0" />
                         {j.hours}h ({j.sessions} séances)
                       </div>
                     </td>
-                    <td className="p-6 font-extrabold text-slate-900 text-base">
+                    <td className="p-6 font-extrabold text-on-surface text-base">
                       {j.publicPrice} €
                     </td>
                     <td className="p-6">
@@ -121,7 +122,7 @@ function FormationsPage() {
                         <span className="font-extrabold text-emerald-600 text-base block">
                           {j.financedReferencePrice} €
                         </span>
-                        <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">
+                        <span className="text-[10px] font-bold text-outline block uppercase tracking-wider">
                           Selon éligibilité <Tooltip content="Mon Compte Formation : l'argent gagné en travaillant pour payer vos cours.">CPF</Tooltip>/<Tooltip content="Organisme qui finance la formation des salariés et indépendants.">OPCO</Tooltip>
                         </span>
                       </div>
@@ -133,7 +134,7 @@ function FormationsPage() {
           </div>
           
           {/* Notes Sous Tableau */}
-          <div className="p-6 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs font-semibold text-slate-500">
+          <div className="p-6 bg-surface border-t border-outline-variant/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs font-semibold text-on-surface-variant">
             <div className="space-y-1">
               <p className="flex items-center gap-1.5">
                 <Check className="h-4 w-4 text-emerald-500 shrink-0" />
@@ -144,7 +145,7 @@ function FormationsPage() {
                 Le tarif financé de référence s'applique selon votre éligibilité.
               </p>
             </div>
-            <p className="bg-slate-200/50 px-3 py-1.5 rounded-lg text-slate-600 font-bold">
+            <p className="bg-surface-container-high/50 px-3 py-1.5 rounded-lg text-on-surface-variant font-bold">
               Aucun engagement avant vérification de votre situation.
             </p>
           </div>
@@ -152,15 +153,15 @@ function FormationsPage() {
 
         {/* Vue Mobile Adaptative - Empilement de cartes fluides */}
         <div className="block md:hidden space-y-4">
-          <div className="bg-slate-900 text-white p-4 rounded-t-2xl font-black text-center text-sm uppercase tracking-wider">
+          <div className="bg-on-surface text-white p-4 rounded-t-2xl font-black text-center text-sm uppercase tracking-wider">
             Tableau des Parcours & Tarifs
           </div>
           {displayJourneys.map((j) => (
-            <div key={j.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 hover:-translate-y-1 transition-all duration-300">
+            <div key={j.id} className="bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm space-y-4 hover:-translate-y-1 transition-all duration-300">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg">{j.name}</h3>
-                  <span className="text-xs text-slate-500">{j.examTarget}</span>
+                  <h3 className="font-extrabold text-on-surface text-lg">{j.name}</h3>
+                  <span className="text-xs text-on-surface-variant">{j.examTarget}</span>
                 </div>
                 {j.isMostRequested && (
                   <span className="px-2.5 py-0.5 bg-secondary/10 text-secondary text-[10px] font-black uppercase tracking-wider rounded-full">
@@ -168,36 +169,36 @@ function FormationsPage() {
                   </span>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100 text-sm">
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-outline-variant/50 text-sm">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Durée</span>
-                  <span className="font-bold text-slate-800 flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Durée</span>
+                  <span className="font-bold text-on-surface flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5 text-outline shrink-0" />
                     {j.hours}h
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Prix Public</span>
-                  <span className="font-extrabold text-slate-900">{j.publicPrice} €</span>
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Prix Public</span>
+                  <span className="font-extrabold text-on-surface">{j.publicPrice} €</span>
                 </div>
               </div>
-              <div className="pt-3 border-t border-slate-100 flex justify-between items-center">
+              <div className="pt-3 border-t border-outline-variant/50 flex justify-between items-center">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
                     Tarif Financé
                   </span>
                   <span className="font-black text-emerald-600 text-lg">
                     {j.financedReferencePrice} €
                   </span>
                 </div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-outline uppercase tracking-wider">
                   CPF/OPCO éligible
                 </span>
               </div>
             </div>
           ))}
           {/* Notes Sous Tableau Mobile */}
-          <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2 text-xs font-semibold text-slate-500">
+          <div className="p-5 bg-surface-bright rounded-2xl border border-outline-variant shadow-sm space-y-2 text-xs font-semibold text-on-surface-variant">
             <p className="flex items-center gap-1.5">
               <Check className="h-4 w-4 text-emerald-500 shrink-0" />
               Paiement en 3 fois sans frais disponible.
@@ -210,56 +211,52 @@ function FormationsPage() {
         </div>
 
         {/* Call to Actions Principaux */}
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <section className="rounded-3xl border border-outline-variant bg-surface-bright p-6 shadow-sm md:p-8">
           <div className="mx-auto mb-6 max-w-2xl text-center">
-            <h2 className="text-2xl font-black text-slate-900">Choisissez la prochaine etape</h2>
-            <p className="mt-2 text-sm font-medium leading-relaxed text-slate-600">
+            <h2 className="text-2xl font-black text-on-surface">Choisissez la prochaine etape</h2>
+            <p className="mt-2 text-sm font-medium leading-relaxed text-on-surface-variant">
               Le test precise le parcours recommande. Si vous connaissez deja votre besoin,
               vous pouvez verifier vos pistes de financement ou parler d'une inscription directe.
             </p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-          <Link 
-            to="/passer-test/$token"
-            params={{ token: "latest" }}
-            onClick={() => trackEvent("formations_cta_click", { action: "start_test" })}
-            className="w-full"
-          >
-            <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all">
+          <div className="grid gap-4 lg:grid-cols-2">
+          <Button variant="primary" size="lg" asChild className="w-full h-16 rounded-2xl font-black text-lg shadow-md">
+            <Link
+              to="/passer-test/$token"
+              params={{ token: "latest" }}
+              onClick={() => trackEvent("formations_cta_click", { action: "start_test" })}
+            >
               Faire le test de positionnement gratuit
               <ArrowRight className="h-5 w-5" />
-            </button>
-          </Link>
-          <Link
-            to="/sessions"
-            onClick={() => trackEvent("formations_cta_click", { action: "view_sessions" })}
-            className="flex-1 max-w-sm"
-          >
-            <button className="w-full h-16 bg-secondary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all">
+            </Link>
+          </Button>
+          <Button variant="secondary" size="lg" asChild className="w-full h-16 rounded-2xl font-black text-lg shadow-md">
+            <Link
+              to="/sessions"
+              onClick={() => trackEvent("formations_cta_click", { action: "view_sessions" })}
+            >
               Voir les prochaines sessions
               <ArrowRight className="h-5 w-5" />
-            </button>
-          </Link>
-          <Link 
-            to="/profil-financement"
-            onClick={() => trackEvent("formations_cta_click", { action: "check_funding" })}
-            className="w-full"
-          >
-            <button className="w-full h-16 border-2 border-emerald-700 text-emerald-800 font-black text-lg rounded-2xl flex items-center justify-center gap-2 hover:bg-emerald-700 hover:text-white active:scale-95 transition-all">
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" asChild className="w-full h-16 rounded-2xl font-black text-lg border-2 border-secondary text-secondary hover:bg-secondary hover:text-on-secondary">
+            <Link
+              to="/profil-financement"
+              onClick={() => trackEvent("formations_cta_click", { action: "check_funding" })}
+            >
               <Wallet className="h-5 w-5 shrink-0" />
               Vérifier mon financement
-            </button>
-          </Link>
-          <Link
-            to="/contact"
-            onClick={() => trackEvent("formations_cta_click", { action: "direct_contact" })}
-            className="w-full"
-          >
-            <button className="w-full h-16 border-2 border-slate-900 text-slate-900 font-black text-lg rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-950 hover:text-white active:scale-95 transition-all">
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" asChild className="w-full h-16 rounded-2xl font-black text-lg border-2 border-on-surface">
+            <Link
+              to="/contact"
+              onClick={() => trackEvent("formations_cta_click", { action: "direct_contact" })}
+            >
               Parler d'une inscription directe
               <ArrowRight className="h-5 w-5" />
-            </button>
-          </Link>
+            </Link>
+          </Button>
           </div>
         </section>
 
@@ -267,32 +264,33 @@ function FormationsPage() {
           <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <p className="text-xs font-black uppercase tracking-wider text-orange-700">Besoin sans cours</p>
-              <h2 className="mt-2 text-2xl font-black text-slate-900">Vous voulez seulement etre accompagne sur votre dossier administratif ?</h2>
-              <p className="mt-2 max-w-2xl text-sm font-medium leading-relaxed text-slate-700">
+              <h2 className="mt-2 text-2xl font-black text-on-surface">Vous voulez seulement etre accompagne sur votre dossier administratif ?</h2>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-relaxed text-on-surface-variant">
                 L'accompagnement administratif reste accessible meme si vous ne choisissez pas une formation de langue.
                 Il sert a verifier votre demarche et vos pieces avec le partenaire specialise.
               </p>
             </div>
-            <Link
-              to="/accompagnement-administratif"
-              onClick={() => trackEvent("formations_cta_click", { action: "admin_support_only" })}
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-orange-600 px-5 text-base font-black text-white transition-colors hover:bg-orange-700"
-            >
-              Demander l'accompagnement
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+            <Button variant="cta" size="lg" asChild className="h-14 rounded-2xl px-5 font-black">
+              <Link
+                to="/accompagnement-administratif"
+                onClick={() => trackEvent("formations_cta_click", { action: "admin_support_only" })}
+              >
+                Demander l'accompagnement
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
           </div>
         </section>
 
         {/* Détails des Cartes Parcours (Bonus Recommandé) */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-black text-slate-900 text-center">Fiches détaillées des parcours</h2>
+          <h2 className="text-2xl font-black text-on-surface text-center">Fiches détaillées des parcours</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {displayJourneys.map((j) => (
               <div
                 key={j.id}
                 onClick={() => trackEvent("parcours_click", { parcours: j.name })}
-                className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-slate-300 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className="bg-surface-bright p-8 rounded-3xl border border-outline-variant shadow-sm hover:border-outline hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">
@@ -300,7 +298,7 @@ function FormationsPage() {
                       <span className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/5 px-2.5 py-1 rounded-md block mb-1.5 w-fit">
                         Niveau Visé : {j.toLevel}
                       </span>
-                      <h3 className="text-2xl font-black text-slate-900">{j.name}</h3>
+                      <h3 className="text-2xl font-black text-on-surface">{j.name}</h3>
                     </div>
                     {j.isMostRequested && (
                       <span className="bg-secondary/15 text-secondary text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shrink-0">
@@ -309,34 +307,34 @@ function FormationsPage() {
                     )}
                   </div>
                   
-                  <p className="text-sm font-semibold text-slate-700 italic border-l-2 border-primary/40 pl-4">
+                  <p className="text-sm font-semibold text-on-surface-variant italic border-l-2 border-primary/40 pl-4">
                     "{j.objective}"
                   </p>
                   
-                  <p className="text-sm text-slate-500 leading-relaxed">
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
                     {j.description}
                   </p>
 
-                  <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-4">
+                  <div className="pt-4 border-t border-outline-variant/50 grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Durée de formation</span>
-                      <span className="font-extrabold text-slate-800 text-sm">{j.hours}h ({j.sessions} séances)</span>
+                      <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Durée de formation</span>
+                      <span className="font-extrabold text-on-surface text-sm">{j.hours}h ({j.sessions} séances)</span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Cible Examen</span>
-                      <span className="font-extrabold text-slate-800 text-sm">{j.examTarget}</span>
+                      <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Cible Examen</span>
+                      <span className="font-extrabold text-on-surface text-sm">{j.examTarget}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-slate-100 flex items-baseline justify-between">
+                <div className="pt-6 mt-6 border-t border-outline-variant/50 flex items-baseline justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mensualité x3</span>
-                    <span className="text-2xl font-black text-slate-900">{j.monthlyInstallment} €<span className="text-xs font-normal text-slate-500">/mois</span></span>
+                    <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Mensualité x3</span>
+                    <span className="text-2xl font-black text-on-surface">{j.monthlyInstallment} €<span className="text-xs font-normal text-on-surface-variant">/mois</span></span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Prix Public</span>
-                    <span className="font-extrabold text-slate-800 text-lg">{j.publicPrice} €</span>
+                    <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">Prix Public</span>
+                    <span className="font-extrabold text-on-surface text-lg">{j.publicPrice} €</span>
                   </div>
                 </div>
               </div>
@@ -345,7 +343,7 @@ function FormationsPage() {
         </div>
 
         {/* Bloc Juridique / Avertissement */}
-        <div className="bg-amber-50/60 text-[#7e2c0d] p-6 rounded-2xl border border-amber-200 flex gap-3">
+        <div className="bg-amber-50/60 text-amber-deep p-6 rounded-2xl border border-amber-200 flex gap-3">
           <Info className="h-6 w-6 shrink-0 mt-0.5" />
           <p className="text-xs font-medium leading-relaxed">
             <strong>Information légale :</strong> Bilan Français Formation est un organisme de formation privé. Nos parcours préparent aux examens officiels mais ne constituent pas des dispenses automatiques. Les démarches de carte de séjour et de naturalisation relèvent de la compétence exclusive de la Préfecture.

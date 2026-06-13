@@ -24,7 +24,8 @@ import {
   Coins, 
   Clock, 
   RefreshCw,
-  Award
+  Award,
+  Info
 } from "lucide-react";
 import { toast } from "sonner";
 import { track } from "../utils/tracking-plausible";
@@ -195,12 +196,12 @@ export function AdminReporting() {
 
         {/* Dossiers Qualifiés */}
         <div className="bg-white p-6 rounded-3xl border border-outline-variant/30 shadow-sm flex items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-[#9d4222]/10 text-[#9d4222] flex items-center justify-center">
+          <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
             <Award size={24} />
           </div>
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Dossiers Qualifiés</span>
-            <p className="text-2xl font-black text-[#9d4222] mt-1">{metrics?.qualifiedLeads || 0}</p>
+            <p className="text-2xl font-black text-primary mt-1">{metrics?.qualifiedLeads || 0}</p>
           </div>
         </div>
 
@@ -316,8 +317,9 @@ export function AdminReporting() {
       </section>
 
       {/* Compliance / Audit Note */}
-      <footer className="p-4 rounded-2xl bg-[#56423c]/5 border border-[#56423c]/10 text-xs text-[#56423c] font-semibold flex items-center gap-2">
-        ℹ️ Toutes les actions d'export et d'orientation font l'objet d'un traçage d'audit strict et cryptographique, conformément au référentiel national Qualiopi.
+      <footer className="p-4 rounded-2xl bg-on-surface-variant/5 border border-on-surface-variant/10 text-xs text-on-surface-variant font-semibold flex items-center gap-2">
+        <Info className="h-4 w-4 shrink-0" />
+        Toutes les actions d'export et d'orientation font l'objet d'un traçage d'audit strict et cryptographique, conformément au référentiel national Qualiopi.
       </footer>
     </div>
   );

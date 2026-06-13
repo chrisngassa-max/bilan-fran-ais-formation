@@ -228,20 +228,20 @@ function QualificationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-10">
+    <main className="min-h-screen bg-surface px-4 py-10">
       <div className="mx-auto max-w-5xl space-y-6">
         <Stepper currentStep={3} />
 
-        <section className="grid gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-[1fr_320px] md:p-8">
+        <section className="grid gap-5 rounded-3xl border border-outline-variant bg-surface-bright p-6 shadow-sm md:grid-cols-[1fr_320px] md:p-8">
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-black uppercase text-primary">
               <ClipboardCheck className="h-4 w-4" />
               Etape financement
             </div>
-            <h1 className="text-3xl font-black text-slate-900">
+            <h1 className="text-3xl font-black text-on-surface">
               Prequalifier votre financement
             </h1>
-            <p className="mt-3 max-w-2xl text-slate-600">
+            <p className="mt-3 max-w-2xl text-on-surface-variant">
               Votre bilan nous donne deja une base pedagogique. Completez votre
               profil de financement pour relier votre besoin au bon parcours.
             </p>
@@ -249,19 +249,19 @@ function QualificationPage() {
 
           <aside className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
             <p className="text-xs font-black uppercase text-primary">Parcours recommande</p>
-            <h2 className="mt-2 text-2xl font-black text-slate-900">{journey.name}</h2>
-            <p className="mt-1 text-sm font-semibold text-slate-600">
+            <h2 className="mt-2 text-2xl font-black text-on-surface">{journey.name}</h2>
+            <p className="mt-1 text-sm font-semibold text-on-surface-variant">
               Niveau estime {testResult.global_level || "a verifier"} - {journey.hours}h - {journey.examTarget}
             </p>
-            <p className="mt-4 text-sm text-slate-700">{journey.objective}</p>
-            <p className="mt-4 text-2xl font-black text-slate-900">{journey.publicPrice} EUR</p>
+            <p className="mt-4 text-sm text-on-surface-variant">{journey.objective}</p>
+            <p className="mt-4 text-2xl font-black text-on-surface">{journey.publicPrice} EUR</p>
           </aside>
         </section>
 
         <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[1fr_340px]">
-          <section className="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <section className="space-y-6 rounded-3xl border border-outline-variant bg-surface-bright p-6 shadow-sm md:p-8">
             <fieldset className="space-y-4">
-              <legend className="text-xl font-black text-slate-900">1. Coordonnees</legend>
+              <legend className="text-xl font-black text-on-surface">1. Coordonnees</legend>
               <div className="grid gap-4 sm:grid-cols-2">
                 <TextField label="Prenom" value={form.firstName} onChange={(value) => setField("firstName", value)} required />
                 <TextField label="Nom" value={form.lastName} onChange={(value) => setField("lastName", value)} required />
@@ -271,10 +271,10 @@ function QualificationPage() {
             </fieldset>
 
             <fieldset className="space-y-4">
-              <legend className="text-xl font-black text-slate-900">2. Situation financement</legend>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm font-bold text-slate-900">Identite utile au dossier</p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+              <legend className="text-xl font-black text-on-surface">2. Situation financement</legend>
+              <div className="rounded-2xl border border-outline-variant bg-surface p-4">
+                <p className="text-sm font-bold text-on-surface">Identite utile au dossier</p>
+                <p className="mt-1 text-xs leading-relaxed text-on-surface-variant">
                   Facultatif maintenant : ces informations aident a preparer une prequalification plus complete.
                 </p>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -363,12 +363,12 @@ function QualificationPage() {
           </section>
 
           <aside className="space-y-4">
-            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="flex items-center gap-2 text-lg font-black text-slate-900">
+            <div className="rounded-3xl border border-outline-variant bg-surface-bright p-5 shadow-sm">
+              <h2 className="flex items-center gap-2 text-lg font-black text-on-surface">
                 <ShieldCheck className="h-5 w-5 text-primary" />
                 Consentements
               </h2>
-              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-slate-600">
+              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-on-surface-variant">
                 <input
                   type="checkbox"
                   checked={form.consentTraining}
@@ -380,7 +380,7 @@ function QualificationPage() {
                   <strong className="text-primary"> *</strong>
                 </span>
               </label>
-              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-slate-600">
+              <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-on-surface-variant">
                 <input
                   type="checkbox"
                   checked={form.consentPartner}
@@ -414,7 +414,7 @@ function QualificationPage() {
               {!loading ? <ArrowRight className="h-5 w-5" /> : null}
             </Button>
 
-            <p className="text-xs leading-relaxed text-slate-500">
+            <p className="text-xs leading-relaxed text-outline">
               Les montants et dispositifs restent soumis a validation par les
               organismes financeurs concernes.
             </p>
@@ -439,14 +439,14 @@ function TextField({
   required?: boolean;
 }) {
   return (
-    <label className="block text-sm font-bold text-slate-900">
+    <label className="block text-sm font-bold text-on-surface">
       {label} {required ? <span className="text-primary">*</span> : null}
       <input
         type={type}
         value={value}
         required={required}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        className="mt-1 h-12 w-full rounded-xl border border-outline-variant bg-surface-container px-3 text-base font-semibold text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
       />
     </label>
   );
@@ -466,13 +466,13 @@ function SelectField({
   required?: boolean;
 }) {
   return (
-    <label className="block text-sm font-bold text-slate-900">
+    <label className="block text-sm font-bold text-on-surface">
       {label} {required ? <span className="text-primary">*</span> : null}
       <select
         value={value}
         required={required}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        className="mt-1 h-12 w-full rounded-xl border border-outline-variant bg-surface-container px-3 text-base font-semibold text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
       >
         {options.map(([valueOption, labelOption]) => (
           <option key={valueOption} value={valueOption}>
@@ -496,14 +496,14 @@ function TextAreaField({
   placeholder: string;
 }) {
   return (
-    <label className="block text-sm font-bold text-slate-900">
+    <label className="block text-sm font-bold text-on-surface">
       {label}
       <textarea
         rows={3}
         value={value}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-base font-semibold text-slate-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        className="mt-1 w-full rounded-xl border border-outline-variant bg-surface-container px-3 py-3 text-base font-semibold text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
       />
     </label>
   );

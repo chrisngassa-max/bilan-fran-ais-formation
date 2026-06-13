@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
-import { GraduationCap, Calendar, FileText, LogIn } from "lucide-react";
+import { GraduationCap, Calendar, FileText, LogIn, ArrowRight } from "lucide-react";
+import { Button } from "@/components/bff/Button";
 import type { ReactNode } from "react";
 
 const NAV = [
@@ -13,7 +14,7 @@ export function ApprenantLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#fcfaf7] py-10 px-4">
+    <div className="min-h-screen bg-surface-app py-10 px-4">
       <div className="max-w-5xl mx-auto space-y-6">
         <header className="bg-primary text-primary-foreground rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
@@ -42,13 +43,12 @@ export function ApprenantLayout({ children }: { children: ReactNode }) {
             <p className="text-sm text-amber-900 mb-3">
               Vous devez être connecté(e) pour accéder à votre espace apprenant.
             </p>
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90"
-            >
-              <LogIn className="w-4 h-4" />
-              Se connecter
-            </Link>
+            <Button variant="primary" asChild className="rounded-xl">
+              <Link to="/login">
+                <LogIn className="w-4 h-4" />
+                Se connecter
+              </Link>
+            </Button>
           </div>
         )}
 
@@ -62,18 +62,18 @@ export function EmptyCohortCTA() {
   return (
     <div className="bg-white rounded-2xl p-10 shadow-sm text-center">
       <GraduationCap className="w-12 h-12 text-primary mx-auto mb-4" />
-      <h2 className="text-xl font-bold text-gray-900 mb-2">
+      <h2 className="text-xl font-bold text-on-surface mb-2">
         Vous n'êtes inscrit(e) à aucune formation pour le moment.
       </h2>
-      <p className="text-sm text-gray-600 mb-6">
+      <p className="text-sm text-on-surface-variant mb-6">
         Découvrez nos prochaines sessions et réservez votre place.
       </p>
-      <Link
-        to="/sessions"
-        className="inline-flex items-center gap-2 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90"
-      >
-        Voir les prochaines sessions →
-      </Link>
+      <Button variant="primary" asChild className="rounded-xl">
+        <Link to="/sessions">
+          Voir les prochaines sessions
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </Button>
     </div>
   );
 }

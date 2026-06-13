@@ -9,7 +9,7 @@ export const Route = createFileRoute("/formateur/mes-apprenants")({
 });
 
 function tauxColor(t: number | null) {
-  if (t === null) return "bg-gray-100 text-gray-700";
+  if (t === null) return "bg-surface-container text-on-surface-variant";
   if (t >= 80) return "bg-green-100 text-green-800";
   if (t >= 60) return "bg-amber-100 text-amber-800";
   return "bg-red-100 text-red-800";

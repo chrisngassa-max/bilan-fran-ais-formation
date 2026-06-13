@@ -77,10 +77,10 @@ export async function buildJourneyEmailContent(level: NiveauIndicatif, first_nam
 
       <div style="space-y: 10px; text-align: center;">
         <a href="${qualificationUrl}" style="display: block; background-color: #ea580c; color: #fff; text-decoration: none; padding: 14px 20px; border-radius: 12px; font-weight: bold; font-size: 15px; margin-bottom: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          💰 Étape 1 — Vérifier mon financement
+          Étape 1 — Vérifier mon financement
         </a>
         <a href="${formationsUrl}" style="display: block; border: 2px solid #0f172a; color: #0f172a; text-decoration: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; font-size: 14px;">
-          🔎 Étape 2 — Voir la fiche détaillée du parcours
+          Étape 2 — Voir la fiche détaillée du parcours
         </a>
       </div>
     </div>

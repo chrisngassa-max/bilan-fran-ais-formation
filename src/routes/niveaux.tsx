@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { siteName } from "@/config/site";
+import { Button } from "@/components/bff/Button";
+import { Alert } from "@/components/ui/Alert";
 
 
 export const Route = createFileRoute("/niveaux")({
@@ -71,10 +73,10 @@ function NiveauxPage() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
-              <strong>⚠️ Nouveau en 2026 :</strong> la naturalisation exige désormais le niveau <strong>B2</strong>
+            <Alert variant="warning" className="mt-4">
+              <strong>Nouveau en 2026 :</strong> la naturalisation exige désormais le niveau <strong>B2</strong>
               (et non plus B1). Assurez-vous de viser le bon niveau selon votre projet.
-            </div>
+            </Alert>
           </section>
 
           <section className="grid grid-cols-1 gap-6">
@@ -176,10 +178,10 @@ function NiveauxPage() {
                 {" "}et{" "}
                 <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noreferrer" className="underline">legifrance.gouv.fr</a>
               </p>
-              <div className="p-4 rounded-lg border border-amber-300 bg-amber-50 text-sm text-amber-900">
-                <strong>⚠️ Important :</strong> depuis 2026, la naturalisation exige le niveau B2
+              <Alert variant="warning" className="mb-0">
+                <strong>Important :</strong> depuis 2026, la naturalisation exige le niveau B2
                 (et non plus B1). Assurez-vous de viser le bon niveau.
-              </div>
+              </Alert>
             </div>
           </section>
 
@@ -189,11 +191,9 @@ function NiveauxPage() {
               Répondez à quelques questions pour estimer rapidement votre niveau (3 min). Pour un bilan complet,
               un test approfondi est disponible.
             </p>
-            <Link to="/test-rapide">
-              <button className="bg-primary text-on-primary min-h-[56px] px-10 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
-                Estimer mon niveau — 3 min, gratuit
-              </button>
-            </Link>
+            <Button variant="cta" size="lg" asChild className="font-bold shadow-md">
+              <Link to="/test-rapide">Estimer mon niveau — 3 min, gratuit</Link>
+            </Button>
             <p className="mt-4 text-sm">
               <Link
                 to="/passer-test/$token"

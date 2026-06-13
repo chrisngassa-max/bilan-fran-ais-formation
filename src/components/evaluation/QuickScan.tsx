@@ -132,19 +132,15 @@ export function QuickScan() {
           complète (15–20 min).
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link to="/passer-test/$token" params={{ token: "latest" }}>
-            <Button variant="primary" className="bg-[var(--color-eval-orange)] hover:opacity-90">
+          <Button variant="cta" asChild>
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
               Passer l'évaluation experte (Bilan CECRL)
               <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <button
-            type="button"
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant px-5 py-3 body-md hover:bg-surface-container transition-all"
-          >
+            </Link>
+          </Button>
+          <Button variant="outline" type="button" onClick={reset}>
             <RotateCcw className="h-4 w-4" /> Refaire le diagnostic
-          </button>
+          </Button>
         </div>
       </div>
     );

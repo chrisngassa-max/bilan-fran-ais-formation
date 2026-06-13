@@ -37,6 +37,7 @@ export function Footer() {
       <div className="border-t border-outline-variant/30 px-4 py-4 max-w-[1200px] mx-auto text-center md:text-left">
         <p className="text-sm text-on-surface-variant/70">
           Les informations proposées sont générales et ne remplacent pas l'avis d'une administration, d'un avocat ou d'un conseiller juridique.
+          {siteName} est un organisme de formation privé, indépendant de l'État et des préfectures.
         </p>
       </div>
     </footer>

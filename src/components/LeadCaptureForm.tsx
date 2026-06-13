@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { CheckCircle2, Loader2, Mail, MessageCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Loader2, Mail, MessageCircle, ShieldCheck, ArrowRight } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { track } from "@/utils/tracking-plausible";
 
@@ -169,14 +169,14 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
             {error}
           </p>
         )}
-        <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
-          <p className="font-bold text-slate-900">Vous ne souhaitez pas suivre de formation ?</p>
+        <div className="rounded-xl border border-eval-orange/30 bg-eval-orange-soft p-4 text-sm text-on-surface-variant">
+          <p className="font-bold text-on-surface">Vous ne souhaitez pas suivre de formation ?</p>
           <p className="mt-1">
             L'accompagnement administratif reste disponible separement pour verifier votre dossier prefecture.
           </p>
           <Link
             to="/accompagnement-administratif"
-            className="mt-3 inline-flex font-bold text-orange-700 underline underline-offset-4"
+            className="mt-3 inline-flex font-bold text-eval-orange underline underline-offset-4"
           >
             Voir l'accompagnement administratif
           </Link>
@@ -300,9 +300,8 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
           type="submit"
           disabled={loading || !email || !firstName || !consentTraining}
           className="w-full h-[58px] rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md
-            bg-secondary text-on-secondary hover:opacity-95 active:scale-[0.98]
+            bg-eval-orange text-white hover:opacity-95 active:scale-[0.98]
             disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ backgroundColor: "#ea580c", color: "white" }}
         >
           {loading ? (
             <>
@@ -312,7 +311,8 @@ export function LeadCaptureForm({ attemptId, estimatedLevel, flags, reliabilityB
           ) : (
             <>
               <Mail className="h-5 w-5" />
-              Recevoir mon bilan complet →
+              Recevoir mon bilan complet
+              <ArrowRight className="h-5 w-5" />
             </>
           )}
         </button>

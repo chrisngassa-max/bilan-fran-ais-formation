@@ -14,14 +14,17 @@ export const Route = createFileRoute("/mentions-legales")({
 
 function MentionsLegalesPage() {
   return (
-    <div className="min-h-screen bg-[#fcfaf7] py-12 px-4">
-      <div className="max-w-[850px] mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-outline-variant">
-        <h1 className="text-3xl font-black mb-8 text-on-surface">Mentions Légales</h1>
+    <div className="min-h-screen bg-surface py-12 px-4 md:px-8">
+      <div className="max-w-[850px] mx-auto bg-surface-bright p-8 md:p-12 rounded-2xl shadow-lg border border-outline-variant">
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-on-surface tracking-tight">Mentions légales</h1>
         
         <div className="space-y-8 text-on-surface-variant leading-relaxed text-sm">
           {/* Section 1: Éditeur */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">1. Éditeur du site</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              1. Éditeur du site
+            </h2>
             <p>
               Le site <strong>{siteName}</strong> est édité par :
             </p>
@@ -37,7 +40,10 @@ function MentionsLegalesPage() {
 
           {/* Section 2: Hébergement & CDN */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">2. Hébergement & CDN</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              2. Hébergement & CDN
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-surface-container p-4 rounded-xl border border-outline-variant/30 text-xs">
                 <p className="font-bold mb-1">Hébergeur du site :</p>
@@ -58,7 +64,10 @@ function MentionsLegalesPage() {
 
           {/* Section 3: Certification Qualiopi */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">3. Certification Qualiopi</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              3. Certification Qualiopi
+            </h2>
             <p className="text-xs">
               Les actions de formation présentées sur ce site sont dispensées en partenariat avec
               [À COMPLÉTER : raison sociale Stafy], organisme de formation certifié <strong>Qualiopi</strong> au titre
@@ -75,7 +84,10 @@ function MentionsLegalesPage() {
 
           {/* Section 4: Médiateur de la consommation */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">4. Médiateur de la consommation</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              4. Médiateur de la consommation
+            </h2>
             <p className="text-xs">
               Conformément aux articles L.611-1 et suivants du Code de la consommation, en cas de
               litige non résolu, vous pouvez recourir gratuitement au médiateur de la consommation :
@@ -88,7 +100,10 @@ function MentionsLegalesPage() {
 
           {/* Section 5: DPO */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">5. Délégué à la Protection des Données (DPO)</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              5. Délégué à la Protection des Données (DPO)
+            </h2>
             <p className="text-xs">
               Pour toute question relative à la protection de vos données personnelles ou pour exercer vos droits (accès, rectification, suppression, opposition, limitation et portabilité) issus du Règlement Général sur la Protection des Données (RGPD), vous pouvez contacter notre Délégué à la protection des données :
             </p>
@@ -101,7 +116,10 @@ function MentionsLegalesPage() {
 
           {/* Section 6: Propriété intellectuelle */}
           <section className="space-y-3">
-            <h2 className="text-xl font-bold text-on-surface border-b pb-2">6. Propriété intellectuelle</h2>
+            <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              6. Propriété intellectuelle
+            </h2>
             <p className="text-xs">
               L'ensemble de ce site (structure, textes, logos, animations, algorithmes) relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés. Toute utilisation non autorisée du site ou de son contenu constituerait une contrefaçon sanctionnée par les articles L. 335-2 et suivants du Code de la propriété intellectuelle.
             </p>

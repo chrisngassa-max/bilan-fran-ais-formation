@@ -14,12 +14,14 @@ export function Hero() {
           et intégration en France.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link to="/passer-test/$token" params={{ token: "latest" }}>
-            <Button variant="primary">Passer l'évaluation experte</Button>
-          </Link>
-          <Link to="/contact">
-            <Button variant="outline">Nous contacter</Button>
-          </Link>
+          <Button variant="primary" asChild>
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+              Passer l'évaluation experte
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/contact">Nous contacter</Link>
+          </Button>
         </div>
       </div>
     </section>

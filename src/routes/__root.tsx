@@ -100,11 +100,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Test de niveau gratuit en 3 minutes. Formations en petits groupes pour atteindre le niveau de français exigé : carte de séjour (A2), carte de résident (B1), naturalisation (B2).",
       },
-      // [À COMPLÉTER : og-image.png à produire] — visuel de marque 1200×630 (logo + accroche)
-      // à déposer dans public/ puis référencer ici : { property: "og:image", content: `${siteUrl}/og-image.png` }
+      { property: "og:image", content: `${siteUrl}/og-image.svg` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:type", content: "image/svg+xml" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${siteUrl}/og-image.svg` },
     ],
     links: [
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -152,7 +156,7 @@ function RootComponent() {
       <AuthProvider>
         <div className="flex min-h-screen flex-col bg-surface">
           <Header />
-          <main className="flex-1">
+          <main id="main-content" className="flex-1">
             <Outlet />
           </main>
           <Footer />

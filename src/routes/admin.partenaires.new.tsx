@@ -194,7 +194,7 @@ export function PartnerNew() {
                     className={`
                       px-4 py-2 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5
                       ${selected 
-                        ? "bg-[#9d4222]/10 border-[#9d4222] text-[#9d4222]" 
+                        ? "bg-primary/10 border-primary text-primary" 
                         : "bg-surface border-outline-variant/30 text-on-surface-variant hover:bg-surface-container"
                       }
                     `}

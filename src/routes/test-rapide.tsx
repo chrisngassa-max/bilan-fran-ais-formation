@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Clock, CheckCircle2, Loader2, AlertCircle, Calendar } from "lucide-react";
+import { ArrowRight, Clock, CheckCircle2, Loader2, AlertCircle, Calendar, ClipboardList } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { ChecklistDocuments } from "@/components/ChecklistDocuments";
 import { AlerteAttestationManquante } from "@/components/AlerteAttestationManquante";
@@ -54,11 +54,11 @@ function differenceEnJours(dateStr: string): number {
 // ─── Phase : Intro ────────────────────────────────────────────────────────────
 function PhaseIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
-          <h1 className="text-2xl font-black text-slate-900 text-center">Estimez votre niveau de français</h1>
-          <ul className="space-y-3 text-sm font-semibold text-slate-700">
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm space-y-6">
+          <h1 className="text-2xl font-black text-on-surface text-center">Estimez votre niveau de français</h1>
+          <ul className="space-y-3 text-sm font-semibold text-on-surface-variant">
             <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> 10 questions — environ 3 minutes</li>
             <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> Les 4 compétences sont survolées</li>
             <li className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" /> À la fin : votre niveau estimé + votre bilan complet par email</li>
@@ -124,23 +124,23 @@ function PhaseTest({ onFinish }: { onFinish: (score: number, duration: number) =
   const progress = ((current) / QUESTIONS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-xl space-y-6">
-        <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <div className="flex items-center justify-between text-xs font-bold text-on-surface-variant uppercase tracking-wider">
           <span>Question {current + 1} / {QUESTIONS.length}</span>
           <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> ~3 min</span>
         </div>
-        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-surface-container rounded-full overflow-hidden">
           <div className="h-full bg-primary transition-all duration-300 rounded-full" style={{ width: `${progress}%` }} />
         </div>
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
-          <p className="text-lg font-black text-slate-900">{q.text}</p>
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm space-y-6">
+          <p className="text-lg font-black text-on-surface">{q.text}</p>
           <div className="space-y-3">
             {q.options.map((opt, i) => (
               <button
                 key={i}
                 onClick={() => handleAnswer(i)}
-                className="w-full text-left px-5 py-4 rounded-xl border-2 border-slate-100 bg-slate-50 hover:border-primary hover:bg-primary/5 font-bold text-sm text-slate-800 transition-all active:scale-[0.98]"
+                className="w-full text-left px-5 py-4 rounded-xl border-2 border-outline-variant bg-surface-container hover:border-primary hover:bg-primary/5 font-bold text-sm text-on-surface transition-all active:scale-[0.98]"
               >
                 {opt}
               </button>
@@ -187,40 +187,40 @@ function PhaseCapture({ onSubmit }: {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto" />
-          <h1 className="text-2xl font-black text-slate-900">Votre niveau estimé est prêt ✅</h1>
-          <p className="text-slate-500 text-sm font-semibold">Indiquez votre email pour recevoir votre bilan détaillé.</p>
+          <CheckCircle2 className="h-12 w-12 text-eval-success mx-auto" />
+          <h1 className="text-2xl font-black text-on-surface">Votre niveau estimé est prêt</h1>
+          <p className="text-on-surface-variant text-sm font-semibold">Indiquez votre email pour recevoir votre bilan détaillé.</p>
         </div>
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-5">
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm space-y-5">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Prénom *</label>
+              <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">Prénom *</label>
               <input type="text" required value={prenom} onChange={e => setPrenom(e.target.value)}
-                placeholder="Amine" className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white font-bold text-sm transition-all" />
+                placeholder="Amine" className="w-full h-11 px-4 rounded-xl border-2 border-outline-variant bg-surface-container focus:border-primary focus:bg-surface-bright font-bold text-sm transition-all" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Email *</label>
+              <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">Email *</label>
               <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="amine@email.com" className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white font-bold text-sm transition-all" />
+                placeholder="amine@email.com" className="w-full h-11 px-4 rounded-xl border-2 border-outline-variant bg-surface-container focus:border-primary focus:bg-surface-bright font-bold text-sm transition-all" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">WhatsApp (optionnel)</label>
+              <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">WhatsApp (optionnel)</label>
               <input type="tel" value={whatsapp} onChange={e => setWhatsapp(e.target.value)}
-                placeholder="+33 6 12 34 56 78" className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white font-bold text-sm transition-all" />
+                placeholder="+33 6 12 34 56 78" className="w-full h-11 px-4 rounded-xl border-2 border-outline-variant bg-surface-container focus:border-primary focus:bg-surface-bright font-bold text-sm transition-all" />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Avez-vous un rendez-vous en préfecture prévu ? *</label>
+              <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Avez-vous un rendez-vous en préfecture prévu ? *</label>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setRdvPrevu(true)}
-                  className={`h-11 rounded-xl border-2 font-bold text-sm transition-all ${rdvPrevu === true ? "border-primary bg-primary/5 text-primary" : "border-slate-100 bg-slate-50 text-slate-700 hover:border-slate-200"}`}>
+                  className={`h-11 rounded-xl border-2 font-bold text-sm transition-all ${rdvPrevu === true ? "border-primary bg-primary/5 text-primary" : "border-outline-variant bg-surface-container text-on-surface-variant hover:border-outline"}`}>
                   Oui
                 </button>
                 <button type="button" onClick={() => setRdvPrevu(false)}
-                  className={`h-11 rounded-xl border-2 font-bold text-sm transition-all ${rdvPrevu === false ? "border-primary bg-primary/5 text-primary" : "border-slate-100 bg-slate-50 text-slate-700 hover:border-slate-200"}`}>
+                  className={`h-11 rounded-xl border-2 font-bold text-sm transition-all ${rdvPrevu === false ? "border-primary bg-primary/5 text-primary" : "border-outline-variant bg-surface-container text-on-surface-variant hover:border-outline"}`}>
                   Non
                 </button>
               </div>
@@ -233,14 +233,14 @@ function PhaseCapture({ onSubmit }: {
                 onChange={(e) => setConsent(e.target.checked)}
                 className="mt-0.5 h-5 w-5 accent-primary shrink-0"
               />
-              <span className="text-[11px] text-slate-500 font-semibold leading-relaxed">
+              <span className="text-[11px] text-on-surface-variant font-semibold leading-relaxed">
                 J'accepte de recevoir mon bilan par email et la{" "}
                 <Link to="/confidentialite" className="underline text-primary">politique de confidentialité</Link>.
                 Vos données ne sont jamais vendues à des tiers.
               </span>
             </label>
 
-            {error && <p className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl p-3">{error}</p>}
+            {error && <p className="text-xs font-bold text-error bg-error-container/30 border border-error/30 rounded-xl p-3">{error}</p>}
 
             <button type="submit"
               className="w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md">
@@ -279,11 +279,11 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 p-10 text-center space-y-6 shadow-sm">
-          <CheckCircle2 className="h-16 w-16 text-emerald-500 mx-auto" />
-          <h2 className="text-2xl font-black text-slate-900">Bilan envoyé !</h2>
-          <p className="text-slate-500 text-sm font-semibold">Vous recevrez votre estimation de niveau et votre plan de formation par email sous peu.</p>
+      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-surface-bright rounded-3xl border border-outline-variant p-10 text-center space-y-6 shadow-sm">
+          <CheckCircle2 className="h-16 w-16 text-eval-success mx-auto" />
+          <h2 className="text-2xl font-black text-on-surface">Bilan envoyé !</h2>
+          <p className="text-on-surface-variant text-sm font-semibold">Vous recevrez votre estimation de niveau et votre plan de formation par email sous peu.</p>
           <Link to="/" className="block w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center">Retour à l'accueil</Link>
         </div>
       </div>
@@ -291,31 +291,31 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Badge niveau */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm text-center space-y-3">
-          <p className="text-xs font-black uppercase tracking-wider text-slate-400">Estimation automatique — indicatif</p>
-          <div className="w-24 h-24 rounded-full bg-slate-900 text-primary flex flex-col items-center justify-center mx-auto">
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Niveau</span>
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm text-center space-y-3">
+          <p className="text-xs font-black uppercase tracking-wider text-on-surface-variant">Estimation automatique — indicatif</p>
+          <div className="w-24 h-24 rounded-full bg-on-surface text-primary flex flex-col items-center justify-center mx-auto">
+            <span className="text-[10px] font-bold text-on-surface-variant uppercase">Niveau</span>
             <span className="text-4xl font-black">{niveau}</span>
           </div>
-          <p className="text-xs text-slate-500 font-semibold italic">Ce résultat ne remplace pas une certification officielle (TCF, DELF, TEF).</p>
+          <p className="text-xs text-on-surface-variant font-semibold italic">Ce résultat ne remplace pas une certification officielle (TCF, DELF, TEF).</p>
         </div>
 
         {/* Formule express */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-5">
-          <h2 className="text-xl font-black text-slate-900 flex items-center gap-2"><Calendar className="h-5 w-5 text-primary" /> Votre rendez-vous</h2>
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm space-y-5">
+          <h2 className="text-xl font-black text-on-surface flex items-center gap-2"><Calendar className="h-5 w-5 text-primary" /> Votre rendez-vous</h2>
           <div className="space-y-3">
             <div>
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Date du rendez-vous en préfecture</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider block mb-1.5">Date du rendez-vous en préfecture</label>
               <input type="date" value={dateRdv} onChange={e => setDateRdv(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary font-bold text-sm transition-all" />
+                className="w-full h-11 px-4 rounded-xl border-2 border-outline-variant bg-surface-container focus:border-primary font-bold text-sm transition-all" />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Titre visé</label>
+              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider block mb-1.5">Titre visé</label>
               <select value={typeTitre} onChange={e => setTypeTitre(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary font-bold text-sm transition-all appearance-none">
+                className="w-full h-11 px-4 rounded-xl border-2 border-outline-variant bg-surface-container focus:border-primary font-bold text-sm transition-all appearance-none">
                 <option value="A2">Carte de séjour pluriannuelle (indicatif A2 — à vérifier)</option>
                 <option value="B1">Carte de résident / 10 ans (indicatif B1)</option>
                 <option value="B2">Nationalité française (B2)</option>
@@ -326,17 +326,20 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
 
           {dateRdv && (
             <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 text-center">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Formule recommandée</p>
-              <p className="text-2xl font-black text-slate-900">{formule}</p>
-              <p className="text-xs text-slate-500 mt-1">{joursRestants} jours avant votre rendez-vous</p>
+              <p className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Formule recommandée</p>
+              <p className="text-2xl font-black text-on-surface">{formule}</p>
+              <p className="text-xs text-on-surface-variant mt-1">{joursRestants} jours avant votre rendez-vous</p>
             </div>
           )}
         </div>
 
         {/* Checklist */}
         {typeTitre !== "je_ne_sais_pas" && (
-          <details className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            <summary className="px-8 py-5 font-black text-slate-900 cursor-pointer hover:bg-slate-50">📋 Voir ma checklist de documents</summary>
+          <details className="bg-surface-bright rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
+            <summary className="px-8 py-5 font-black text-on-surface cursor-pointer hover:bg-surface-container flex items-center gap-2">
+              <ClipboardList className="h-5 w-5 text-primary shrink-0" />
+              Voir ma checklist de documents
+            </summary>
             <div className="px-8 pb-8">
               <ChecklistDocuments type_demarche={typeTitre === "B2" ? "naturalisation" : typeTitre === "A2" ? "pluriannuelle" : "resident_10ans"} onChange={setChecklistData} />
             </div>
@@ -372,11 +375,11 @@ function PhaseResultatNiveau({ score, prenom, whatsapp, onCaptureLead }: {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 p-10 text-center space-y-6 shadow-sm">
-          <CheckCircle2 className="h-16 w-16 text-emerald-500 mx-auto" />
-          <h2 className="text-2xl font-black text-slate-900">Bilan envoyé !</h2>
-          <p className="text-slate-500 text-sm font-semibold">Votre estimation et plan de formation arrivent par email.</p>
+      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-surface-bright rounded-3xl border border-outline-variant p-10 text-center space-y-6 shadow-sm">
+          <CheckCircle2 className="h-16 w-16 text-eval-success mx-auto" />
+          <h2 className="text-2xl font-black text-on-surface">Bilan envoyé !</h2>
+          <p className="text-on-surface-variant text-sm font-semibold">Votre estimation et plan de formation arrivent par email.</p>
           <Link to="/formations" className="block w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center">Voir les formations</Link>
         </div>
       </div>
@@ -384,15 +387,15 @@ function PhaseResultatNiveau({ score, prenom, whatsapp, onCaptureLead }: {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-xl mx-auto space-y-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm text-center space-y-4">
-          <p className="text-xs font-black uppercase tracking-wider text-slate-400">Estimation automatique — indicatif</p>
-          <div className="w-24 h-24 rounded-full bg-slate-900 text-primary flex flex-col items-center justify-center mx-auto">
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Niveau</span>
+        <div className="bg-surface-bright rounded-3xl border border-outline-variant p-8 shadow-sm text-center space-y-4">
+          <p className="text-xs font-black uppercase tracking-wider text-on-surface-variant">Estimation automatique — indicatif</p>
+          <div className="w-24 h-24 rounded-full bg-on-surface text-primary flex flex-col items-center justify-center mx-auto">
+            <span className="text-[10px] font-bold text-on-surface-variant uppercase">Niveau</span>
             <span className="text-4xl font-black">{niveau}</span>
           </div>
-          <p className="text-xs text-slate-500 font-semibold italic">Ce résultat ne remplace pas une certification officielle (TCF, DELF, TEF).</p>
+          <p className="text-xs text-on-surface-variant font-semibold italic">Ce résultat ne remplace pas une certification officielle (TCF, DELF, TEF).</p>
           <button onClick={handleCTA}
             className="w-full h-12 bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
             Voir les formations adaptées <ArrowRight className="h-4 w-4" />
@@ -400,10 +403,10 @@ function PhaseResultatNiveau({ score, prenom, whatsapp, onCaptureLead }: {
         </div>
 
         <div className="bg-amber-50 border border-amber-200 rounded-3xl p-6 space-y-3">
-          <p className="font-black text-slate-800">Vous avez un dossier préfecture en cours ?</p>
-          <p className="text-sm text-slate-600">Notre partenaire spécialisé peut vérifier vos pièces et détecter d'éventuelles dispenses.</p>
+          <p className="font-black text-on-surface">Vous avez un dossier préfecture en cours ?</p>
+          <p className="text-sm text-on-surface-variant">Notre partenaire spécialisé peut vérifier vos pièces et détecter d'éventuelles dispenses.</p>
           <Link to="/accompagnement-administratif"
-            className="inline-flex items-center gap-2 h-10 px-5 bg-slate-900 text-white font-bold text-sm rounded-xl hover:opacity-90 transition-all">
+            className="inline-flex items-center gap-2 h-10 px-5 bg-on-surface text-on-primary font-bold text-sm rounded-xl hover:opacity-90 transition-all">
             Faire vérifier mon dossier <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

@@ -75,9 +75,9 @@ function FormateurLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf7] flex flex-col md:flex-row relative">
+    <div className="min-h-screen bg-surface-app flex flex-col md:flex-row relative">
       {/* Mobile Top Bar */}
-      <div className="md:hidden flex items-center justify-between px-6 h-16 bg-[#2c1d1a] text-white border-b border-[#3e2e2a] sticky top-[72px] z-30">
+      <div className="md:hidden flex items-center justify-between px-6 h-16 bg-sidebar-bg text-white border-b border-sidebar-border sticky top-[72px] z-30">
         <div className="flex items-center gap-2">
           <GraduationCap size={24} className="text-primary-container" />
           <span className="font-extrabold text-sm tracking-wider uppercase">
@@ -86,7 +86,7 @@ function FormateurLayout() {
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-white p-1 hover:bg-[#3e2e2a] rounded"
+          className="text-white p-1 hover:bg-sidebar-border rounded"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -94,13 +94,13 @@ function FormateurLayout() {
 
       <aside
         className={`
-        fixed md:sticky top-0 md:top-[72px] left-0 h-[calc(100vh-72px)] w-72 bg-[#2c1d1a] text-white border-r border-[#3e2e2a] 
+        fixed md:sticky top-0 md:top-[72px] left-0 h-[calc(100vh-72px)] w-72 bg-sidebar-bg text-white border-r border-sidebar-border 
         flex flex-col justify-between p-6 z-40 transition-transform duration-300
         ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}
       >
         <div className="space-y-8">
-          <div className="hidden md:flex items-center gap-3 pb-6 border-b border-[#3e2e2a]">
+          <div className="hidden md:flex items-center gap-3 pb-6 border-b border-sidebar-border">
             <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-black">
               F
             </div>
@@ -127,7 +127,7 @@ function FormateurLayout() {
                     ${
                       active
                         ? "bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]"
-                        : "text-outline-variant hover:bg-[#3e2e2a] hover:text-white"
+                        : "text-outline-variant hover:bg-sidebar-border hover:text-white"
                     }
                   `}
                 >
@@ -146,7 +146,7 @@ function FormateurLayout() {
           </nav>
         </div>
 
-        <div className="pt-6 border-t border-[#3e2e2a] flex flex-col gap-4">
+        <div className="pt-6 border-t border-sidebar-border flex flex-col gap-4">
           <div className="px-2">
             <p className="text-xs font-semibold text-outline-variant truncate">
               Connecté en tant que :
@@ -155,7 +155,7 @@ function FormateurLayout() {
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-[#3e2e2a] hover:bg-red-950/40 hover:text-red-300 font-bold text-sm transition-colors text-outline-variant"
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl bg-sidebar-border hover:bg-red-950/40 hover:text-red-300 font-bold text-sm transition-colors text-outline-variant"
           >
             <LogOut size={18} />
             <span>Se déconnecter</span>

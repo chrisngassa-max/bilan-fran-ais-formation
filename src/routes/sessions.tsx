@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Calendar, Clock, Users, ArrowRight, AlertCircle, MessageCircle } from "lucide-react";
+import { Calendar, Clock, Users, ArrowRight, AlertCircle, MessageCircle, Circle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { trackEvent } from "@/lib/analytics";
 import { waHref } from "@/config/site";
+import { Button } from "@/components/bff/Button";
 
 const SESSIONS_TIMEOUT_MS = 8000;
 
@@ -49,9 +50,9 @@ type PublicCohort = {
 };
 
 const INTENSITY_LABEL: Record<string, { label: string; cls: string }> = {
-  standard: { label: "Standard", cls: "bg-slate-100 text-slate-700" },
+  standard: { label: "Standard", cls: "bg-surface-container text-on-surface-variant" },
   intensif: { label: "Intensif", cls: "bg-amber-100 text-amber-800" },
-  express: { label: "Express ⚡", cls: "bg-red-100 text-red-800" },
+  express: { label: "Express", cls: "bg-red-100 text-red-800" },
 };
 
 function formatDateLong(d: string) {
@@ -79,21 +80,24 @@ function StatusBadge({ cohort }: { cohort: PublicCohort }) {
   const enrolled = cohort.enrolled_count;
   if (cohort.status === "confirmed") {
     return (
-      <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
-        🟢 Confirmé — démarre le {new Date(cohort.start_date).toLocaleDateString("fr-FR")}
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+        <Circle className="h-2 w-2 fill-emerald-600 text-emerald-600" aria-hidden />
+        Confirmé — démarre le {new Date(cohort.start_date).toLocaleDateString("fr-FR")}
       </span>
     );
   }
   if (cohort.status === "confirming" || enrolled >= cohort.min_students_to_confirm) {
     return (
-      <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold animate-pulse">
-        🟡 Bientôt confirmé
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold animate-pulse">
+        <Circle className="h-2 w-2 fill-amber-500 text-amber-500" aria-hidden />
+        Bientôt confirmé
       </span>
     );
   }
   return (
-    <span className="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[11px] font-bold">
-      🔵 En cours de constitution
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[11px] font-bold">
+      <Circle className="h-2 w-2 fill-sky-500 text-sky-500" aria-hidden />
+      En cours de constitution
     </span>
   );
 }
@@ -195,23 +199,23 @@ function SessionsPage() {
   }, [cohorts, intensity, format, period]);
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-[1200px] mx-auto space-y-8">
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
             <Calendar className="h-4 w-4" /> Prochaines sessions
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-on-surface leading-tight">
             Réservez votre place dans une session
           </h1>
-          <p className="text-slate-600">
+          <p className="text-on-surface-variant">
             Groupes limités à 6 élèves pour un suivi de qualité. Ouvertes à
             l'inscription dès maintenant.
           </p>
         </div>
 
         {/* Filtres */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-wrap gap-4 items-end shadow-sm">
+        <div className="bg-surface-bright rounded-2xl border border-outline-variant p-4 flex flex-wrap gap-4 items-end shadow-sm">
           <FilterSelect
             label="Intensité"
             value={intensity}
@@ -248,20 +252,20 @@ function SessionsPage() {
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-hidden="true">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 animate-pulse">
+              <div key={i} className="bg-surface-bright rounded-2xl border border-outline-variant p-6 shadow-sm space-y-4 animate-pulse">
                 <div className="flex justify-between">
-                  <div className="h-6 w-20 bg-slate-200 rounded-full" />
-                  <div className="h-6 w-28 bg-slate-200 rounded-full" />
+                  <div className="h-6 w-20 bg-surface-container-high rounded-full" />
+                  <div className="h-6 w-28 bg-surface-container-high rounded-full" />
                 </div>
-                <div className="h-6 w-3/4 bg-slate-200 rounded" />
-                <div className="h-4 w-1/2 bg-slate-100 rounded" />
+                <div className="h-6 w-3/4 bg-surface-container-high rounded" />
+                <div className="h-4 w-1/2 bg-surface-container rounded" />
                 <div className="space-y-2 pt-2">
-                  <div className="h-4 w-full bg-slate-100 rounded" />
-                  <div className="h-4 w-5/6 bg-slate-100 rounded" />
-                  <div className="h-4 w-2/3 bg-slate-100 rounded" />
+                  <div className="h-4 w-full bg-surface-container rounded" />
+                  <div className="h-4 w-5/6 bg-surface-container rounded" />
+                  <div className="h-4 w-2/3 bg-surface-container rounded" />
                 </div>
-                <div className="h-2 w-full bg-slate-100 rounded-full" />
-                <div className="h-11 w-full bg-slate-200 rounded-lg" />
+                <div className="h-2 w-full bg-surface-container rounded-full" />
+                <div className="h-11 w-full bg-surface-container-high rounded-lg" />
               </div>
             ))}
           </div>
@@ -283,7 +287,7 @@ function SessionsPage() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackEvent("whatsapp_clicked", { from: "sessions_error" })}
-                className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba56] text-white px-5 py-3 rounded-lg font-bold transition-all"
+                className="inline-flex items-center justify-center gap-2 bg-whatsapp hover:bg-whatsapp-hover text-white px-5 py-3 rounded-lg font-bold transition-all"
               >
                 <MessageCircle className="h-4 w-4" /> Nous contacter sur WhatsApp
               </a>
@@ -292,8 +296,8 @@ function SessionsPage() {
         )}
 
         {!loading && !error && filtered.length === 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-4">
-            <p className="text-slate-700 font-semibold">
+          <div className="bg-surface-bright rounded-2xl border border-outline-variant p-12 text-center space-y-4">
+            <p className="text-on-surface-variant font-semibold">
               Aucune session n'est ouverte à l'inscription pour le moment.
             </p>
             <Link
@@ -331,13 +335,13 @@ function FilterSelect({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+      <label className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
         {label}
       </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold bg-white"
+        className="border border-outline-variant rounded-lg px-3 py-2 text-sm font-semibold bg-surface-bright"
       >
         {options.map((o) => (
           <option key={o.v} value={o.v}>
@@ -361,7 +365,7 @@ function CohortCard({ cohort }: { cohort: PublicCohort }) {
   const journey = cohort.formation_journeys;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4">
+    <div className="bg-surface-bright rounded-2xl border border-outline-variant p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-4">
       <div className="flex justify-between items-start gap-2">
         <span
           className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${intensityBadge.cls}`}
@@ -372,50 +376,51 @@ function CohortCard({ cohort }: { cohort: PublicCohort }) {
       </div>
 
       <div>
-        <h3 className="text-xl font-black text-slate-900">
+        <h3 className="text-xl font-black text-on-surface">
           {journey?.title || "Parcours de formation"}
         </h3>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-on-surface-variant mt-1">
           {journey?.duration_weeks ? `${journey.duration_weeks} sem. · ` : ""}
           {journey?.level ? `Niveau ${journey.level}` : ""}
         </p>
       </div>
 
-      <div className="space-y-2 text-sm text-slate-700">
+      <div className="space-y-2 text-sm text-on-surface-variant">
         <p className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-slate-400" />
+          <Calendar className="h-4 w-4 text-outline" />
           Démarre le {formatDateLong(cohort.start_date)}
         </p>
         <p className="flex items-center gap-2">
-          <Clock className="h-4 w-4 text-slate-400" />
+          <Clock className="h-4 w-4 text-outline" />
           {formatSchedule(cohort.weekly_schedule)}
         </p>
         <p className={`flex items-center gap-2 ${lowSeats ? "text-red-600 font-bold" : ""}`}>
-          <Users className="h-4 w-4 text-slate-400" />
+          <Users className="h-4 w-4 text-outline" />
           {isFull
             ? "Complet"
             : lowSeats
-            ? `🔴 Dernières places ! ${remaining} sur ${cohort.max_students}`
+            ? `Dernières places ! ${remaining} sur ${cohort.max_students}`
             : `${remaining} places restantes sur ${cohort.max_students}`}
         </p>
       </div>
 
-      <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+      <div className="w-full bg-surface-container rounded-full h-2 overflow-hidden">
         <div
           className="h-full bg-primary transition-all"
           style={{ width: `${progressPct}%` }}
         />
       </div>
 
-      <Link
-        to="/sessions/$cohortId"
-        params={{ cohortId: cohort.id }}
-        onClick={() => trackEvent("inscription_click", { cohort: cohort.code ?? cohort.id })}
-        className="mt-2 inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-5 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all"
-      >
-        {isFull ? "Liste d'attente" : "Réserver ma place"}
-        <ArrowRight className="h-4 w-4" />
-      </Link>
+      <Button variant="primary" size="md" asChild className="mt-2 w-full font-bold">
+        <Link
+          to="/sessions/$cohortId"
+          params={{ cohortId: cohort.id }}
+          onClick={() => trackEvent("inscription_click", { cohort: cohort.code ?? cohort.id })}
+        >
+          {isFull ? "Liste d'attente" : "Réserver ma place"}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </Button>
     </div>
   );
 }

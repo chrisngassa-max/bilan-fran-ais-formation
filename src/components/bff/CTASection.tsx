@@ -17,9 +17,11 @@ export function CTASection({ title, ctaLabel, description }: Props) {
           <p className="body-lg mt-4 text-on-surface-variant">{description}</p>
         )}
         <div className="mt-8">
-          <Link to="/passer-test/$token" params={{ token: "latest" }}>
-            <Button variant="primary">{ctaLabel}</Button>
-          </Link>
+          <Button variant="primary" size="lg" asChild>
+            <Link to="/passer-test/$token" params={{ token: "latest" }}>
+              {ctaLabel}
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

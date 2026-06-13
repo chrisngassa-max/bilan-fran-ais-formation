@@ -46,11 +46,11 @@ function Content({ data }: { data: any }) {
     <div className="space-y-6">
       {/* Documents pédagogiques */}
       <section className="bg-white rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-4 flex items-center gap-2">
           <FileText className="w-4 h-4" /> Documents pédagogiques
         </h2>
         {documents.length === 0 ? (
-          <p className="text-sm text-gray-500 italic">
+          <p className="text-sm text-outline italic">
             Aucun document partagé pour le moment. Vos formateurs déposeront ici les supports de cours au fur et à mesure.
           </p>
         ) : (
@@ -58,10 +58,10 @@ function Content({ data }: { data: any }) {
             {documents.map((d: any, i: number) => (
               <li key={i} className="py-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{d.name}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-sm font-semibold text-on-surface truncate">{d.name}</p>
+                  <p className="text-xs text-outline mt-0.5">
                     Séance n°{d.sessionNumber} · {formatDateFrLong(d.sessionDate)}
-                    {d.type && <span className="ml-2 uppercase text-gray-400">{d.type}</span>}
+                    {d.type && <span className="ml-2 uppercase text-outline">{d.type}</span>}
                   </p>
                 </div>
                 {d.url && (
@@ -82,7 +82,7 @@ function Content({ data }: { data: any }) {
 
       {/* Attestations */}
       <section className="bg-white rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3 flex items-center gap-2">
           <Award className="w-4 h-4" /> Attestations
         </h2>
         <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-900">
@@ -92,21 +92,21 @@ function Content({ data }: { data: any }) {
 
       {/* Mon programme */}
       <section className="bg-white rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3 flex items-center gap-2">
           <BookOpen className="w-4 h-4" /> Mon programme — {journey?.title}
         </h2>
         {journey?.description ? (
-          <div className="prose prose-sm max-w-none text-gray-800 whitespace-pre-line">
+          <div className="prose prose-sm max-w-none text-on-surface whitespace-pre-line">
             {journey.description}
           </div>
         ) : (
-          <p className="text-sm text-gray-500 italic">
+          <p className="text-sm text-outline italic">
             Le programme détaillé de votre parcours sera bientôt disponible ici.
           </p>
         )}
         {journey?.level && (
-          <p className="mt-4 text-xs text-gray-500">
-            Niveau visé : <span className="font-semibold text-gray-700">{journey.level}</span>
+          <p className="mt-4 text-xs text-outline">
+            Niveau visé : <span className="font-semibold text-on-surface-variant">{journey.level}</span>
           </p>
         )}
       </section>

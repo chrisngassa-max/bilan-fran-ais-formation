@@ -60,13 +60,13 @@ function AdminDashboard() {
     <div className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500">Vue temps réel de l'activité</p>
+          <h1 className="text-2xl font-extrabold text-on-surface">Dashboard</h1>
+          <p className="text-sm text-outline">Vue temps réel de l'activité</p>
         </div>
         <button
           onClick={() => refetch()}
           disabled={isFetching}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant rounded-lg text-sm font-semibold hover:bg-surface-container-low disabled:opacity-60"
         >
           <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
           Actualiser
@@ -140,7 +140,7 @@ function AdminDashboard() {
                 {pctMonth}% vs mois dernier
               </span>
             ) : (
-              <span className="text-xs text-gray-500">Pas de référence</span>
+              <span className="text-xs text-outline">Pas de référence</span>
             )
           }
         />
@@ -148,14 +148,14 @@ function AdminDashboard() {
           icon={GraduationCap}
           label="Apprenants actifs"
           value={data.activeEnrollments}
-          extra={<span className="text-xs text-gray-500">Enrollments en cours</span>}
+          extra={<span className="text-xs text-outline">Enrollments en cours</span>}
         />
         <KpiCard
           icon={Target}
           label="Cohortes actives"
           value={data.activeCohorts.length}
           extra={
-            <p className="text-xs text-gray-500 truncate" title={data.activeCohorts.map((c: any) => c.code).join(", ")}>
+            <p className="text-xs text-outline truncate" title={data.activeCohorts.map((c: any) => c.code).join(", ")}>
               {data.activeCohorts.map((c: any) => c.code).filter(Boolean).slice(0, 4).join(" · ") || "—"}
             </p>
           }
@@ -164,23 +164,23 @@ function AdminDashboard() {
           icon={TrendingUp}
           label="Taux remplissage moyen"
           value={`${data.fillRate}%`}
-          extra={<span className="text-xs text-gray-500">Cohortes ouvertes</span>}
+          extra={<span className="text-xs text-outline">Cohortes ouvertes</span>}
         />
       </section>
 
       {/* Section 3 — Leads par source */}
-      <section className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-sm font-bold text-gray-900 mb-4">Leads par source (ce mois)</h2>
+      <section className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/50">
+        <h2 className="text-sm font-bold text-on-surface mb-4">Leads par source (ce mois)</h2>
         <div className="space-y-3">
           {data.leadsBySource.map((s) => {
             const pct = Math.round((s.count / maxSource) * 100);
             return (
               <div key={s.source}>
-                <div className="flex justify-between text-xs text-gray-700 mb-1">
+                <div className="flex justify-between text-xs text-on-surface-variant mb-1">
                   <span className="font-medium">{SOURCE_LABELS[s.source] || s.source}</span>
                   <span className="font-bold">{s.count}</span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-surface-container rounded-full overflow-hidden">
                   <div
                     className="h-full bg-primary transition-all"
                     style={{ width: `${pct}%` }}
@@ -193,15 +193,15 @@ function AdminDashboard() {
       </section>
 
       {/* Section 4 — Prochaines séances */}
-      <section className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-sm font-bold text-gray-900 mb-4">Prochaines séances</h2>
+      <section className="bg-white rounded-2xl p-6 shadow-sm border border-outline-variant/50">
+        <h2 className="text-sm font-bold text-on-surface mb-4">Prochaines séances</h2>
         {data.upcomingSessions.length === 0 ? (
-          <p className="text-sm text-gray-500 italic">Aucune séance planifiée.</p>
+          <p className="text-sm text-outline italic">Aucune séance planifiée.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs uppercase tracking-wider text-gray-500 border-b border-gray-200">
+                <tr className="text-left text-xs uppercase tracking-wider text-outline border-b border-outline-variant">
                   <th className="pb-2 pr-4">Date & heure</th>
                   <th className="pb-2 pr-4">Cohorte</th>
                   <th className="pb-2 pr-4">Apprenants</th>
@@ -212,17 +212,17 @@ function AdminDashboard() {
                 {data.upcomingSessions.map((s: any) => (
                   <tr key={s.id}>
                     <td className="py-3 pr-4">
-                      <p className="font-semibold text-gray-900">{formatFr(s.session_date)}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-semibold text-on-surface">{formatFr(s.session_date)}</p>
+                      <p className="text-xs text-outline">
                         {s.start_time?.slice(0, 5)} – {s.end_time?.slice(0, 5)}
                       </p>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="font-mono text-xs px-2 py-1 bg-gray-100 rounded">
+                      <span className="font-mono text-xs px-2 py-1 bg-surface-container rounded">
                         {s.cohorts?.code || s.cohort_id?.slice(0, 8)}
                       </span>
                     </td>
-                    <td className="py-3 pr-4 text-gray-700">{s.attendees}</td>
+                    <td className="py-3 pr-4 text-on-surface-variant">{s.attendees}</td>
                     <td className="py-3">
                       {s.meeting_url ? (
                         <a
@@ -235,7 +235,7 @@ function AdminDashboard() {
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       ) : (
-                        <span className="text-xs text-gray-400">—</span>
+                        <span className="text-xs text-outline">—</span>
                       )}
                     </td>
                   </tr>
@@ -261,12 +261,12 @@ function KpiCard({
   extra?: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-outline-variant/50">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">{label}</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-outline">{label}</p>
         <Icon className="w-4 h-4 text-primary" />
       </div>
-      <p className="text-3xl font-extrabold text-gray-900 mb-2">{value}</p>
+      <p className="text-3xl font-extrabold text-on-surface mb-2">{value}</p>
       {extra}
     </div>
   );

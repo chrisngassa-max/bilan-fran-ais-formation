@@ -533,7 +533,7 @@ export function AdminLeads() {
                         {SOURCE_LABELS[lead.source] || lead.source}
                       </span>
                       {lead.lead_intent && (
-                        <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-600">
+                        <div className="mt-1 text-[10px] font-black uppercase tracking-wider text-on-surface-variant">
                           {LEAD_INTENT_LABELS[lead.lead_intent] || lead.lead_intent}
                         </div>
                       )}
@@ -549,7 +549,7 @@ export function AdminLeads() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col gap-1.5 items-start">
-                        <span className="inline-flex items-center gap-1 text-xs font-black text-[#9d4222] bg-[#9d4222]/10 border border-[#9d4222]/20 px-2.5 py-1 rounded-lg">
+                        <span className="inline-flex items-center gap-1 text-xs font-black text-primary bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-lg">
                           <Award size={12} />
                           {lead.estimated_level || "—"}
                         </span>
@@ -565,7 +565,7 @@ export function AdminLeads() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-800"}`}>
+                      <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${STATUS_BADGES[lead.status] || "bg-surface-container text-on-surface"}`}>
                         {STATUS_LABELS[lead.status] || lead.status}
                       </span>
                     </td>
@@ -595,7 +595,7 @@ export function AdminLeads() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${PARTNER_STATUS_BADGES[lead.partner_status] || "bg-gray-100 text-gray-800"}`}>
+                      <span className={`inline-block px-2.5 py-1 text-xs font-bold rounded-full border ${PARTNER_STATUS_BADGES[lead.partner_status] || "bg-surface-container text-on-surface"}`}>
                         {PARTNER_STATUS_LABELS[lead.partner_status] || lead.partner_status}
                       </span>
                     </td>

@@ -29,7 +29,7 @@ function EmargementPage() {
       <div>
         <Link
           to="/mon-espace/mes-seances"
-          className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-primary mb-3"
+          className="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary mb-3"
         >
           <ArrowLeft className="w-4 h-4" /> Retour à mes séances
         </Link>
@@ -61,7 +61,7 @@ function NotEligible({ reason }: { reason: string }) {
   return (
     <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
       <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-      <p className="text-sm text-gray-800">{messages[reason] ?? "Action impossible."}</p>
+      <p className="text-sm text-on-surface">{messages[reason] ?? "Action impossible."}</p>
     </div>
   );
 }
@@ -100,7 +100,7 @@ function EmargementForm({
             hour: "2-digit",
             minute: "2-digit",
           })}
-          . ✅
+          .
         </p>
       </div>
     );
@@ -119,7 +119,8 @@ function EmargementForm({
           to="/mon-espace/mes-seances"
           className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
         >
-          ← Retour à mes séances
+          <ArrowLeft className="h-4 w-4" />
+          Retour à mes séances
         </Link>
       </div>
     );
@@ -149,18 +150,18 @@ function EmargementForm({
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm space-y-5">
       <div>
-        <h2 className="text-lg font-bold text-gray-900">
+        <h2 className="text-lg font-bold text-on-surface">
           Séance n°{session.session_number}
-          {session.title && <span className="text-gray-500"> — {session.title}</span>}
+          {session.title && <span className="text-outline"> — {session.title}</span>}
         </h2>
-        <p className="text-sm text-gray-700 mt-1">{formatDateFrLong(session.session_date)}</p>
-        <p className="text-xs text-gray-500">
+        <p className="text-sm text-on-surface-variant mt-1">{formatDateFrLong(session.session_date)}</p>
+        <p className="text-xs text-outline">
           {formatTime(session.start_time)} – {formatTime(session.end_time)}
         </p>
       </div>
 
       <div>
-        <p className="text-sm font-semibold text-gray-900 mb-3">Confirmez votre présence à cette séance</p>
+        <p className="text-sm font-semibold text-on-surface mb-3">Confirmez votre présence à cette séance</p>
         <div className="grid sm:grid-cols-3 gap-2">
           {([
             ["click", "Confirmation simple"],
@@ -174,7 +175,7 @@ function EmargementForm({
               className={`px-3 py-2.5 rounded-lg text-sm font-medium border transition ${
                 mode === k
                   ? "border-primary bg-primary/5 text-primary"
-                  : "border-gray-200 hover:bg-gray-50 text-gray-700"
+                  : "border-outline-variant hover:bg-surface-container-low text-on-surface-variant"
               }`}
             >
               {label}
@@ -185,7 +186,7 @@ function EmargementForm({
 
       {mode === "code" && (
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
+          <label className="block text-xs font-semibold text-on-surface-variant mb-1">
             Code à 4 chiffres communiqué par votre formateur
           </label>
           <input
@@ -194,10 +195,10 @@ function EmargementForm({
             maxLength={4}
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-center text-2xl font-mono tracking-widest"
+            className="w-full px-3 py-2.5 border border-outline-variant rounded-lg text-center text-2xl font-mono tracking-widest"
             placeholder="••••"
           />
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-outline mt-2">
             Le code vous est communiqué par votre formateur.
             Il simplifie l'identification mais n'est pas cryptographiquement vérifié.
           </p>
@@ -206,21 +207,21 @@ function EmargementForm({
 
       {mode === "absent" && (
         <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
+          <label className="block text-xs font-semibold text-on-surface-variant mb-1">
             Motif (optionnel)
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="w-full px-3 py-2 border border-outline-variant rounded-lg text-sm"
             placeholder="Ex : maladie, empêchement professionnel…"
           />
         </div>
       )}
 
       {mode === "click" && (
-        <p className="text-sm text-gray-700 p-3 bg-gray-50 rounded-lg">
+        <p className="text-sm text-on-surface-variant p-3 bg-surface-container-low rounded-lg">
           Je confirme être présent(e) à cette séance.
         </p>
       )}

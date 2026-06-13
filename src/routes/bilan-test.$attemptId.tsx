@@ -62,7 +62,7 @@ function BilanTestPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">
         <Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" />
-        <span className="font-extrabold text-slate-800 text-lg">Analyse linguistique et estimation automatique de votre niveau...</span>
+        <span className="font-extrabold text-on-surface-variant text-lg">Analyse linguistique et estimation automatique de votre niveau...</span>
       </div>
     );
   }
@@ -71,7 +71,7 @@ function BilanTestPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-20 text-center">
         <AlertCircle className="h-10 w-10 text-red-500 mx-auto mb-4" />
-        <span className="font-extrabold text-slate-800 text-lg">Résultat de bilan introuvable.</span>
+        <span className="font-extrabold text-on-surface-variant text-lg">Résultat de bilan introuvable.</span>
       </div>
     );
   }
@@ -83,11 +83,11 @@ function BilanTestPage() {
   // Modale bloquante de fatigue
   if (hasFatigue && !bypassFatigue) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="bg-white p-10 rounded-3xl border border-slate-200 max-w-lg w-full text-center space-y-6 shadow-sm">
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="bg-surface-bright p-10 rounded-3xl border border-outline-variant max-w-lg w-full text-center space-y-6 shadow-sm">
           <AlertCircle className="h-20 w-20 text-primary/80 mx-auto animate-pulse" />
-          <h2 className="text-3xl font-black text-slate-900 leading-snug">Prenez une pause pour donner le meilleur de vous-même.</h2>
-          <p className="text-slate-600 text-base leading-relaxed">
+          <h2 className="text-3xl font-black text-on-surface leading-snug">Prenez une pause pour donner le meilleur de vous-même.</h2>
+          <p className="text-on-surface-variant text-base leading-relaxed">
             Notre système a détecté une baisse significative de concentration sur la fin de votre évaluation. 
             Pour que votre bilan soit le plus précis possible, il est préférable de le terminer quand vous serez bien reposé(e).
           </p>
@@ -95,17 +95,19 @@ function BilanTestPage() {
             Nous vous invitons à vous reposer et à repasser l'évaluation dans de meilleures conditions.
           </p>
           <div className="space-y-3 w-full">
-            <Link to="/passer-test/$token" params={{ token: "latest" }} className="block w-full">
-              <button className="w-full h-14 bg-primary text-on-primary font-bold rounded-xl hover:opacity-90 transition-all">
+            <Button variant="primary" size="lg" asChild className="w-full font-bold">
+              <Link to="/passer-test/$token" params={{ token: "latest" }}>
                 Recommencer plus tard
-              </button>
-            </Link>
-            <button 
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full font-bold text-on-surface-variant"
               onClick={() => setBypassFatigue(true)}
-              className="w-full h-14 bg-transparent text-slate-500 font-bold rounded-xl hover:bg-slate-100 transition-all"
             >
               Continuer vers mon bilan
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -140,7 +142,7 @@ function BilanTestPage() {
   const typeDemarche = savedInfo?.type_demarche || "je_ne_sais_pas";
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-[850px] mx-auto space-y-8">
         
         {/* Stepper de Progression */}
@@ -151,9 +153,9 @@ function BilanTestPage() {
           <span className="text-xs font-black text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
             Bilan de Positionnement Linguistique
           </span>
-          <h1 className="text-4xl font-black text-slate-900">Votre Rapport de Positionnement</h1>
+          <h1 className="text-4xl font-black text-on-surface">Votre Rapport de Positionnement</h1>
           {result.placement_test_attempts?.student_name && (
-            <p className="text-slate-500 font-semibold text-base">Candidat : {result.placement_test_attempts.student_name}</p>
+            <p className="text-outline font-semibold text-base">Candidat : {result.placement_test_attempts.student_name}</p>
           )}
         </div>
 
@@ -171,11 +173,11 @@ function BilanTestPage() {
               </h2>
             </div>
             <div className="p-8 space-y-6">
-              <p className="text-slate-800 font-bold text-lg">
+              <p className="text-on-surface-variant font-bold text-lg">
                 Votre profil présente des variations de vitesse ou de réussite nécessitant une analyse humaine.
               </p>
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <p className="text-slate-600 text-sm mb-4">
+              <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant shadow-sm">
+                <p className="text-on-surface-variant text-sm mb-4">
                   Renseignez votre email ci-dessous : nous vous envoyons votre bilan détaillé avec une lecture
                   pédagogique affinée par notre équipe.
                 </p>
@@ -193,114 +195,113 @@ function BilanTestPage() {
           <div className="space-y-8">
             
             {/* BLOC PRINCIPAL — Score et Recommandation Unifiée */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden space-y-8">
+            <div className="bg-surface-bright border border-outline-variant rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden space-y-8">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16"></div>
               
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-slate-100 pb-8">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-outline-variant pb-8">
                 {/* Badge Niveau */}
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-slate-900 flex flex-col items-center justify-center bg-slate-900 text-white shrink-0 shadow-lg">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Niveau</span>
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-on-surface flex flex-col items-center justify-center bg-on-surface text-on-primary shrink-0 shadow-lg">
+                  <span className="text-[10px] font-black text-outline uppercase tracking-widest">Niveau</span>
                   <span className="text-5xl font-black text-primary flex items-baseline">
                     {level}
                     {isFragile && <span className="text-sm font-bold ml-1 text-amber-500"> (fragile)</span>}
                   </span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">CECRL</span>
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider mt-1">CECRL</span>
                 </div>
                 
                 <div className="flex-1 text-center md:text-left space-y-3">
-                  <span className="text-xs font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+                  <span className="text-xs font-black text-on-surface bg-surface-container px-3 py-1 rounded-full uppercase tracking-wider inline-block">
                     ESTIMATION AUTOMATIQUE À CARACTÈRE INDICATIF
                   </span>
-                  <h2 className="text-2xl font-black text-slate-900">Parcours Recommandé : {journey.name}</h2>
-                  <p className="text-slate-600 text-sm leading-relaxed italic">
+                  <h2 className="text-2xl font-black text-on-surface">Parcours Recommandé : {journey.name}</h2>
+                  <p className="text-on-surface-variant text-sm leading-relaxed italic">
                     "{journey.objective}"
                   </p>
                 </div>
               </div>
 
               {/* Fiche Technique & Grille Tarifaire */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface p-6 rounded-2xl border border-outline-variant">
                 <div className="space-y-4">
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Structure Pédagogique</h4>
+                  <h4 className="text-xs font-black text-outline uppercase tracking-wider">Structure Pédagogique</h4>
                   <ul className="space-y-3">
-                    <li className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                      <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                    <li className="flex items-center gap-2 text-xs font-bold text-on-surface-variant">
+                      <Clock className="h-4 w-4 text-outline shrink-0" />
                       {journey.hours}h de formation ({journey.sessions} séances)
                     </li>
-                    <li className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                    <li className="flex items-center gap-2 text-xs font-bold text-on-surface-variant">
                       <ShieldCheck className="h-4 w-4 text-emerald-500 shrink-0" />
                       1 formateur référent - 6 élèves maximum
                     </li>
-                    <li className="flex items-center gap-2 text-xs text-slate-600">
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+                    <li className="flex items-center gap-2 text-xs text-on-surface-variant">
+                      <span className="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span>
                       Préparation : {journey.examTarget}
                     </li>
                   </ul>
                 </div>
 
-                <div className="space-y-4 md:border-l md:border-slate-200 md:pl-8">
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Tarification et Financement</h4>
+                <div className="space-y-4 md:border-l md:border-outline-variant md:pl-8">
+                  <h4 className="text-xs font-black text-outline uppercase tracking-wider">Tarification et Financement</h4>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-baseline text-xs font-semibold text-slate-500">
+                    <div className="flex justify-between items-baseline text-xs font-semibold text-outline">
                       <span>Prix public</span>
                       <span>{journey.publicPrice} €</span>
                     </div>
                     <div className="flex justify-between items-baseline border-b border-dashed pb-2">
-                      <span className="text-xs font-semibold text-slate-500">Tarif financé de référence</span>
+                      <span className="text-xs font-semibold text-outline">Tarif financé de référence</span>
                       <span className="text-base font-extrabold text-emerald-600">{journey.financedReferencePrice} €</span>
                     </div>
                     <div className="flex justify-between items-baseline pt-1">
-                      <span className="text-xs font-bold text-slate-900">Mensualité (3x sans frais)</span>
-                      <span className="text-lg font-black text-slate-900">{journey.monthlyInstallment} €<span className="text-xs font-normal text-slate-500">/mois</span></span>
+                      <span className="text-xs font-bold text-on-surface">Mensualité (3x sans frais)</span>
+                      <span className="text-lg font-black text-on-surface">{journey.monthlyInstallment} €<span className="text-xs font-normal text-outline">/mois</span></span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Primary action buttons */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
-                <p className="font-black text-slate-900">Deux chemins apres votre bilan</p>
+              <div className="rounded-2xl border border-outline-variant bg-surface-bright p-4 text-sm text-on-surface-variant">
+                <p className="font-black text-on-surface">Deux chemins apres votre bilan</p>
                 <p className="mt-1">
                   Verifiez vos pistes de financement si vous souhaitez explorer CPF, OPCO,
                   employeur ou France Travail. Contactez-nous directement si vous voulez avancer
                   au prix public.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-slate-100">
-                <Link to="/qualification/$attemptId" params={{ attemptId }} className="flex-1">
-                  <button className="w-full h-16 bg-primary text-on-primary font-black text-lg rounded-2xl flex items-center justify-center gap-2 shadow-xl hover:opacity-95 active:scale-95 transition-all">
+              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-outline-variant/50">
+                <Button variant="primary" size="lg" asChild className="flex-1 h-16 rounded-2xl font-black text-lg shadow-xl">
+                  <Link to="/qualification/$attemptId" params={{ attemptId }}>
                     <Wallet className="h-5 w-5" />
                     Vérifier mon financement
                     <ArrowRight className="h-5 w-5" />
-                  </button>
-                </Link>
-                <Link to="/contact" className="flex-1">
-                  <button className="w-full h-16 border-2 border-slate-900 text-slate-900 font-bold rounded-2xl hover:bg-slate-50 transition-all flex items-center justify-center">
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild className="flex-1 h-16 rounded-2xl font-bold border-2 border-on-surface">
+                  <Link to="/contact">
                     M'inscrire au prix public - {journey.publicPrice} €
-                  </button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
 
-              <p className="text-[10px] text-center font-bold text-slate-400 uppercase tracking-wider">
+              <p className="text-[10px] text-center font-bold text-outline uppercase tracking-wider">
                 Eligible CPF, OPCO, France Travail. Paiement en 3 fois sans frais.
               </p>
 
-              <div className="rounded-2xl border border-orange-200 bg-orange-50/70 p-4 text-sm text-slate-700">
+              <div className="rounded-2xl border border-orange-200 bg-orange-50/70 p-4 text-sm text-on-surface-variant">
                 <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
                   <div>
-                    <p className="font-black text-slate-900">Vous ne souhaitez pas suivre de formation ?</p>
+                    <p className="font-black text-on-surface">Vous ne souhaitez pas suivre de formation ?</p>
                     <p className="mt-1">
                       Si vous avez surtout besoin d'aide pour votre dossier prefecture,
                       l'accompagnement administratif peut etre demande separement.
                     </p>
                   </div>
-                  <Link
-                    to="/accompagnement-administratif"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-orange-600 px-4 font-black text-white hover:bg-orange-700"
-                  >
-                    Voir ce service
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  <Button variant="cta" size="md" asChild className="h-12 rounded-xl font-black">
+                    <Link to="/accompagnement-administratif">
+                      Voir ce service
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -312,7 +313,7 @@ function BilanTestPage() {
                   <ShieldCheck className="h-5 w-5 text-emerald-600" />
                   Socle Validé par Preuve
                 </h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
+                <p className="text-on-surface-variant text-sm leading-relaxed">
                   Votre niveau actuel a été validé formellement par notre système automatisé à l'aide de preuves mathématiques solides. 
                   Vous êtes parfaitement capable de vous inscrire à l'offre recommandée ci-dessus.
                 </p>
@@ -326,7 +327,7 @@ function BilanTestPage() {
                   <AlertCircle className="h-5 w-5 text-amber-600 animate-pulse" />
                   Conseil Pédagogique : Profil Asymétrique Détecté
                 </h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
+                <p className="text-on-surface-variant text-sm leading-relaxed">
                   Votre score révèle un écart prononcé entre vos compétences de compréhension écrite et orale. 
                   Ce profil d'apprentissage asymétrique est très fréquent chez les personnes apprenant en immersion pratique quotidienne. Nous vous recommandons de 
                   privilégier nos ateliers intensifs de conversation orale pour libérer votre parole tout en consolidant l'écrit.
@@ -338,10 +339,10 @@ function BilanTestPage() {
             <ChecklistDocuments type_demarche={typeDemarche} />
 
             {/* Lead Capture */}
-            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="bg-surface-bright p-8 rounded-3xl border border-outline-variant shadow-sm space-y-4">
               <div className="space-y-1">
-                <h3 className="text-xl font-black text-slate-900">Recevoir le rapport complet par email</h3>
-                <p className="text-xs text-slate-500">Un récapitulatif détaillé de vos scores et de votre plan de formation.</p>
+                <h3 className="text-xl font-black text-on-surface">Recevoir le rapport complet par email</h3>
+                <p className="text-xs text-outline">Un récapitulatif détaillé de vos scores et de votre plan de formation.</p>
               </div>
               <LeadCaptureForm 
                 attemptId={attemptId} 

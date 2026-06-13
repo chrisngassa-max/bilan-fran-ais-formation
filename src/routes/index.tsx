@@ -12,11 +12,17 @@ import {
   Sparkles,
   Calculator,
   Mail,
-  ShieldCheck,
   Clock,
+  Zap,
+  Target,
+  ClipboardList,
+  GraduationCap,
 } from "lucide-react";
 import { siteName } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
+import { Button } from "@/components/bff/Button";
+import { Card } from "@/components/bff/Card";
+import { Alert } from "@/components/ui/Alert";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,27 +47,33 @@ function IndexPage() {
             <Sparkles className="h-3.5 w-3.5" />
             Formation de français pour vos démarches en France
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-on-background mb-4 leading-tight">
-            Atteignez le niveau de français exigé pour votre{" "}
-            <span className="text-primary">titre de séjour, votre carte de résident ou votre naturalisation.</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-background mb-4 leading-tight">
+            <span className="md:hidden">
+              Le niveau de français exigé pour votre{" "}
+              <span className="text-primary">titre de séjour, résidence ou naturalisation.</span>
+            </span>
+            <span className="hidden md:inline">
+              Atteignez le niveau de français exigé pour votre{" "}
+              <span className="text-primary">titre de séjour, votre carte de résident ou votre naturalisation.</span>
+            </span>
           </h1>
           <p className="text-lg md:text-xl font-bold text-on-surface-variant mb-8">
             Petits groupes de 6 élèves maximum. Un formateur référent à chaque étape.
           </p>
           <div className="flex justify-center">
-            <Link
-              to="/test-rapide"
-              onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
-              className="w-full md:w-auto"
+            <Button
+              variant="cta"
+              asChild
+              className="w-full md:w-auto h-[58px] px-8 font-bold"
             >
-              <button
-                className="h-[58px] w-full md:w-auto px-8 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all shadow-md text-white"
-                style={{ backgroundColor: "#f97316" }}
+              <Link
+                to="/test-rapide"
+                onClick={() => trackEvent("landing_cta_click", { location: "hero_quick" })}
               >
                 Estimer mon niveau — 3 min, gratuit
                 <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
+              </Link>
+            </Button>
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs text-on-surface-variant">
             <span>Gratuit</span>
@@ -70,30 +82,37 @@ function IndexPage() {
             <span>·</span>
             <span className="inline-flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" /> Bilan envoyé par email</span>
           </div>
-          <p className="mt-4 text-xs font-bold text-slate-500">
+          <p className="mt-4 text-xs font-bold text-on-surface-variant">
             CPF, France Travail, OPCO, employeur : votre éligibilité est vérifiée après le test.
           </p>
         </div>
 
         <div className="mt-12 max-w-[1000px] mx-auto rounded-xl overflow-hidden shadow-sm border border-outline-variant">
-          <img
-            alt="Apprenants travaillant leur français"
-            className="w-full h-[300px] md:h-[450px] object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzYQMSLme1QuqbxfGCtlkQdEwrsTAawK3v1CJ4VpHQNRvuwta1hEDoFjoM-BZPTfFIZNzcmX_aMyA3Own7y38Ms33q4fs7KaMl28oax7RGNn2V11qZu6VdNiyVzHNUHXlO8RFh13pxqAn8aTop1XWq5XcpETWVmHoqRbtzbHSlrt4gNrgi8nb3YiWwMffyu3byArf13QUcVl5WU-UrHnvZpYtVyYiKj9Bl0_EDkHGXkejkyIBfhtFN4e3owE2jSVwHbL9rKsBM39c"
-          />
+          <div
+            className="w-full h-[300px] md:h-[450px] bg-gradient-to-br from-primary-container/50 via-secondary-container/40 to-surface-container flex flex-col items-center justify-center gap-4 px-6"
+            role="img"
+            aria-label="Formation en petits groupes avec un formateur référent"
+          >
+            <GraduationCap className="h-20 w-20 text-primary opacity-80" aria-hidden />
+            <p className="text-lg font-bold text-on-surface text-center max-w-md">
+              Petits groupes · 6 élèves maximum · formateur référent
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Bandeau alerte 2026 — remonté sous le hero */}
       <section className="px-4">
-        <div className="max-w-[800px] mx-auto p-4 rounded-xl border border-amber-300 bg-amber-50 text-sm text-amber-900">
-          <strong>⚠️ Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source :{" "}
-          <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline">service-public.fr</a>
+        <div className="max-w-[800px] mx-auto">
+          <Alert variant="warning">
+            <strong>Nouveau en 2026 :</strong> le niveau <strong>B2</strong> est désormais obligatoire pour la naturalisation française (au lieu de B1 auparavant). Source :{" "}
+            <a href="https://www.service-public.fr" target="_blank" rel="noreferrer" className="underline font-semibold">service-public.fr</a>
+          </Alert>
         </div>
       </section>
 
       {/* Tableau des niveaux */}
-      <section className="py-12 px-4 bg-[#f8efec]">
+      <section className="py-12 px-4 bg-accent-warm">
         <div className="max-w-[800px] mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Le niveau de français demandé pour chaque démarche
@@ -148,35 +167,47 @@ function IndexPage() {
           </p>
         </div>
         <div className="max-w-[800px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+          <Link
+            to="/financement/cpf"
+            className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-high transition-colors"
+          >
             <Wallet className="text-primary w-10 h-10 mb-2" />
             <span className="font-bold">CPF</span>
-          </div>
-          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+          </Link>
+          <Link
+            to="/financement"
+            className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-high transition-colors"
+          >
             <Building2 className="text-primary w-10 h-10 mb-2" />
             <span className="font-bold">Employeur</span>
-          </div>
-          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+          </Link>
+          <Link
+            to="/financement"
+            className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-high transition-colors"
+          >
             <Handshake className="text-primary w-10 h-10 mb-2" />
             <span className="font-bold">OPCO</span>
-          </div>
-          <div className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center">
+          </Link>
+          <Link
+            to="/financement"
+            className="bg-surface-container p-6 rounded-lg flex flex-col items-center justify-center text-center hover:bg-surface-container-high transition-colors"
+          >
             <Briefcase className="text-primary w-10 h-10 mb-2" />
             <span className="font-bold">France Travail</span>
-          </div>
+          </Link>
         </div>
       </section>
 
       {/* 3 Étapes (refonte automatisée) */}
       <section className="py-16 px-4 bg-secondary-container/10">
         <div className="max-w-[900px] mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Votre parcours en 3 étapes</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Votre parcours en 3 étapes</h2>
+          <p className="text-center text-on-surface-variant max-w-xl mx-auto mb-10 text-sm">
+            100 % en ligne, sans engagement. {siteName} est un organisme de formation privé — nous vous guidons, les décisions administratives restent du ressort des autorités compétentes.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant text-center space-y-3">
-              <div
-                className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white"
-                style={{ backgroundColor: "#1e3a8a" }}
-              >
+            <Card className="text-center space-y-3 border-outline-variant">
+              <div className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white bg-eval-navy">
                 <Calculator className="w-6 h-6" />
               </div>
               <div className="text-xs font-bold text-secondary uppercase tracking-wider">Étape 1</div>
@@ -184,12 +215,9 @@ function IndexPage() {
               <p className="text-on-surface-variant text-sm">
                 Quelques questions ciblées sur les 4 compétences (compréhension, expression écrite et orale).
               </p>
-            </div>
-            <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant text-center space-y-3">
-              <div
-                className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white"
-                style={{ backgroundColor: "#1e3a8a" }}
-              >
+            </Card>
+            <Card className="text-center space-y-3 border-outline-variant">
+              <div className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white bg-eval-navy">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div className="text-xs font-bold text-secondary uppercase tracking-wider">Étape 2</div>
@@ -197,12 +225,9 @@ function IndexPage() {
               <p className="text-on-surface-variant text-sm">
                 Notre algorithme positionne votre niveau CECRL et identifie les démarches adaptées à votre projet.
               </p>
-            </div>
-            <div className="bg-surface-bright p-6 rounded-2xl border border-outline-variant text-center space-y-3">
-              <div
-                className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white"
-                style={{ backgroundColor: "#f97316" }}
-              >
+            </Card>
+            <Card className="text-center space-y-3 border-outline-variant">
+              <div className="mx-auto w-14 h-14 rounded-full flex items-center justify-center text-white bg-eval-orange">
                 <Mail className="w-6 h-6" />
               </div>
               <div className="text-xs font-bold text-secondary uppercase tracking-wider">Étape 3</div>
@@ -210,7 +235,7 @@ function IndexPage() {
               <p className="text-on-surface-variant text-sm">
                 Bilan détaillé, guide pratique et pistes de financement envoyés automatiquement par email.
               </p>
-            </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -225,20 +250,25 @@ function IndexPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* T2 — Test rapide */}
-            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-primary/20 shadow-sm hover:border-primary transition-all group">
+            <div className="relative bg-surface-bright p-8 rounded-3xl border-2 border-eval-orange/40 shadow-sm hover:border-eval-orange transition-all group ring-2 ring-eval-orange/10">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-eval-orange-soft text-eval-orange text-xs font-bold uppercase tracking-wider rounded-full border border-eval-orange/30">
+                Recommandé
+              </span>
               <div className="bg-primary/10 text-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                 <Clock className="w-8 h-8" />
               </div>
-              <div className="text-xs font-bold text-primary uppercase tracking-wider mb-2">⚡ 3 minutes</div>
+              <div className="text-xs font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5" /> 3 minutes
+              </div>
               <h3 className="text-xl font-bold mb-2">Test rapide</h3>
               <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
                 10 questions ciblées. Estimation de niveau + formule adaptée à votre délai.
               </p>
-              <Link to="/test-rapide" onClick={() => trackEvent("home_t2_click")}>
-                <button className="w-full h-12 bg-primary text-on-primary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+              <Button variant="primary" size="md" asChild className="w-full rounded-xl text-sm shadow-md">
+                <Link to="/test-rapide" onClick={() => trackEvent("home_t2_click")}>
                   Commencer <ArrowRight className="w-4 h-4" />
-                </button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
             {/* T3 — Test complet */}
@@ -246,59 +276,38 @@ function IndexPage() {
               <div className="bg-secondary/10 text-secondary w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-white transition-colors">
                 <Sparkles className="w-8 h-8" />
               </div>
-              <div className="text-xs font-bold text-secondary uppercase tracking-wider mb-2">🎯 30 minutes</div>
+              <div className="text-xs font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Target className="h-3.5 w-3.5" /> 30 minutes
+              </div>
               <h3 className="text-xl font-bold mb-2">Diagnostic complet</h3>
               <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
                 4 compétences évaluées : oral, écrit, grammaire, production. Programme sur-mesure.
               </p>
-              <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => trackEvent("home_t3_click")}>
-                <button className="w-full h-12 bg-secondary text-on-secondary rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+              <Button variant="secondary" size="md" asChild className="w-full rounded-xl text-sm shadow-md">
+                <Link to="/passer-test/$token" params={{ token: "latest" }} onClick={() => trackEvent("home_t3_click")}>
                   Passer le test <ArrowRight className="w-4 h-4" />
-                </button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
             {/* T1 — Accompagnement admin */}
-            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-outline-variant shadow-sm hover:border-slate-400 transition-all group">
-              <div className="bg-slate-100 text-slate-700 w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-surface-bright p-8 rounded-3xl border-2 border-outline-variant shadow-sm hover:border-outline transition-all group">
+              <div className="bg-surface-container text-on-surface-variant w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
                 <FileText className="w-8 h-8" />
               </div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📋 Sans test</div>
+              <div className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <ClipboardList className="h-3.5 w-3.5" /> Sans test
+              </div>
               <h3 className="text-xl font-bold mb-2">Dossier préfecture</h3>
               <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
                 Besoin d'aide pour vos papiers ? Notre partenaire analyse votre dossier sous 24h.
               </p>
-              <Link to="/accompagnement-administratif" onClick={() => trackEvent("home_t1_click")}>
-                <button className="w-full h-12 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-95 transition-all text-sm">
+              <Button size="md" asChild className="w-full rounded-xl text-sm shadow-md bg-on-surface text-on-primary hover:opacity-90">
+                <Link to="/accompagnement-administratif" onClick={() => trackEvent("home_t1_click")}>
                   Être contacté <ArrowRight className="w-4 h-4" />
-                </button>
-              </Link>
+                </Link>
+              </Button>
             </div>
-          </div>
-        </div>
-      </section>
-      {/* Section Accompagnement Administratif */}
-      <section className="py-12 px-4 bg-primary-container/10 border-t border-b border-outline-variant/50">
-        <div className="max-w-[800px] mx-auto flex flex-col md:flex-row items-center gap-8">
-          <div className="flex-1 space-y-4 text-center md:text-left">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold uppercase tracking-wider">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              Nouveau service
-            </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-on-surface">Dossier préfecture complexe ?</h3>
-            <p className="text-on-surface-variant leading-relaxed">
-              Bénéficiez d'un accompagnement personnalisé avec nos experts partenaires sélectionnés pour analyser votre dossier, identifier les pièces manquantes et sécuriser vos démarches administratives.
-            </p>
-          </div>
-          <div className="shrink-0 w-full md:w-auto">
-            <Link to="/accompagnement-administratif">
-              <button
-                className="w-full md:w-auto h-14 px-8 rounded-xl font-bold text-white shadow-md hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2"
-                style={{ backgroundColor: "#ea580c" }}
-              >
-                Demander un accompagnement →
-              </button>
-            </Link>
           </div>
         </div>
       </section>

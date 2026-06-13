@@ -9,10 +9,16 @@ import {
   Loader2,
   AlertCircle,
   ChevronDown,
+  BookOpen,
+  FileText,
+  User,
+  MessageCircle,
+  ArrowRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { sendEnrollmentConfirmationFn } from "@/lib/dashboard.functions";
+import { Button } from "@/components/bff/Button";
 
 export const Route = createFileRoute("/sessions/$cohortId")({
   head: () => ({
@@ -50,9 +56,9 @@ type Cohort = {
 };
 
 const INTENSITY: Record<string, { label: string; cls: string }> = {
-  standard: { label: "Standard", cls: "bg-slate-100 text-slate-700" },
+  standard: { label: "Standard", cls: "bg-surface-container text-on-surface-variant" },
   intensif: { label: "Intensif", cls: "bg-amber-100 text-amber-800" },
-  express: { label: "Express ⚡", cls: "bg-red-100 text-red-800" },
+  express: { label: "Express", cls: "bg-red-100 text-red-800" },
 };
 
 function formatDateLong(d: string) {
@@ -120,7 +126,7 @@ function SessionDetailPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <Loader2 className="h-10 w-10 animate-spin text-primary mb-3" />
-        <p className="font-bold text-slate-700">Chargement de la session…</p>
+        <p className="font-bold text-on-surface-variant">Chargement de la session…</p>
       </div>
     );
   }
@@ -152,17 +158,17 @@ function SessionDetailPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4">
+    <div className="min-h-screen bg-surface py-12 px-4">
       <div className="max-w-[900px] mx-auto space-y-8">
         <Link
           to="/sessions"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-primary"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Toutes les sessions
         </Link>
 
         {/* SECTION 1 — En-tête */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-5">
+        <div className="bg-surface-bright rounded-2xl border border-outline-variant p-8 shadow-sm space-y-5">
           <div className="flex flex-wrap gap-2">
             <span
               className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${intensityBadge.cls}`}
@@ -173,7 +179,7 @@ function SessionDetailPage() {
               {cohort.status}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900">
+          <h1 className="text-3xl md:text-4xl font-black text-on-surface">
             {cohort.formation_journeys?.title || "Parcours de formation"}
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
@@ -195,13 +201,13 @@ function SessionDetailPage() {
             />
           </div>
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold text-slate-600">
+            <div className="flex justify-between text-xs font-semibold text-on-surface-variant">
               <span className="flex items-center gap-1">
                 <Users className="h-4 w-4" /> {enrolled} / {cohort.max_students} inscrits
               </span>
               <span>{isFull ? "Complet" : `${remaining} places restantes`}</span>
             </div>
-            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-surface-container rounded-full h-2 overflow-hidden">
               <div className="h-full bg-primary" style={{ width: `${progressPct}%` }} />
             </div>
           </div>
@@ -209,31 +215,31 @@ function SessionDetailPage() {
 
         {/* SECTION 2 — Programme */}
         <Accordion title="Ce que vous allez préparer">
-          <p className="text-slate-700 leading-relaxed">
+          <p className="text-on-surface-variant leading-relaxed">
             {cohort.formation_journeys?.description ||
               "Une formation structurée pour atteindre votre objectif administratif ou professionnel."}
           </p>
         </Accordion>
 
         <Accordion title="Structure du parcours">
-          <ul className="space-y-2 text-slate-700">
-            <li>📚 Séances de 3h en groupe restreint (6 élèves maximum)</li>
-            <li>📝 3 examens blancs aux jalons 50%, 75% et 100%</li>
-            <li>👩‍🏫 Un formateur référent tout au long du parcours</li>
-            <li>💬 Suivi WhatsApp entre les séances</li>
+          <ul className="space-y-2 text-on-surface-variant">
+            <li className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-primary shrink-0" /> Séances de 3h en groupe restreint (6 élèves maximum)</li>
+            <li className="flex items-center gap-2"><FileText className="h-4 w-4 text-primary shrink-0" /> 3 examens blancs aux jalons 50%, 75% et 100%</li>
+            <li className="flex items-center gap-2"><User className="h-4 w-4 text-primary shrink-0" /> Un formateur référent tout au long du parcours</li>
+            <li className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-primary shrink-0" /> Suivi WhatsApp entre les séances</li>
           </ul>
         </Accordion>
 
         <Accordion title="Financement possible">
-          <p className="text-slate-700">
+          <p className="text-on-surface-variant">
             CPF · OPCO · France Travail · paiement en 3× sans frais
           </p>
-          <Link
-            to="/financement"
-            className="inline-flex items-center gap-2 text-primary font-bold mt-3 hover:underline"
-          >
-            Vérifier mes droits au financement →
-          </Link>
+          <Button variant="ghost" size="md" asChild className="mt-3 text-primary font-bold p-0 h-auto hover:bg-transparent">
+            <Link to="/financement">
+              Vérifier mes droits au financement
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </Accordion>
 
         {/* SECTION 3 — Réservation */}
@@ -246,10 +252,10 @@ function SessionDetailPage() {
 function Info({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
   return (
     <div>
-      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+      <span className="text-[10px] font-bold uppercase tracking-wider text-outline flex items-center gap-1">
         {icon} {label}
       </span>
-      <p className="font-bold text-slate-800 text-sm mt-1">{value}</p>
+      <p className="font-bold text-on-surface-variant text-sm mt-1">{value}</p>
     </div>
   );
 }
@@ -257,11 +263,11 @@ function Info({ label, value, icon }: { label: string; value: string; icon: Reac
 function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-surface-bright rounded-2xl border border-outline-variant shadow-sm overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex justify-between items-center p-5 text-left font-bold text-slate-900"
+        className="w-full flex justify-between items-center p-5 text-left font-bold text-on-surface"
       >
         {title}
         <ChevronDown className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -416,9 +422,9 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
   return (
     <form
       onSubmit={onSubmit}
-      className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-5"
+      className="bg-surface-bright rounded-2xl border border-outline-variant p-8 shadow-sm space-y-5"
     >
-      <h2 className="text-2xl font-black text-slate-900">
+      <h2 className="text-2xl font-black text-on-surface">
         {isFull ? "S'inscrire en liste d'attente" : "Réserver ma place"}
       </h2>
 
@@ -429,7 +435,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
             required
             value={prenom}
             onChange={(e) => setPrenom(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2.5"
+            className="w-full border border-outline-variant rounded-lg px-3 py-2.5"
           />
         </Field>
         <Field label="Nom *">
@@ -438,7 +444,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
             required
             value={nom}
             onChange={(e) => setNom(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2.5"
+            className="w-full border border-outline-variant rounded-lg px-3 py-2.5"
           />
         </Field>
         <Field label="Email *">
@@ -447,7 +453,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2.5"
+            className="w-full border border-outline-variant rounded-lg px-3 py-2.5"
           />
         </Field>
         <Field label="Téléphone WhatsApp *">
@@ -456,7 +462,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
             required
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
-            className="w-full border border-slate-200 rounded-lg px-3 py-2.5"
+            className="w-full border border-outline-variant rounded-lg px-3 py-2.5"
             placeholder="+33 6 12 34 56 78"
           />
         </Field>
@@ -466,7 +472,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
         <select
           value={paymentMode}
           onChange={(e) => setPaymentMode(e.target.value)}
-          className="w-full border border-slate-200 rounded-lg px-3 py-2.5"
+          className="w-full border border-outline-variant rounded-lg px-3 py-2.5"
         >
           <option value="direct">Je paie directement (acompte 30%)</option>
           <option value="financement">Je souhaite un financement CPF / OPCO / France Travail</option>
@@ -475,7 +481,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
       </Field>
 
       <div className="space-y-3">
-        <label className="flex items-start gap-3 text-sm text-slate-700">
+        <label className="flex items-start gap-3 text-sm text-on-surface-variant">
           <input
             type="checkbox"
             required
@@ -487,7 +493,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
             * J'accepte de recevoir des informations sur cette formation.
           </span>
         </label>
-        <label className="flex items-start gap-3 text-sm text-slate-700">
+        <label className="flex items-start gap-3 text-sm text-on-surface-variant">
           <input
             type="checkbox"
             checked={consentPartner}
@@ -525,7 +531,7 @@ function ReservationForm({ cohortId, isFull }: { cohortId: string; isFull: boole
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-xs font-bold text-slate-700">{label}</span>
+      <span className="text-xs font-bold text-on-surface-variant">{label}</span>
       {children}
     </div>
   );

@@ -25,7 +25,7 @@ const STATUS_BADGES: Record<string, string> = {
   confirming: "bg-amber-50 text-amber-800 border-amber-200",
   confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200",
   in_progress: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  completed: "bg-slate-100 text-slate-700 border-slate-200",
+  completed: "bg-surface-container text-on-surface-variant border-outline-variant",
   cancelled: "bg-red-50 text-red-700 border-red-200",
 };
 const STATUS_LABELS: Record<string, string> = {

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { siteName, phoneHref } from "@/config/site";
 import { AlertCircle, Wallet, Building2, Users, Briefcase, Handshake, CreditCard } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { Button } from "@/components/bff/Button";
 
 export const Route = createFileRoute("/financement/")({
   head: () => ({
@@ -43,12 +44,10 @@ function FinancementIndexPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* CPF Card - Main Focus */}
           <div className="md:col-span-2 bg-surface-bright p-8 rounded-xl border border-outline-variant shadow-sm flex flex-col md:flex-row gap-8 items-center">
-            <div className="md:w-1/3">
-              <img 
-                className="w-full h-48 object-cover rounded-lg" 
-                alt="Espace de travail" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB8bQ4XytVH184pz3nNSnEdS-bgFIzRDSJQYAhXoiFpUNUZVvj7Ed6maJDBR2lI2QNw0zOGrCY968aPwph0vZBLIGvQVtYXR4bHgh0wEfA2bOmHYwaqGYgf0pz6n1JcB1miOWqcusRNnB8zXyTR9aSzTN9jUEWaR7WBplHjKzO7YANbJB4BwsI7VmlcBMjkVCOsTHhlFBTJiGQvMPQOOHBOJByj7-WHwocYIX3_VDRYQ9bIO2A6XZMxwsV4WsZgg7t0xflB4ZLZl4" 
-              />
+            <div className="md:w-1/3 w-full">
+              <div className="w-full h-48 rounded-lg bg-gradient-to-br from-primary-container/40 via-secondary-container/30 to-surface-container flex items-center justify-center">
+                <Wallet className="h-16 w-16 text-primary opacity-80" aria-hidden />
+              </div>
             </div>
             <div className="md:w-2/3">
               <div className="flex items-center gap-3 mb-4">
@@ -122,11 +121,11 @@ function FinancementIndexPage() {
 
         {/* Final CTA Section */}
         <div className="text-center py-8">
-          <Link to="/contact" onClick={() => trackEvent("financement_cta_click", { action: "verifier_financement" })}>
-            <button className="bg-primary text-on-primary px-10 h-16 rounded-xl font-bold text-xl hover:opacity-90 active:scale-95 transition-all shadow-md">
+          <Button variant="primary" size="lg" asChild className="h-16 px-10 text-xl font-bold shadow-md">
+            <Link to="/contact" onClick={() => trackEvent("financement_cta_click", { action: "verifier_financement" })}>
               Vérifier mes financements possibles
-            </button>
-          </Link>
+            </Link>
+          </Button>
           <p className="text-sm text-on-surface-variant mt-4">
             Réponse personnalisée sous 24 h ouvrées par nos conseillers.
           </p>

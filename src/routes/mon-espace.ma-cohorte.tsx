@@ -16,12 +16,12 @@ export const Route = createFileRoute("/mon-espace/ma-cohorte")({
 });
 
 const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
-  draft: { label: "Brouillon", cls: "bg-gray-100 text-gray-700" },
+  draft: { label: "Brouillon", cls: "bg-surface-container text-on-surface-variant" },
   open: { label: "Ouverte", cls: "bg-blue-100 text-blue-700" },
   confirming: { label: "Confirmation", cls: "bg-amber-100 text-amber-800" },
   confirmed: { label: "Confirmée", cls: "bg-emerald-100 text-emerald-700" },
   in_progress: { label: "En cours", cls: "bg-primary/10 text-primary" },
-  completed: { label: "Terminée", cls: "bg-gray-100 text-gray-700" },
+  completed: { label: "Terminée", cls: "bg-surface-container text-on-surface-variant" },
   cancelled: { label: "Annulée", cls: "bg-red-100 text-red-700" },
 };
 
@@ -70,13 +70,13 @@ function Content({ data }: { data: any }) {
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Ma formation */}
       <section className="bg-white rounded-2xl p-6 shadow-sm lg:col-span-2">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Ma formation</h2>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">Ma formation</h2>
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-xl font-bold text-gray-900">{journey?.title ?? "Parcours"}</h3>
-            <p className="text-sm text-gray-600 capitalize">
+            <h3 className="text-xl font-bold text-on-surface">{journey?.title ?? "Parcours"}</h3>
+            <p className="text-sm text-on-surface-variant capitalize">
               Intensité : <span className="font-medium">{cohort.intensity}</span>
-              {cohort.code && <span className="text-gray-400"> · {cohort.code}</span>}
+              {cohort.code && <span className="text-outline"> · {cohort.code}</span>}
             </p>
           </div>
           <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${status.cls}`}>
@@ -85,22 +85,22 @@ function Content({ data }: { data: any }) {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 text-sm">
-          <div className="p-3 rounded-lg bg-gray-50">
-            <p className="text-xs text-gray-500">Démarrage</p>
-            <p className="font-semibold text-gray-900">{formatDateFrLong(cohort.start_date)}</p>
+          <div className="p-3 rounded-lg bg-surface-container-low">
+            <p className="text-xs text-outline">Démarrage</p>
+            <p className="font-semibold text-on-surface">{formatDateFrLong(cohort.start_date)}</p>
           </div>
-          <div className="p-3 rounded-lg bg-gray-50">
-            <p className="text-xs text-gray-500">Fin estimée</p>
-            <p className="font-semibold text-gray-900">{formatDateFrLong(cohort.estimated_end_date)}</p>
+          <div className="p-3 rounded-lg bg-surface-container-low">
+            <p className="text-xs text-outline">Fin estimée</p>
+            <p className="font-semibold text-on-surface">{formatDateFrLong(cohort.estimated_end_date)}</p>
           </div>
         </div>
 
         {schedule.length > 0 && (
           <div className="mt-4">
-            <p className="text-xs text-gray-500 mb-2">Créneaux hebdomadaires</p>
+            <p className="text-xs text-outline mb-2">Créneaux hebdomadaires</p>
             <ul className="space-y-1.5">
               {schedule.map((s: any, i: number) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-gray-800">
+                <li key={i} className="flex items-center gap-2 text-sm text-on-surface">
                   <CalendarDays className="w-4 h-4 text-primary" />
                   {formatSlot(s)}
                 </li>
@@ -124,22 +124,22 @@ function Content({ data }: { data: any }) {
 
       {/* Ma progression */}
       <section className="bg-white rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Ma progression</h2>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3">Ma progression</h2>
         <p className="text-3xl font-extrabold text-primary mb-1">
-          {pastCount}<span className="text-base text-gray-500"> / {totalCount}</span>
+          {pastCount}<span className="text-base text-outline"> / {totalCount}</span>
         </p>
-        <p className="text-xs text-gray-500 mb-3">séances effectuées</p>
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5">
+        <p className="text-xs text-outline mb-3">séances effectuées</p>
+        <div className="w-full h-2 bg-surface-container rounded-full overflow-hidden mb-5">
           <div className="h-full bg-primary" style={{ width: `${progressPct}%` }} />
         </div>
 
         {nextSession && (
           <div className="mb-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
             <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-1">Prochaine séance</p>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-on-surface">
               N°{nextSession.session_number} — {formatDateFrLong(nextSession.session_date)}
             </p>
-            <p className="text-xs text-gray-600 mt-0.5">
+            <p className="text-xs text-on-surface-variant mt-0.5">
               {formatTime(nextSession.start_time)} – {formatTime(nextSession.end_time)}
             </p>
             {nextSession.meeting_url && (
@@ -169,28 +169,28 @@ function Content({ data }: { data: any }) {
 
       {/* Financement */}
       <section className="bg-white rounded-2xl p-6 shadow-sm lg:col-span-3">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-outline mb-3 flex items-center gap-2">
           <Wallet className="w-4 h-4" /> Mon financement
         </h2>
         <div className="grid sm:grid-cols-3 gap-4 text-sm">
-          <div className="p-3 rounded-lg bg-gray-50">
-            <p className="text-xs text-gray-500">Mode de financement</p>
-            <p className="font-semibold text-gray-900 capitalize">
+          <div className="p-3 rounded-lg bg-surface-container-low">
+            <p className="text-xs text-outline">Mode de financement</p>
+            <p className="font-semibold text-on-surface capitalize">
               {enrollment?.payment_mode?.replace(/_/g, " ") ?? "Non précisé"}
             </p>
           </div>
           {enrollment?.stafy_status && enrollment.stafy_status !== "not_sent" && (
-            <div className="p-3 rounded-lg bg-gray-50">
-              <p className="text-xs text-gray-500">Statut Stafy</p>
-              <p className="font-semibold text-gray-900 capitalize">
+            <div className="p-3 rounded-lg bg-surface-container-low">
+              <p className="text-xs text-outline">Statut Stafy</p>
+              <p className="font-semibold text-on-surface capitalize">
                 {enrollment.stafy_status.replace(/_/g, " ")}
               </p>
             </div>
           )}
           {enrollment?.payment_mode === "direct" && (
-            <div className="p-3 rounded-lg bg-gray-50">
-              <p className="text-xs text-gray-500">Payé / Solde dû</p>
-              <p className="font-semibold text-gray-900">
+            <div className="p-3 rounded-lg bg-surface-container-low">
+              <p className="text-xs text-outline">Payé / Solde dû</p>
+              <p className="font-semibold text-on-surface">
                 {Number(enrollment.total_paid ?? 0).toFixed(0)} € / {Number(enrollment.solde_due ?? 0).toFixed(0)} €
               </p>
             </div>

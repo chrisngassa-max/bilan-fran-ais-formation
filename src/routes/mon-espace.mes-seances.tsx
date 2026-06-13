@@ -55,10 +55,10 @@ function Content({ data, tab, setTab }: { data: any; tab: Tab; setTab: (t: Tab) 
   return (
     <>
       <div className="bg-white rounded-2xl p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-gray-900">
+        <h2 className="text-lg font-bold text-on-surface">
           Mes séances — {data.journey?.title ?? "Mon parcours"}
         </h2>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-on-surface-variant mt-1">
           {past.length} séance{past.length > 1 ? "s" : ""} passée{past.length > 1 ? "s" : ""} ·{" "}
           {upcoming.length} à venir · {all.length} total
         </p>
@@ -74,7 +74,7 @@ function Content({ data, tab, setTab }: { data: any; tab: Tab; setTab: (t: Tab) 
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 tab === key
                   ? "bg-primary text-primary-foreground"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-surface-container text-on-surface-variant hover:bg-surface-container-high"
               }`}
             >
               {label}
@@ -85,7 +85,7 @@ function Content({ data, tab, setTab }: { data: any; tab: Tab; setTab: (t: Tab) 
 
       <div className="space-y-3">
         {list.length === 0 && (
-          <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-500 shadow-sm">
+          <div className="bg-white rounded-2xl p-8 text-center text-sm text-outline shadow-sm">
             Aucune séance.
           </div>
         )}
@@ -108,7 +108,7 @@ function SessionRow({ session, attendance, today }: { session: any; attendance: 
         ? { label: "Bilan", icon: ClipboardCheck, cls: "bg-emerald-100 text-emerald-700" }
         : { label: "Cours", icon: null as any, cls: "bg-blue-100 text-blue-700" };
 
-  let statusEl: React.ReactNode = <span className="text-gray-400 text-sm">—</span>;
+  let statusEl: React.ReactNode = <span className="text-outline text-sm">—</span>;
   if (attendance) {
     if (attendance.status === "present") {
       statusEl = (
@@ -136,7 +136,7 @@ function SessionRow({ session, attendance, today }: { session: any; attendance: 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-semibold text-on-surface">
               Séance n°{session.session_number}
             </span>
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${typeBadge.cls}`}>
@@ -144,11 +144,11 @@ function SessionRow({ session, attendance, today }: { session: any; attendance: 
               {typeBadge.label}
             </span>
           </div>
-          <p className="text-sm text-gray-700 mt-1">{formatDateFrLong(session.session_date)}</p>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-sm text-on-surface-variant mt-1">{formatDateFrLong(session.session_date)}</p>
+          <p className="text-xs text-outline mt-0.5">
             {formatTime(session.start_time)} – {formatTime(session.end_time)}
           </p>
-          {session.title && <p className="text-xs text-gray-600 mt-1 italic">{session.title}</p>}
+          {session.title && <p className="text-xs text-on-surface-variant mt-1 italic">{session.title}</p>}
         </div>
         <div className="flex items-center gap-3 shrink-0">
           {statusEl}
