@@ -410,6 +410,7 @@ function CohortCard({ cohort }: { cohort: PublicCohort }) {
       <Link
         to="/sessions/$cohortId"
         params={{ cohortId: cohort.id }}
+        onClick={() => trackEvent("inscription_click", { cohort: cohort.code ?? cohort.id })}
         className="mt-2 inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-5 py-3 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all"
       >
         {isFull ? "Liste d'attente" : "Réserver ma place"}

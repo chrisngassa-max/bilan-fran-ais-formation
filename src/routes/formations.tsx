@@ -289,9 +289,10 @@ function FormationsPage() {
           <h2 className="text-2xl font-black text-slate-900 text-center">Fiches détaillées des parcours</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {displayJourneys.map((j) => (
-              <div 
-                key={j.id} 
-                className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-slate-300 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              <div
+                key={j.id}
+                onClick={() => trackEvent("parcours_click", { parcours: j.name })}
+                className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-slate-300 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { CheckCircle2, ChevronDown, ChevronUp, FileText, Info, HelpCircle } from "lucide-react"
+import { trackEvent } from "@/lib/analytics"
 
 export type DemarcheType = "pluriannuelle" | "resident_10ans" | "naturalisation" | "je_ne_sais_pas" | "autre"
 
@@ -142,13 +143,18 @@ export function ChecklistDocuments({
   }
 
   const toggleItem = (id: string) => {
-    setCheckedItems(prev => ({ ...prev, [id]: !prev[id] }))
+    setCheckedItems(prev => {
+      const next = !prev[id];
+      trackEvent("checklist_item_checked", { item: id, checked: next });
+      return { ...prev, [id]: next };
+    });
   }
 
   const handleDispenseClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDispenseDemandee(true)
+    trackEvent("dispense_demandee")
     onDispenseClick?.()
   }
 

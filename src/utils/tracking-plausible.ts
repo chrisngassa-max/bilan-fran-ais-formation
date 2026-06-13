@@ -16,6 +16,21 @@ type PlausibleEvent =
   | "cpf_link_clicked"
   | "export_downloaded"
   | "dispense_verifiee"
+  // Patch 10
+  | "hero_cta_click"
+  | "test_start"
+  | "test_question_answered"
+  | "lead_form_view"
+  | "lead_submitted"
+  | "diag_start"
+  | "diag_step_completed"
+  | "diag_completed"
+  | "parcours_click"
+  | "inscription_click"
+  | "financement_cta_click"
+  | "demarche_selected"
+  | "checklist_item_checked"
+  | "dispense_demandee"
 
 declare global {
   interface Window {

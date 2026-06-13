@@ -238,7 +238,7 @@ function AccompagnementAdministratifPage() {
                 <select
                   id="demarche-select"
                   value={requestType}
-                  onChange={(e) => setRequestType(e.target.value as DemarcheType)}
+                  onChange={(e) => { const v = e.target.value as DemarcheType; setRequestType(v); trackEvent("demarche_selected", { demarche: v }); }}
                   className="w-full h-12 px-4 rounded-xl border-2 border-slate-100 bg-slate-50 focus:border-primary focus:bg-white transition-all font-bold text-sm appearance-none cursor-pointer"
                 >
                   <option value="pluriannuelle">Carte de séjour pluriannuelle / résident</option>

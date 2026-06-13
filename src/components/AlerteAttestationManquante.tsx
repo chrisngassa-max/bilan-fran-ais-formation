@@ -43,6 +43,7 @@ export function AlerteAttestationManquante({
     e.preventDefault()
     e.stopPropagation()
     track("dispense_verifiee", { tunnel: tunnel ?? "", type_titre: type_titre ?? "" })
+    track("dispense_demandee", { tunnel: tunnel ?? "" })
     onDispenseClick?.()
   }
 

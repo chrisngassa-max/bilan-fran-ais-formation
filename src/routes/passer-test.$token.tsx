@@ -286,7 +286,13 @@ function PasserTestPage() {
     if (currentItemIndex < currentItems.length - 1) {
       setCurrentItemIndex(prev => prev + 1);
     } else {
-      setCurrentStep(prev => prev + 1);
+      const nextStep = currentStep + 1;
+      if (nextStep === 5) {
+        trackEvent("diag_completed");
+      } else {
+        trackEvent("diag_step_completed", { competence: currentSkill });
+      }
+      setCurrentStep(nextStep);
       setCurrentItemIndex(0);
     }
     
@@ -392,7 +398,7 @@ function PasserTestPage() {
               </div>
               <Button 
                 disabled={!studentName.trim()}
-                onClick={() => { trackEvent('test_started'); setCurrentStep(1); }}
+                onClick={() => { trackEvent('test_started'); trackEvent('diag_start'); setCurrentStep(1); }}
                 className="w-full h-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-xl shadow-lg flex items-center justify-center"
               >
                 Démarrer mon évaluation

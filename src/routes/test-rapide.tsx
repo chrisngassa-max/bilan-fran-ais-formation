@@ -105,14 +105,18 @@ function PhaseTest({ onFinish }: { onFinish: (score: number, duration: number) =
 
   const handleAnswer = (idx: number) => {
     const newAnswers = [...answers, idx];
-    if (current + 1 >= QUESTIONS.length) {
+    const nextQ = current + 1;
+    if (nextQ >= QUESTIONS.length) {
       const score = newAnswers.filter((a, i) => a === QUESTIONS[i].correct).length;
       const duration = Math.round((Date.now() - startRef.current) / 1000);
       sessionStorage.removeItem(TEST_PROGRESS_KEY);
       onFinish(score, duration);
     } else {
+      if (nextQ === 3 || nextQ === 5 || nextQ === 8) {
+        trackEvent("test_question_answered", { n: nextQ });
+      }
       setAnswers(newAnswers);
-      setCurrent(current + 1);
+      setCurrent(nextQ);
     }
   };
 
@@ -161,6 +165,7 @@ function PhaseCapture({ onSubmit }: {
 
   // Pré-remplir depuis sessionStorage
   useEffect(() => {
+    trackEvent("lead_form_view");
     const saved = sessionStorage.getItem("bff_candidate_info");
     if (saved) {
       try {
@@ -259,6 +264,8 @@ function PhaseFormuleExpress({ score, prenom, email, whatsapp, onCaptureLead }: 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => { trackEvent("result_viewed"); }, []);
+
   const joursRestants = dateRdv ? differenceEnJours(dateRdv) : 90;
   const formule = calculerFormule(joursRestants);
   const isAttestationMissing = checklistData ? !checklistData.attestation_ok && !checklistData.dispense_demandee : false;
@@ -356,6 +363,8 @@ function PhaseResultatNiveau({ score, prenom, whatsapp, onCaptureLead }: {
   const niveau = calculerNiveau(score);
   const [submitted, setSubmitted] = useState(false);
 
+  useEffect(() => { trackEvent("result_viewed"); }, []);
+
   const handleCTA = async () => {
     await onCaptureLead({ rdv_prevu: false, niveau_estime: niveau, score_brut: score });
     setSubmitted(true);
@@ -416,6 +425,7 @@ function TestRapidePage() {
 
   const handleStart = () => {
     trackEvent("test_rapide_started");
+    trackEvent("test_start");
     setPhase("test");
   };
 
@@ -424,6 +434,8 @@ function TestRapidePage() {
     setDuration(d);
     setPhase("capture");
     trackEvent("test_rapide_completed", { score: s, duration: d });
+    trackEvent("test_completed");
+    trackEvent("test_question_answered", { n: 10 });
   };
 
   const handleCapture = (data: { prenom: string; email: string; whatsapp: string; rdv_prevu: boolean }) => {
@@ -432,6 +444,7 @@ function TestRapidePage() {
     sessionStorage.setItem("bff_candidate_info", JSON.stringify({ prenom: data.prenom, whatsapp: data.whatsapp }));
     setPhase(data.rdv_prevu ? "express" : "niveau");
     trackEvent("test_rapide_contact_submitted", { rdv_prevu: data.rdv_prevu });
+    trackEvent("lead_submitted", { email_ok: true, whatsapp_ok: !!data.whatsapp });
   };
 
   const handleCaptureLead = async (extra: object) => {

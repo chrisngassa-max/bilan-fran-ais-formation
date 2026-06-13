@@ -36,7 +36,23 @@ export type AnalyticsEvent =
   | "offers_loaded"
   | "offers_load_error"
   | "sessions_load_error"
-  | "diag_load_error";
+  | "diag_load_error"
+  // Instrumentation Plausible (Patch 10)
+  | "hero_cta_click"
+  | "test_start"
+  | "test_question_answered"
+  | "test_completed"
+  | "lead_form_view"
+  | "lead_submitted"
+  | "diag_start"
+  | "diag_step_completed"
+  | "diag_completed"
+  | "parcours_click"
+  | "inscription_click"
+  | "financement_cta_click"
+  | "demarche_selected"
+  | "checklist_item_checked"
+  | "dispense_demandee";
 
 export function trackEvent(name: AnalyticsEvent, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

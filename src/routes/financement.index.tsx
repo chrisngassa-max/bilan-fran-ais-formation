@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { siteName, phoneHref } from "@/config/site";
 import { AlertCircle, Wallet, Building2, Users, Briefcase, Handshake, CreditCard } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/financement/")({
   head: () => ({
@@ -121,7 +122,7 @@ function FinancementIndexPage() {
 
         {/* Final CTA Section */}
         <div className="text-center py-8">
-          <Link to="/contact">
+          <Link to="/contact" onClick={() => trackEvent("financement_cta_click", { action: "verifier_financement" })}>
             <button className="bg-primary text-on-primary px-10 h-16 rounded-xl font-bold text-xl hover:opacity-90 active:scale-95 transition-all shadow-md">
               Vérifier mes financements possibles
             </button>
