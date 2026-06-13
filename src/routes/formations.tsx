@@ -1,17 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useFormationOffers } from "@/hooks/useFormationOffers";
-import { 
-  ArrowRight, 
-  Clock, 
-  Wallet, 
-  ShieldCheck, 
-  GraduationCap, 
-  Check, 
+import {
+  ArrowRight,
+  Clock,
+  Wallet,
+  GraduationCap,
+  Check,
   Info,
-  Loader2,
-  AlertCircle
+  MessageCircle,
 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
+import { waHref } from "@/config/site";
 import { Tooltip } from "@/components/Tooltip";
 
 export const Route = createFileRoute("/formations")({
@@ -30,13 +29,14 @@ export const Route = createFileRoute("/formations")({
 });
 
 function FormationsPage() {
-  const { data: journeys, isError: journeysError, isLoading: journeysLoading } = useFormationOffers();
-  const displayJourneys = journeys || [];
+  const { data } = useFormationOffers();
+  const displayJourneys = data?.journeys ?? [];
+  const degraded = data?.degraded ?? false;
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-[1000px] mx-auto space-y-12">
-        
+
         {/* Header Section */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
@@ -56,24 +56,24 @@ function FormationsPage() {
           </div>
         </div>
 
-
-
-        {journeysLoading && (
-          <div className="flex flex-col items-center justify-center p-20 text-center">
-            <Loader2 className="h-10 w-10 animate-spin mx-auto mb-6 text-primary" />
-            <span className="font-extrabold text-slate-800 text-lg">Chargement des offres...</span>
+        {degraded && (
+          <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <p className="text-amber-900 font-semibold text-sm">
+              Tarifs détaillés momentanément indisponibles.
+            </p>
+            <a
+              href={waHref("Bonjour, je souhaite connaître les tarifs détaillés des parcours de formation.")}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackEvent("whatsapp_clicked", { from: "formations_degraded" })}
+              className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba56] text-white px-4 py-2 rounded-lg font-bold text-sm transition-all"
+            >
+              <MessageCircle className="h-4 w-4" /> Contactez-nous sur WhatsApp
+            </a>
           </div>
         )}
 
-        {journeysError && (
-          <div className="bg-red-50 p-6 rounded-2xl border border-red-200 text-center space-y-3">
-            <AlertCircle className="h-10 w-10 text-red-500 mx-auto" />
-            <h2 className="font-black text-red-900 text-xl">Catalogue indisponible</h2>
-            <p className="text-red-700 font-semibold">Une erreur est survenue lors de la récupération des offres.</p>
-          </div>
-        )}
-
-        {!journeysLoading && !journeysError && (
+        {(
           <div className="space-y-12">
             {/* Tableau Comparatif - Desktop uniquement */}
             <div className="hidden md:block bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">

@@ -31,7 +31,12 @@ export type AnalyticsEvent =
   | "home_t3_click"
   | "test_rapide_started"
   | "test_rapide_completed"
-  | "test_rapide_contact_submitted";
+  | "test_rapide_contact_submitted"
+  // Fallbacks de chargement (Patch 9)
+  | "offers_loaded"
+  | "offers_load_error"
+  | "sessions_load_error"
+  | "diag_load_error";
 
 export function trackEvent(name: AnalyticsEvent, props?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

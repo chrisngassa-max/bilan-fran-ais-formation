@@ -5,6 +5,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { waHref, contactInfo } from '@/config/site';
+import { trackEvent } from '@/lib/analytics';
 import { 
   ChevronRight, 
   Send, 
@@ -42,7 +43,7 @@ export const Route = createFileRoute('/passer-test/$token')({
   validateSearch: (search) => searchSchema.parse(search),
 });
 
-const PLACEMENT_TEST_TIMEOUT_MS = 6000;
+const PLACEMENT_TEST_TIMEOUT_MS = 10000;
 
 function PasserTestPage() {
   const { token } = Route.useParams();
@@ -141,27 +142,32 @@ function PasserTestPage() {
   const { data: testPayload, isLoading, error, refetch } = useQuery({
     queryKey: ['public-placement-test', token],
     queryFn: async () => {
-      const response = await Promise.race([
-        supabase.functions.invoke('get-placement-test', {
-          method: 'GET',
-          headers: token === 'latest'
-            ? { 'Content-Type': 'application/json' }
-            : { 'Content-Type': 'application/json', 'x-placement-token': token },
-        }),
-        new Promise<{ data: null; error: Error }>((_, reject) => {
-          window.setTimeout(
-            () => reject(new Error('Le serveur de test ne répond pas dans le délai imparti.')),
-            PLACEMENT_TEST_TIMEOUT_MS,
-          );
-        }),
-      ]);
+      try {
+        const response = await Promise.race([
+          supabase.functions.invoke('get-placement-test', {
+            method: 'GET',
+            headers: token === 'latest'
+              ? { 'Content-Type': 'application/json' }
+              : { 'Content-Type': 'application/json', 'x-placement-token': token },
+          }),
+          new Promise<never>((_, reject) => {
+            window.setTimeout(
+              () => reject(new Error('Le serveur de test ne répond pas dans le délai imparti.')),
+              PLACEMENT_TEST_TIMEOUT_MS,
+            );
+          }),
+        ]);
 
-      const { data, error } = response as any;
-      
-      if (error || !data || !Array.isArray(data.items)) {
-        throw new Error(error?.message || "Impossible de charger le contenu du test.");
+        const { data, error } = response as any;
+
+        if (error || !data || !Array.isArray(data.items)) {
+          throw new Error(error?.message || "Impossible de charger le contenu du test.");
+        }
+        return data;
+      } catch (e: any) {
+        trackEvent("diag_load_error", { reason: e?.message || "unknown" });
+        throw e;
       }
-      return data;
     },
   });
 
@@ -332,6 +338,12 @@ function PasserTestPage() {
             >
               Réessayer la connexion
             </Button>
+            <Link
+              to="/test-rapide"
+              className="w-full h-14 border-2 border-blue-900 text-blue-900 font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 hover:bg-blue-50"
+            >
+              Faire le test rapide (3 min)
+            </Link>
             <a
               href={waHref("Bonjour, je rencontre un problème de chargement avec le test de positionnement et je souhaite de l'aide.")}
               target="_blank"
@@ -380,7 +392,7 @@ function PasserTestPage() {
               </div>
               <Button 
                 disabled={!studentName.trim()}
-                onClick={() => { import('@/lib/analytics').then(m => m.trackEvent('test_started')); setCurrentStep(1); }}
+                onClick={() => { trackEvent('test_started'); setCurrentStep(1); }}
                 className="w-full h-16 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl rounded-xl shadow-lg flex items-center justify-center"
               >
                 Démarrer mon évaluation
